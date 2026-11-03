@@ -23,6 +23,7 @@ import {
 import { useProjectsQuery } from './hooks/use-projects-query'
 import { ProjectMobileList } from './components/project-mobile-list'
 import { ProjectsFilters } from './components/projects-filters'
+import { ProjectsSort } from './components/projects-sort'
 import { ProjectsTable } from './components/projects-table'
 
 function ProjectsSkeleton() {
@@ -129,6 +130,16 @@ export function ProjectsPage() {
               />
             ) : (
               <>
+                <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/60 px-5 py-2.5">
+                  <p className="text-xs text-muted-foreground">
+                    {active ? 'Resultados filtrados' : 'Portafolio completo'}
+                  </p>
+                  <ProjectsSort
+                    sortBy={filters.sortBy}
+                    sortDirection={filters.sortDirection}
+                    onChange={update}
+                  />
+                </div>
                 <div className="hidden md:block">
                   <ProjectsTable projects={items} users={DEMO_USERS} />
                 </div>

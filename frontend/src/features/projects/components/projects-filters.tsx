@@ -1,10 +1,25 @@
-import { ArrowDownAZ, ArrowUpAZ, Search, X } from 'lucide-react'
+import {
+  ChevronDown,
+  Search,
+  SlidersHorizontal,
+  X,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 import { Switch } from '@/components/ui/switch'
-import type { ProjectSortField } from '@/data'
 import {
   PRIORITY_LABELS,
   SECTOR_LABELS,
@@ -16,7 +31,6 @@ import {
   SECTORS,
   type User,
 } from '@/domain/models'
-import { cn } from '@/lib/utils'
 import {
   hasActiveFilters,
   type ProjectFilters,
@@ -55,12 +69,26 @@ const RISK_OPTIONS: FilterOption[] = [
   { value: 'medio', label: 'Riesgo medio' },
 ]
 
-const SORT_OPTIONS: FilterOption[] = [
-  { value: 'updatedAt', label: 'Actualización' },
-  { value: 'name', label: 'Nombre' },
-  { value: 'dueDate', label: 'Fecha de entrega' },
-  { value: 'budget', label: 'Presupuesto' },
-]
+interface FilterChipProps {
+  label: string
+  onRemove: () => void
+}
+
+function FilterChip({ label, onRemove }: FilterChipProps) {
+  return (
+    <span className="inline-flex max-w-full items-center gap-1 rounded-full border border-border bg-sand-soft py-1 pr-1.5 pl-2.5 text-xs text-foreground">
+      <span className="max-w-[200px] truncate">{label}</span>
+      <button
+        type="button"
+        onClick={onRemove}
+        aria-label={`Quitar filtro ${label}`}
+        className="inline-flex size-4 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-terracotta"
+      >
+        <X aria-hidden="true" className="size-3" />
+      </button>
+    </span>
+  )
+}
 
 interface ProjectsFiltersProps {
   filters: ProjectFilters
@@ -80,32 +108,207 @@ export function ProjectsFilters({
     ...users.map((user) => ({ value: user.id, label: user.name })),
   ]
 
-  return (
-    <Card className="gap-4 p-4">
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="space-y-1.5 sm:col-span-2">
-          <Label
-            htmlFor="project-search"
-            className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase"
-          >
-            Buscar
-          </Label>
-          <div className="relative">
-            <Search
-              aria-hidden="true"
-              className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
-            />
-            <Input
-              id="project-search"
-              type="search"
-              value={filters.search}
-              onChange={(event) => onChange({ search: event.target.value })}
-              placeholder="Nombre, código o cliente"
-              className="h-9 bg-surface pl-9"
-            />
-          </div>
-        </div>
+  const ownerName = users.find((user) => user.id === filters.ownerId)?.name
 
+  const chips: { key: string; label: string; clear: () => void }[] = []
+
+  if (filters.search) {
+    chips.push({
+      key: 'search',
+      label: `Búsqueda: “${filters.search}”`,
+      clear: () => onChange({ search: '' }),
+    })
+  }
+  if (filters.status !== 'all') {
+    chips.push({
+      key: 'status',
+      label: `Estado: ${STATUS_LABELS[filters.status]}`,
+      clear: () => onChange({ status: 'all' }),
+    })
+  }
+  if (filters.priority !== 'all') {
+    chips.push({
+      key: 'priority',
+      label: `Prioridad: ${PRIORITY_LABELS[filters.priority]}`,
+      clear: () => onChange({ priority: 'all' }),
+    })
+  }
+  if (filters.sector !== 'all') {
+    chips.push({
+      key: 'sector',
+      label: `Sector: ${SECTOR_LABELS[filters.sector]}`,
+      clear: () => onChange({ sector: 'all' }),
+    })
+  }
+  if (ownerName) {
+    chips.push({
+      key: 'owner',
+      label: `Responsable: ${ownerName}`,
+      clear: () => onChange({ ownerId: '' }),
+    })
+  }
+  if (filters.risk !== 'all') {
+    chips.push({
+      key: 'risk',
+      label: `Riesgo: ${filters.risk === 'alto' ? 'alto' : 'medio'}`,
+      clear: () => onChange({ risk: 'all' }),
+    })
+  }
+  if (filters.includeArchived) {
+    chips.push({
+      key: 'archived',
+      label: 'Incluye archivados',
+      clear: () => onChange({ includeArchived: false }),
+    })
+  }
+
+  const moreFiltersCount =
+    (filters.ownerId ? 1 : 0) +
+    (filters.risk !== 'all' ? 1 : 0) +
+    (filters.includeArchived ? 1 : 0)
+  const appliedFilterCount = chips.length - (filters.search ? 1 : 0)
+  const active = hasActiveFilters(filters)
+
+  return (
+    <Card className="gap-4 p-4 sm:p-5">
+      <div role="search">
+        <Label htmlFor="project-search" className="sr-only">
+          Buscar proyectos
+        </Label>
+        <div className="relative">
+          <Search
+            aria-hidden="true"
+            className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground"
+          />
+          <Input
+            id="project-search"
+            type="text"
+            value={filters.search}
+            onChange={(event) => onChange({ search: event.target.value })}
+            placeholder="Nombre, código o cliente"
+            className="h-11 bg-surface pr-10 pl-10 text-base md:text-sm"
+          />
+          {filters.search ? (
+            <button
+              type="button"
+              onClick={() => onChange({ search: '' })}
+              aria-label="Limpiar búsqueda"
+              className="absolute top-1/2 right-2.5 inline-flex size-7 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-foreground/10 hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-terracotta"
+            >
+              <X aria-hidden="true" className="size-4" />
+            </button>
+          ) : null}
+        </div>
+      </div>
+
+      <div className="sm:hidden">
+        <Sheet>
+          <SheetTrigger
+            render={
+              <Button
+                type="button"
+                variant="outline"
+                className="h-10 w-full justify-between"
+              />
+            }
+          >
+            <span className="flex items-center gap-2">
+              <SlidersHorizontal aria-hidden="true" className="size-4" />
+              Filtros
+            </span>
+            {appliedFilterCount > 0 ? (
+              <span className="rounded-full bg-brand-terracotta/15 px-2 py-0.5 text-[11px] font-semibold text-brand-terracotta-hover">
+                {appliedFilterCount}
+              </span>
+            ) : (
+              <ChevronDown
+                aria-hidden="true"
+                className="size-4 text-muted-foreground"
+              />
+            )}
+          </SheetTrigger>
+          <SheetContent
+            side="bottom"
+            className="gap-0 rounded-t-2xl p-0 sm:max-w-none"
+          >
+            <SheetHeader className="border-b border-border px-5 pt-5 pb-4">
+              <SheetTitle>Filtros</SheetTitle>
+              <SheetDescription>
+                Acota el portafolio por estado, prioridad y contexto.
+              </SheetDescription>
+            </SheetHeader>
+
+            <div className="grid grid-cols-2 gap-3 px-5 py-4">
+              <FilterSelect
+                label="Estado"
+                value={filters.status}
+                options={STATUS_OPTIONS}
+                onChange={(status) =>
+                  onChange({ status: status as ProjectFilters['status'] })
+                }
+              />
+              <FilterSelect
+                label="Prioridad"
+                value={filters.priority}
+                options={PRIORITY_OPTIONS}
+                onChange={(priority) =>
+                  onChange({ priority: priority as ProjectFilters['priority'] })
+                }
+              />
+              <FilterSelect
+                label="Sector"
+                value={filters.sector}
+                options={SECTOR_OPTIONS}
+                onChange={(sector) =>
+                  onChange({ sector: sector as ProjectFilters['sector'] })
+                }
+              />
+              <FilterSelect
+                label="Responsable"
+                value={filters.ownerId || 'all'}
+                options={ownerOptions}
+                onChange={(ownerId) =>
+                  onChange({ ownerId: ownerId === 'all' ? '' : ownerId })
+                }
+              />
+              <FilterSelect
+                label="Riesgo"
+                value={filters.risk}
+                options={RISK_OPTIONS}
+                onChange={(risk) =>
+                  onChange({ risk: risk as ProjectFilters['risk'] })
+                }
+              />
+              <label className="col-span-2 inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+                <Switch
+                  checked={filters.includeArchived}
+                  onCheckedChange={(checked) =>
+                    onChange({ includeArchived: Boolean(checked) })
+                  }
+                  aria-label="Incluir proyectos archivados"
+                />
+                Incluir archivados
+              </label>
+            </div>
+
+            <SheetFooter className="flex-row items-center justify-between gap-3 border-t border-border px-5 py-4">
+              <Button
+                type="button"
+                variant="ghost"
+                disabled={!active}
+                onClick={onClear}
+              >
+                Limpiar
+              </Button>
+              <SheetClose render={<Button type="button" />}>
+                Ver resultados
+              </SheetClose>
+            </SheetFooter>
+          </SheetContent>
+        </Sheet>
+      </div>
+
+      <div className="hidden flex-wrap items-end gap-2 border-t border-border/60 pt-3 sm:flex">
         <FilterSelect
           label="Estado"
           value={filters.status}
@@ -113,6 +316,7 @@ export function ProjectsFilters({
           onChange={(status) =>
             onChange({ status: status as ProjectFilters['status'] })
           }
+          className="w-[132px]"
         />
         <FilterSelect
           label="Prioridad"
@@ -121,6 +325,7 @@ export function ProjectsFilters({
           onChange={(priority) =>
             onChange({ priority: priority as ProjectFilters['priority'] })
           }
+          className="w-[132px]"
         />
         <FilterSelect
           label="Sector"
@@ -129,95 +334,81 @@ export function ProjectsFilters({
           onChange={(sector) =>
             onChange({ sector: sector as ProjectFilters['sector'] })
           }
+          className="w-[140px]"
         />
-        <FilterSelect
-          label="Responsable"
-          value={filters.ownerId || 'all'}
-          options={ownerOptions}
-          onChange={(ownerId) =>
-            onChange({ ownerId: ownerId === 'all' ? '' : ownerId })
-          }
-        />
-        <FilterSelect
-          label="Riesgo"
-          value={filters.risk}
-          options={RISK_OPTIONS}
-          onChange={(risk) =>
-            onChange({ risk: risk as ProjectFilters['risk'] })
-          }
-        />
-        <div className="space-y-1.5">
-          <Label className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-            Ordenar por
-          </Label>
-          <div className="flex gap-2">
-            <FilterSelect
-              label="Ordenar por"
-              value={filters.sortBy}
-              options={SORT_OPTIONS}
-              onChange={(sortBy) =>
-                onChange({ sortBy: sortBy as ProjectSortField })
-              }
-              showLabel={false}
-              className="flex-1"
-            />
-            <Button
-              type="button"
-              variant="outline"
-              size="icon"
-              className="shrink-0"
-              onClick={() =>
-                onChange({
-                  sortDirection:
-                    filters.sortDirection === 'asc' ? 'desc' : 'asc',
-                })
-              }
-              aria-label={
-                filters.sortDirection === 'asc'
-                  ? 'Cambiar a orden descendente'
-                  : 'Cambiar a orden ascendente'
-              }
-              title={
-                filters.sortDirection === 'asc'
-                  ? 'Ascendente'
-                  : 'Descendente'
-              }
-            >
-              {filters.sortDirection === 'asc' ? (
-                <ArrowUpAZ aria-hidden="true" className="size-4" />
-              ) : (
-                <ArrowDownAZ aria-hidden="true" className="size-4" />
-              )}
-            </Button>
-          </div>
-        </div>
+
+        <Popover>
+          <PopoverTrigger
+            render={
+              <Button
+                type="button"
+                variant="outline"
+                className="h-9 gap-1.5 px-3"
+              />
+            }
+          >
+            <SlidersHorizontal aria-hidden="true" className="size-4" />
+            Más filtros
+            {moreFiltersCount > 0 ? (
+              <span className="rounded-full bg-brand-terracotta/15 px-1.5 py-0.5 text-[10px] font-semibold text-brand-terracotta-hover">
+                {moreFiltersCount}
+              </span>
+            ) : null}
+          </PopoverTrigger>
+          <PopoverContent align="start" className="w-72 gap-3 p-3">
+            <div className="space-y-3">
+              <FilterSelect
+                label="Responsable"
+                value={filters.ownerId || 'all'}
+                options={ownerOptions}
+                onChange={(ownerId) =>
+                  onChange({ ownerId: ownerId === 'all' ? '' : ownerId })
+                }
+              />
+              <FilterSelect
+                label="Riesgo"
+                value={filters.risk}
+                options={RISK_OPTIONS}
+                onChange={(risk) =>
+                  onChange({ risk: risk as ProjectFilters['risk'] })
+                }
+              />
+              <label className="inline-flex cursor-pointer items-center gap-2 pt-1 text-sm text-muted-foreground">
+                <Switch
+                  checked={filters.includeArchived}
+                  onCheckedChange={(checked) =>
+                    onChange({ includeArchived: Boolean(checked) })
+                  }
+                  aria-label="Incluir proyectos archivados"
+                />
+                Incluir archivados
+              </label>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-3">
-        <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
-          <Switch
-            checked={filters.includeArchived}
-            onCheckedChange={(checked) =>
-              onChange({ includeArchived: Boolean(checked) })
-            }
-            aria-label="Incluir proyectos archivados"
-          />
-          Incluir archivados
-        </label>
-
-        {hasActiveFilters(filters) ? (
+      {chips.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-2 border-t border-border/60 pt-3">
+          {chips.map((chip) => (
+            <FilterChip
+              key={chip.key}
+              label={chip.label}
+              onRemove={chip.clear}
+            />
+          ))}
           <Button
             type="button"
             variant="ghost"
             size="sm"
             onClick={onClear}
-            className={cn('gap-1.5 text-brand-terracotta-hover')}
+            className="h-7 gap-1.5 px-2 text-brand-terracotta-hover"
           >
             <X aria-hidden="true" className="size-3.5" />
-            Limpiar filtros
+            Limpiar todo
           </Button>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
     </Card>
   )
 }
