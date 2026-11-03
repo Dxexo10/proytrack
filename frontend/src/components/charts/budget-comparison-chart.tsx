@@ -57,11 +57,11 @@ export function BudgetComparisonChart({ data }: BudgetComparisonChartProps) {
             tickFormatter={(value: number) => formatCompactCurrency(value)}
           />
           <Tooltip
-            cursor={{ fill: 'var(--muted)' }}
+            cursor={{ fill: 'var(--sand-soft)' }}
             contentStyle={{
               background: 'var(--surface)',
               border: '1px solid var(--border)',
-              borderRadius: 8,
+              borderRadius: 10,
               fontSize: 12,
               boxShadow: 'var(--shadow-raised)',
             }}
@@ -73,15 +73,15 @@ export function BudgetComparisonChart({ data }: BudgetComparisonChartProps) {
           <Bar
             dataKey="initial"
             name="Presupuesto inicial"
-            fill="#94A3B8"
-            radius={[4, 4, 0, 0]}
+            fill="#c9bfb0"
+            radius={[6, 6, 0, 0]}
             maxBarSize={36}
           />
           <Bar
             dataKey="current"
             name="Presupuesto actual"
             fill="var(--chart-1)"
-            radius={[4, 4, 0, 0]}
+            radius={[6, 6, 0, 0]}
             maxBarSize={36}
           />
         </BarChart>
@@ -89,7 +89,7 @@ export function BudgetComparisonChart({ data }: BudgetComparisonChartProps) {
 
       <div className="mt-2 flex flex-wrap items-center gap-4 px-3 text-xs text-muted-foreground">
         <span className="inline-flex items-center gap-1.5">
-          <span aria-hidden="true" className="size-2 rounded-full bg-slate-400" />
+          <span aria-hidden="true" className="size-2 rounded-full bg-brand-sand" />
           Presupuesto inicial
         </span>
         <span className="inline-flex items-center gap-1.5">

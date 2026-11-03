@@ -4,11 +4,11 @@ import type { StatusSlice } from '@/domain/services/dashboard-summary'
 import { STATUS_LABELS } from '@/lib/labels'
 
 const STATUS_COLORS: Record<ProjectStatus, string> = {
-  in_progress: '#2563EB',
-  planned: '#94A3B8',
-  on_hold: '#F59E0B',
-  completed: '#10B981',
-  cancelled: '#CBD5E1',
+  in_progress: 'var(--chart-1)',
+  planned: '#c9bfb0',
+  on_hold: 'var(--chart-3)',
+  completed: 'var(--chart-2)',
+  cancelled: 'var(--chart-4)',
 }
 
 interface StatusDistributionChartProps {
@@ -57,7 +57,7 @@ export function StatusDistributionChart({ data }: StatusDistributionChartProps) 
               contentStyle={{
                 background: 'var(--surface)',
                 border: '1px solid var(--border)',
-                borderRadius: 8,
+                borderRadius: 10,
                 fontSize: 12,
                 boxShadow: 'var(--shadow-raised)',
               }}
