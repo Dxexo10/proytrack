@@ -10,4 +10,5 @@ export interface ProjectVersion {
   changedAt: string
   changedBy: string
   source: VersionSource
+  reason?: string | null
 }
