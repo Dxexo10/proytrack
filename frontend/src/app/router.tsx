@@ -25,6 +25,11 @@ const ProjectDetailPage = lazy(() =>
     default: module.ProjectDetailPage,
   })),
 )
+const ProjectEditPage = lazy(() =>
+  import('@/features/projects/project-edit-page').then((module) => ({
+    default: module.ProjectEditPage,
+  })),
+)
 const MonitorPage = lazy(() =>
   import('@/features/monitoring/monitor-page').then((module) => ({
     default: module.MonitorPage,
@@ -60,6 +65,7 @@ export const router = createBrowserRouter([
       { path: 'dashboard', element: page(<DashboardPage />) },
       { path: 'projects', element: page(<ProjectsPage />) },
       { path: 'projects/new', element: page(<ProjectNewPage />) },
+      { path: 'projects/:id/edit', element: page(<ProjectEditPage />) },
       { path: 'projects/:id', element: page(<ProjectDetailPage />) },
       { path: 'monitor', element: page(<MonitorPage />) },
       { path: 'alerts', element: page(<AlertsPage />) },

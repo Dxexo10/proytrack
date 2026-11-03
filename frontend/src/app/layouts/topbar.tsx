@@ -17,9 +17,17 @@ import { ROUTE_TITLES } from './nav-items'
 import { MobileNav } from './mobile-nav'
 import { useOpenAlertsCount } from '@/features/alerts/hooks/use-open-alerts'
 
+function resolveTitle(pathname: string): string {
+  const exact = ROUTE_TITLES[pathname]
+  if (exact) return exact
+  if (/^\/projects\/[^/]+\/edit$/.test(pathname)) return 'Editar proyecto'
+  if (/^\/projects\/[^/]+$/.test(pathname)) return 'Detalle del proyecto'
+  return 'Página no encontrada'
+}
+
 function Breadcrumb() {
   const { pathname } = useLocation()
-  const title = ROUTE_TITLES[pathname] ?? 'Página no encontrada'
+  const title = resolveTitle(pathname)
   const parent = pathname.startsWith('/projects')
     ? { label: 'Proyectos', href: '/projects' }
     : null

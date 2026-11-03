@@ -17,7 +17,7 @@ export interface NavItem {
 
 export const PRIMARY_NAV: NavItem[] = [
   { label: 'Resumen general', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Proyectos', href: '/projects', icon: FolderKanban, phase: 'Fase 2' },
+  { label: 'Proyectos', href: '/projects', icon: FolderKanban },
   { label: 'Monitor de cambios', href: '/monitor', icon: Radar, phase: 'Fase 3' },
   { label: 'Centro de alertas', href: '/alerts', icon: BellRing, phase: 'Fase 3' },
   { label: 'Actividad', href: '/activity', icon: History, phase: 'Fase 4' },
