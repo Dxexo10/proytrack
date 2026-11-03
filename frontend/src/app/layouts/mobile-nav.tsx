@@ -1,0 +1,71 @@
+import { Menu } from 'lucide-react'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { LogoMark } from '@/components/shared/logo-mark'
+import { DemoBadge } from '@/components/shared/demo-badge'
+import { Button } from '@/components/ui/button'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { useOpenAlertsCount } from '@/features/alerts/hooks/use-open-alerts'
+import { SidebarNav } from './sidebar'
+
+export function MobileNav() {
+  const [open, setOpen] = useState(false)
+  const { data: openAlerts } = useOpenAlertsCount()
+
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger
+        render={
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            aria-label="Abrir navegación"
+          />
+        }
+      >
+        <Menu aria-hidden="true" className="size-5" />
+      </SheetTrigger>
+      <SheetContent
+        side="left"
+        showCloseButton={false}
+        className="w-[280px] gap-0 border-sidebar-border bg-sidebar p-0 text-sidebar-foreground sm:max-w-[280px]"
+      >
+        <SheetHeader className="flex h-16 flex-row items-center gap-3 border-b border-sidebar-border px-4 py-0">
+          <LogoMark />
+          <div className="min-w-0">
+            <SheetTitle className="text-sm font-semibold text-white">
+              ProyTrack
+            </SheetTitle>
+            <SheetDescription className="text-[11px] text-sidebar-foreground/60">
+              Project Management &amp; Intelligence
+            </SheetDescription>
+          </div>
+        </SheetHeader>
+
+        <SidebarNav onNavigate={() => setOpen(false)} />
+
+        <div className="border-t border-sidebar-border p-3">
+          <DemoBadge variant="dark" className="w-full justify-center" />
+          <p className="mt-2 text-center text-[11px] text-sidebar-foreground/60">
+            {openAlerts ?? 0} alertas abiertas ·{' '}
+            <Link
+              to="/alerts"
+              className="underline underline-offset-2 hover:text-white"
+              onClick={() => setOpen(false)}
+            >
+              ver centro
+            </Link>
+          </p>
+        </div>
+      </SheetContent>
+    </Sheet>
+  )
+}
