@@ -19,8 +19,8 @@ de cada cambio para explicar qué se modificó, cuándo y por qué.
 La demo usa **datos ficticios deterministas** y un reloj de referencia fijo, de
 modo que el portafolio siempre se ve coherente sin depender de un backend.
 
-> El repositorio remoto conserva su nombre técnico `proytrack` hasta que el
-> propietario autorice el renombrado. La identidad del producto es **Trazo**.
+> Repositorio: [`Dxexo10/trazo`](https://github.com/Dxexo10/trazo). La URL
+> anterior de GitHub redirige automáticamente al nuevo nombre.
 
 ## Identidad
 

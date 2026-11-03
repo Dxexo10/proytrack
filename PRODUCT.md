@@ -47,7 +47,7 @@ No se limita a mostrar el estado actual: conserva versiones de cada proyecto y e
 - La identidad visual vinculante (terracota, grafito, marfil, arena y oliva; Manrope + Inter; Floating Workspace) se define en `TRAZO_BRAND_GUIDELINES.md`.
 - Restricción visual vinculante del propietario: **tono claro (light mode)**.
 - El wordmark y el logotipo actual son provisionales; no inventar clientes, testimonios ni resultados de negocio.
-- El repositorio remoto conserva su nombre técnico hasta autorización expresa del propietario.
+- El repositorio remoto es `Dxexo10/trazo`; la URL anterior de GitHub redirige al nuevo nombre.
 
 ## Evidence on Hand
 
