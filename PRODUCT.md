@@ -38,7 +38,7 @@ No se limita a mostrar el estado actual: conserva versiones de cada proyecto y e
 - Dinero en céntimos enteros y moneda PEN; fechas ISO-8601 UTC; interfaz en español y nombres de código en inglés.
 - Sin IA generativa, pagos, integraciones externas ni multiempresa real mientras no se apruebe.
 - No iniciar backend, autenticación ni PostgreSQL sin autorización explícita del propietario.
-- **Decisiones abiertas:** nombre y dominio definitivos, identidad gráfica final, hosting, autenticación y multiempresa reales, formato de exportación de reportes.
+- **Decisiones abiertas:** dominio definitivo y disponibilidad de marca, identidad gráfica final (wordmark/logo definitivos), hosting, autenticación y multiempresa reales, formato de exportación de reportes.
 
 ## Brand Commitments
 

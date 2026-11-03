@@ -1,4 +1,4 @@
-# Arquitectura — ProyTrack (frontend-first)
+# Arquitectura — Trazo (frontend-first)
 
 ## Objetivo
 
@@ -53,10 +53,10 @@ implementar `HttpProjectRepository`, `HttpAlertRepository` y
 
 ## Persistencia
 
-`data/mock/storage/db.ts` abre IndexedDB (`proytrack-demo`, versión 1) con los
+`data/mock/storage/db.ts` abre IndexedDB (`trazo-demo`, versión 1) con los
 stores `projects`, `alerts`, `activity` y `meta`. En el primer acceso, o cuando
 cambia `seedVersion` / `schemaVersion` / `referenceDate`, se vuelve a sembrar el
-dataset determinista.
+dataset determinista. La versión de semilla actual es 2.
 
 Los adaptadores simulan latencia de 120–320 ms **solo en desarrollo**; en tests y
 producción no hay esperas artificiales.
@@ -75,14 +75,15 @@ producción no hay esperas artificiales.
   calcula porcentaje y se muestra un caso explícito.
 - Riesgo de proyecto: vencimiento (+40), bloqueo (+30), prioridad crítica (+15),
   sobrecosto >20 % (+15) o >10 % (+8), avance <30 % en ejecución (+10).
-- Periodo del dashboard = ventana de meses sobre `createdAt`, con comparación
-  contra la ventana anterior.
+- Periodo del dashboard = ventana de meses sobre `createdAt` para la tendencia
+  mensual y los deltas contra la ventana anterior. Los totales, la distribución
+  y las alertas representan el portafolio activo completo.
 
 ## Verificación
 
 ```bash
 npm run lint
 npm run typecheck
-npm run test
+NODE_ENV=test npm run test
 npm run build
 ```
