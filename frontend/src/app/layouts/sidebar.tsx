@@ -190,7 +190,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed top-3 bottom-3 left-3 z-40 hidden flex-col overflow-hidden rounded-3xl border border-white/[0.07] bg-brand-graphite bg-[image:radial-gradient(120%_80%_at_0%_0%,rgba(198,93,58,0.14),transparent_55%)] text-sidebar-foreground shadow-[0_24px_60px_-30px_rgba(37,40,36,0.7)] transition-[width] duration-[220ms] ease-out lg:flex',
+        'fixed top-3 bottom-3 left-3 z-40 hidden flex-col overflow-hidden rounded-3xl border border-white/[0.07] bg-brand-graphite bg-[image:radial-gradient(120%_80%_at_0%_0%,rgba(198,93,58,0.14),transparent_55%)] text-sidebar-foreground shadow-[0_24px_60px_-30px_rgba(37,40,36,0.7)] transition-[width] duration-[220ms] ease-out md:flex',
         collapsed ? 'w-[72px]' : 'w-[236px]',
       )}
     >

@@ -27,7 +27,7 @@ export function MobileNav() {
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="md:hidden"
             aria-label="Abrir navegación"
           />
         }
@@ -54,7 +54,7 @@ export function MobileNav() {
               <Button
                 variant="ghost"
                 size="icon-sm"
-                className="ml-auto text-slate-400 hover:bg-white/10 hover:text-white"
+                className="ml-auto text-sidebar-foreground/60 hover:bg-white/10 hover:text-brand-ivory"
                 aria-label="Cerrar navegación"
               />
             }

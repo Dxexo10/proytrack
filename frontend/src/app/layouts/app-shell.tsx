@@ -50,7 +50,7 @@ export function AppShell() {
       <div
         className={cn(
           'flex min-h-svh flex-col transition-[padding-left] duration-[220ms] ease-out',
-          collapsed ? 'lg:pl-[96px]' : 'lg:pl-[260px]',
+          collapsed ? 'md:pl-[96px]' : 'md:pl-[260px]',
         )}
       >
         <Topbar />
