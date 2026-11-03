@@ -37,16 +37,16 @@ export function MobileNav() {
       <SheetContent
         side="left"
         showCloseButton={false}
-        className="w-[280px] gap-0 border-white/10 bg-brand-navy p-0 text-sidebar-foreground sm:max-w-[280px]"
+        className="w-[280px] gap-0 border-white/10 bg-brand-graphite p-0 text-sidebar-foreground sm:max-w-[280px]"
       >
         <SheetHeader className="flex h-16 flex-row items-center gap-3 border-b border-white/10 px-4 py-0">
           <LogoMark />
           <div className="min-w-0">
-            <SheetTitle className="text-sm font-semibold text-white">
-              ProyTrack
+            <SheetTitle className="font-heading text-base font-semibold text-brand-ivory">
+              trazo<span className="text-brand-terracotta">.</span>
             </SheetTitle>
-            <SheetDescription className="text-[11px] text-sidebar-foreground/60">
-              Project Management &amp; Intelligence
+            <SheetDescription className="text-[10px] tracking-[0.16em] text-sidebar-foreground/50 uppercase">
+              Gestión inteligente
             </SheetDescription>
           </div>
           <SheetClose

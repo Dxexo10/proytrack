@@ -38,25 +38,26 @@ function SidebarLink({
       aria-current={active ? 'page' : undefined}
       aria-label={collapsed ? item.label : undefined}
       className={cn(
-        'group relative flex items-center rounded-xl text-sm font-medium transition-colors duration-150',
+        'group relative flex items-center rounded-xl text-sm font-medium transition-colors duration-200',
+        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-ivory/80',
         collapsed ? 'mx-auto size-10 justify-center' : 'gap-3 px-2.5 py-2',
         active
-          ? 'bg-white/[0.08] text-white'
-          : 'text-sidebar-foreground/80 hover:bg-white/[0.05] hover:text-white',
+          ? 'bg-white/[0.07] text-brand-ivory'
+          : 'text-sidebar-foreground/85 hover:bg-white/[0.05] hover:text-brand-ivory',
       )}
     >
       {active ? (
         <span
           aria-hidden="true"
-          className="absolute top-1/2 -left-1 h-5 w-[3px] -translate-y-1/2 rounded-full bg-brand-primary"
+          className="absolute top-1/2 -left-1 h-6 w-[3px] -translate-y-1/2 rounded-full bg-brand-terracotta"
         />
       ) : null}
       <span
         className={cn(
-          'inline-flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors duration-150',
+          'inline-flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors duration-200',
           active
-            ? 'bg-brand-primary text-white shadow-[0_6px_16px_-8px_rgba(37,99,235,0.9)]'
-            : 'text-slate-400 group-hover:text-white',
+            ? 'bg-brand-terracotta text-white shadow-[0_8px_18px_-10px_rgba(198,93,58,0.9)]'
+            : 'text-sidebar-foreground/60 group-hover:text-brand-ivory',
         )}
       >
         <Icon aria-hidden="true" className="size-[18px]" />
@@ -66,7 +67,7 @@ function SidebarLink({
           <span className="truncate">{item.label}</span>
           {item.phase ? (
             <span
-              className="ml-auto rounded-md bg-white/[0.06] px-1.5 py-0.5 text-[10px] font-medium text-sidebar-foreground/60"
+              className="ml-auto rounded-md bg-white/[0.06] px-1.5 py-0.5 text-[10px] font-medium text-sidebar-foreground/55"
               aria-hidden="true"
             >
               {item.phase.replace('Fase ', 'F')}
@@ -113,7 +114,7 @@ export function SidebarNav({
         )}
       >
         {!collapsed ? (
-          <p className="px-2 pt-1 pb-1.5 text-[10px] font-semibold tracking-[0.14em] text-slate-500 uppercase">
+          <p className="px-2 pt-1 pb-1.5 text-[10px] font-semibold tracking-[0.18em] text-sidebar-foreground/45 uppercase">
             Portafolio
           </p>
         ) : null}
@@ -155,21 +156,21 @@ export function SidebarNav({
               : undefined
           }
           className={cn(
-            'flex items-center gap-2.5 rounded-xl bg-white/[0.06]',
+            'flex items-center gap-2.5 rounded-xl bg-white/[0.05]',
             collapsed ? 'justify-center p-1.5' : 'p-2',
           )}
         >
           <Avatar size="sm" className="shrink-0">
-            <AvatarFallback className="bg-brand-primary/20 text-xs font-semibold text-blue-200">
+            <AvatarFallback className="bg-brand-terracotta/20 text-xs font-semibold text-brand-ivory">
               {initials(DEMO_CURRENT_USER.name)}
             </AvatarFallback>
           </Avatar>
           {!collapsed ? (
             <div className="min-w-0">
-              <p className="truncate text-xs font-medium text-white">
+              <p className="truncate text-xs font-medium text-brand-ivory">
                 {DEMO_CURRENT_USER.name}
               </p>
-              <p className="truncate text-[11px] text-sidebar-foreground/60">
+              <p className="truncate text-[11px] text-sidebar-foreground/55">
                 {ROLE_LABELS[DEMO_CURRENT_USER.role]}
               </p>
             </div>
@@ -189,29 +190,29 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed top-3 bottom-3 left-3 z-40 hidden flex-col overflow-hidden rounded-2xl border border-white/10 bg-brand-navy bg-[image:radial-gradient(120%_80%_at_0%_0%,rgba(37,99,235,0.16),transparent_55%)] text-sidebar-foreground shadow-[0_24px_60px_-32px_rgba(15,23,42,0.8)] transition-[width] duration-200 ease-out lg:flex',
-        collapsed ? 'w-[68px]' : 'w-60',
+        'fixed top-3 bottom-3 left-3 z-40 hidden flex-col overflow-hidden rounded-3xl border border-white/[0.07] bg-brand-graphite bg-[image:radial-gradient(120%_80%_at_0%_0%,rgba(198,93,58,0.14),transparent_55%)] text-sidebar-foreground shadow-[0_24px_60px_-30px_rgba(37,40,36,0.7)] transition-[width] duration-[220ms] ease-out lg:flex',
+        collapsed ? 'w-[72px]' : 'w-[236px]',
       )}
     >
       <div
         className={cn(
           'flex shrink-0 items-center gap-2 pb-1',
-          collapsed ? 'flex-col justify-center px-2 pt-3' : 'px-3 pt-3',
+          collapsed ? 'flex-col justify-center px-2 pt-3.5' : 'px-3 pt-3.5',
         )}
       >
         <Link
           to="/dashboard"
-          className="flex min-w-0 items-center gap-2.5 rounded-xl p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
-          aria-label="ProyTrack — ir al resumen general"
+          className="flex min-w-0 items-center gap-2.5 rounded-xl p-1 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-ivory/80"
+          aria-label="Trazo — ir al resumen general"
         >
           <LogoMark />
           {!collapsed ? (
             <span className="hidden min-w-0 sm:block">
-              <span className="block truncate text-sm font-semibold text-white">
-                ProyTrack
+              <span className="block font-heading text-lg leading-none font-semibold tracking-tight text-brand-ivory">
+                trazo<span className="text-brand-terracotta">.</span>
               </span>
-              <span className="block truncate text-[11px] text-sidebar-foreground/60">
-                Project Management &amp; Intelligence
+              <span className="mt-1 block truncate text-[10px] tracking-[0.16em] text-sidebar-foreground/50 uppercase">
+                Gestión inteligente
               </span>
             </span>
           ) : null}
@@ -226,7 +227,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           }
           title={collapsed ? 'Expandir navegación' : 'Contraer navegación'}
           className={cn(
-            'text-slate-400 hover:bg-white/10 hover:text-white',
+            'text-sidebar-foreground/60 hover:bg-white/10 hover:text-brand-ivory focus-visible:outline-brand-ivory/80',
             !collapsed && 'ml-auto',
           )}
         >

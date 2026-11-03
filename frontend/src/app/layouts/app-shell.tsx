@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { Sidebar } from './sidebar'
 import { Topbar } from './topbar'
 
-const COLLAPSE_STORAGE_KEY = 'proytrack:nav-collapsed'
+const COLLAPSE_STORAGE_KEY = 'trazo:nav-collapsed'
 
 function useSidebarCollapse() {
   const [collapsed, setCollapsed] = useState(() => {
@@ -40,7 +40,7 @@ export function AppShell() {
     <div className="min-h-svh bg-canvas">
       <a
         href="#contenido"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-xl focus:bg-brand-navy focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-xl focus:bg-brand-graphite focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-brand-ivory"
       >
         Saltar al contenido
       </a>
@@ -49,8 +49,8 @@ export function AppShell() {
 
       <div
         className={cn(
-          'flex min-h-svh flex-col transition-[padding-left] duration-200 ease-out',
-          collapsed ? 'lg:pl-[92px]' : 'lg:pl-[264px]',
+          'flex min-h-svh flex-col transition-[padding-left] duration-[220ms] ease-out',
+          collapsed ? 'lg:pl-[96px]' : 'lg:pl-[260px]',
         )}
       >
         <Topbar />
@@ -65,7 +65,7 @@ export function AppShell() {
 
         <footer className="px-3 pb-4 sm:px-5 lg:px-6">
           <div className="mx-auto flex w-full max-w-[1600px] flex-wrap items-center justify-between gap-2 rounded-2xl border border-border/70 bg-surface/60 px-4 py-3 text-xs text-muted-foreground">
-            <span>ProyTrack · Project Management &amp; Intelligence</span>
+            <span>trazo · Project Management &amp; Intelligence</span>
             <span>{DEMO_LABEL}</span>
           </div>
         </footer>
