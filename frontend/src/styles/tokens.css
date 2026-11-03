@@ -1,13 +1,15 @@
 /**
- * ProyTrack design tokens.
- * Source: PROYTRACK_MASTER_SPEC.md §3 — light mode is the only supported theme for the MVP.
+ * Trazo design tokens.
+ * Light mode is the only supported theme for the MVP.
+ * Brand source of truth: TRAZO_BRAND_GUIDELINES.md.
  */
 
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
-  --font-heading: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-heading:
+    'Manrope Variable', 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -29,17 +31,30 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --color-brand-navy: var(--brand-navy);
-  --color-brand-primary: var(--brand-primary);
-  --color-brand-primary-hover: var(--brand-primary-hover);
+  --color-brand-graphite: var(--brand-graphite);
+  --color-brand-graphite-elevated: var(--brand-graphite-elevated);
+  --color-brand-terracotta: var(--brand-terracotta);
+  --color-brand-terracotta-hover: var(--brand-terracotta-hover);
+  --color-brand-terracotta-strong: var(--brand-terracotta-strong);
+  --color-brand-terracotta-subtle: var(--brand-terracotta-subtle);
+  --color-brand-ivory: var(--brand-ivory);
+  --color-brand-sand: var(--brand-sand);
+  --color-brand-olive: var(--brand-olive);
+  --color-sand-soft: var(--sand-soft);
+
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
+  --color-text-muted: var(--text-muted);
   --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
   --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
   --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
   --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
 
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
@@ -59,61 +74,80 @@
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
-  --radius-2xl: 1.25rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.125rem;
+  --radius-3xl: 1.25rem;
 
-  --shadow-card: 0 1px 2px 0 rgb(15 23 42 / 0.04);
-  --shadow-raised: 0 4px 16px -6px rgb(15 23 42 / 0.12);
+  --shadow-card:
+    0 1px 2px 0 rgb(37 40 36 / 0.04), 0 10px 30px -24px rgb(37 40 36 / 0.35);
+  --shadow-raised:
+    0 2px 4px 0 rgb(37 40 36 / 0.05), 0 18px 40px -28px rgb(37 40 36 / 0.45);
 }
 
 :root {
-  --brand-navy: #0f172a;
-  --brand-primary: #2563eb;
-  --brand-primary-hover: #1d4ed8;
-  --canvas: #f8fafc;
-  --surface: #ffffff;
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --danger: #ef4444;
-  --info: #3b82f6;
-  --focus: #93c5fd;
+  --brand-graphite: #252824;
+  --brand-graphite-elevated: #323630;
+  --brand-terracotta: #c65d3a;
+  --brand-terracotta-hover: #a84b2c;
+  --brand-terracotta-strong: #b4522f;
+  --brand-terracotta-subtle: #f5e5dd;
+  --brand-ivory: #f5f2eb;
+  --brand-sand: #e7e0d5;
+  --brand-olive: #60715a;
+  --sand-soft: #f0ebe2;
 
-  --background: var(--canvas);
+  --text-primary: #252824;
+  --text-secondary: #686c64;
+  --text-muted: #858a80;
+  --border-subtle: #e8e4dc;
+
+  --success: #4f6b47;
+  --success-soft: #e8ede4;
+  --warning: #96601b;
+  --warning-soft: #f6e9d8;
+  --danger: #a63f32;
+  --danger-soft: #f7e3df;
+  --info: #4f6070;
+  --info-soft: #e9edf0;
+  --focus: #a84b2c;
+
+  --canvas: var(--brand-ivory);
+  --surface: #ffffff;
+
+  --background: var(--brand-ivory);
   --foreground: var(--text-primary);
   --card: var(--surface);
   --card-foreground: var(--text-primary);
   --popover: var(--surface);
   --popover-foreground: var(--text-primary);
-  --primary: var(--brand-primary);
+  --primary: var(--brand-terracotta-strong);
   --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
+  --secondary: var(--sand-soft);
   --secondary-foreground: var(--text-primary);
-  --muted: #f1f5f9;
+  --muted: var(--sand-soft);
   --muted-foreground: var(--text-secondary);
-  --accent: #eff6ff;
-  --accent-foreground: var(--brand-primary-hover);
+  --accent: var(--brand-terracotta-subtle);
+  --accent-foreground: var(--brand-terracotta-hover);
   --destructive: var(--danger);
   --destructive-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
+  --border: var(--border-subtle);
+  --input: var(--brand-sand);
   --ring: var(--focus);
 
-  --chart-1: #2563eb;
-  --chart-2: #10b981;
-  --chart-3: #f59e0b;
-  --chart-4: #64748b;
-  --chart-5: #6366f1;
+  --chart-1: #c65d3a;
+  --chart-2: #60715a;
+  --chart-3: #b7791f;
+  --chart-4: #858a80;
+  --chart-5: #4f6070;
 
-  --sidebar: var(--brand-navy);
-  --sidebar-foreground: #cbd5e1;
-  --sidebar-primary: var(--brand-primary);
+  --sidebar: var(--brand-graphite);
+  --sidebar-foreground: #d9d6ce;
+  --sidebar-primary: var(--brand-terracotta);
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #1e293b;
-  --sidebar-accent-foreground: #f8fafc;
-  --sidebar-border: #1e293b;
-  --sidebar-ring: #3b82f6;
+  --sidebar-accent: var(--brand-graphite-elevated);
+  --sidebar-accent-foreground: #f5f2eb;
+  --sidebar-border: #3a3e38;
+  --sidebar-ring: #f0c4b2;
 
   --radius: 0.75rem;
   color-scheme: light;
@@ -147,6 +181,11 @@
   p {
     margin: 0;
     text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--brand-terracotta-subtle);
+    color: var(--brand-graphite);
   }
 
   :focus-visible {

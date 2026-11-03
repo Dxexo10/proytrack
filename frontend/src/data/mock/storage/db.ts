@@ -15,17 +15,17 @@ export interface DatasetMeta {
   seededAt: string
 }
 
-interface ProyTrackDB extends DBSchema {
+interface TrazoDB extends DBSchema {
   projects: { key: string; value: Project }
   alerts: { key: string; value: Alert }
   activity: { key: string; value: ActivityLog }
   meta: { key: string; value: DatasetMeta }
 }
 
-let databasePromise: Promise<IDBPDatabase<ProyTrackDB>> | null = null
+let databasePromise: Promise<IDBPDatabase<TrazoDB>> | null = null
 
 function writeDataset(
-  db: IDBPDatabase<ProyTrackDB>,
+  db: IDBPDatabase<TrazoDB>,
   dataset: DemoDataset,
 ): Promise<void> {
   const tx = db.transaction(['projects', 'alerts', 'activity', 'meta'], 'readwrite')
@@ -57,7 +57,7 @@ function writeDataset(
   return tx.done
 }
 
-async function ensureSeeded(db: IDBPDatabase<ProyTrackDB>): Promise<void> {
+async function ensureSeeded(db: IDBPDatabase<TrazoDB>): Promise<void> {
   const meta = await db.get('meta', 'dataset')
   const isCurrent =
     meta !== undefined &&
@@ -73,9 +73,9 @@ async function ensureSeeded(db: IDBPDatabase<ProyTrackDB>): Promise<void> {
   await writeDataset(db, generateDemoDataset())
 }
 
-export function getDatabase(): Promise<IDBPDatabase<ProyTrackDB>> {
+export function getDatabase(): Promise<IDBPDatabase<TrazoDB>> {
   if (!databasePromise) {
-    databasePromise = openDB<ProyTrackDB>(
+    databasePromise = openDB<TrazoDB>(
       DEMO_DATABASE_NAME,
       DEMO_SCHEMA_VERSION,
       {
