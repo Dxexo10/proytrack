@@ -64,7 +64,7 @@ orientado a decisiones y sin anglicismos innecesarios.
 | Estado | Texto | Fondo suave |
 | --- | --- | --- |
 | Success | `#4F6B47` | `#E8EDE4` |
-| Warning | `#96601B` | `#F6E9D8` |
+| Warning | `#8A5714` | `#F6E9D8` |
 | Danger | `#A63F32` | `#F7E3DF` |
 | Info | `#4F6070` | `#E9EDF0` |
 
