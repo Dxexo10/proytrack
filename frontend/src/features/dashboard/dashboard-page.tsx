@@ -12,6 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { formatDate } from '@/domain/utils/date'
 import { formatCompactCurrency, formatCurrency } from '@/domain/utils/money'
 import { DEMO_REFERENCE_DATE } from '@/lib/demo-config'
+import { DEMO_CURRENT_USER } from '@/data/mock/seed/users'
 import { AttentionTable } from './components/attention-table'
 import { DashboardFilters } from './components/dashboard-filters'
 import {
@@ -81,12 +82,13 @@ export function DashboardPage() {
 
   const summary = data?.summary
   const previousPeriod = parsePeriod(String(period))
+  const firstName = DEMO_CURRENT_USER.name.split(' ')[0] ?? DEMO_CURRENT_USER.name
 
   return (
     <div className="space-y-5 lg:space-y-7">
       <PageHeader
-        title="Resumen general"
-        description="Una vista clara del estado de tu portafolio."
+        title={`Buen día, ${firstName}`}
+        description="Así avanzan tus proyectos."
         meta={
           <div className="flex flex-wrap items-center gap-2">
             <DemoBadge />
@@ -144,7 +146,7 @@ export function DashboardPage() {
               description="Proyectos creados y completados por mes."
               summary={`Serie mensual de ${summary.periodMonths} meses.`}
               action={
-                <span className="hidden rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground sm:inline">
+                <span className="hidden rounded-md bg-sand-soft px-2 py-1 text-xs text-muted-foreground sm:inline">
                   Últimos {summary.periodMonths} meses
                 </span>
               }
@@ -172,7 +174,7 @@ export function DashboardPage() {
               description="Comparación de la línea base con el presupuesto vigente por sector."
               summary={`Presupuesto actual del portafolio: ${formatCurrency(summary.totals.currentBudgetCents)}.`}
               action={
-                <span className="hidden rounded-md bg-muted px-2 py-1 text-xs text-muted-foreground sm:inline">
+                <span className="hidden rounded-md bg-sand-soft px-2 py-1 text-xs text-muted-foreground sm:inline">
                   {formatCompactCurrency(summary.totals.currentBudgetCents)} en
                   ejecución
                 </span>

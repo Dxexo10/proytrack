@@ -5,7 +5,7 @@ export function MonitorPage() {
   return (
     <ComingSoon
       title="Monitor de cambios"
-      description="La función distintiva de ProyTrack: cada modificación relevante, explicada."
+      description="La función distintiva de Trazo: cada modificación relevante, explicada."
       phase="Fase 3"
       icon={Radar}
       plannedFeatures={[

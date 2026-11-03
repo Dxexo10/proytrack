@@ -9,7 +9,7 @@ export function NotFoundPage() {
     <div className="space-y-6">
       <PageHeader
         title="Página no encontrada"
-        description="La ruta que buscas no existe en esta demo de ProyTrack."
+        description="La ruta que buscas no existe en esta demo de Trazo."
       />
       <Card className="gap-5 p-8 text-center">
         <span className="mx-auto inline-flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">

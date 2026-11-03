@@ -24,11 +24,11 @@ export function PageHeader({
       )}
     >
       <div className="min-w-0 space-y-2">
-        <h1 className="text-[26px] leading-tight font-semibold tracking-[-0.02em] text-foreground sm:text-[30px]">
+        <h1 className="text-[30px] leading-[1.08] font-semibold tracking-[-0.025em] text-foreground sm:text-[32px]">
           {title}
         </h1>
         {description ? (
-          <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          <p className="max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
             {description}
           </p>
         ) : null}

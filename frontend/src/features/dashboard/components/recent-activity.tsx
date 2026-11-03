@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import type { ActivityLog, Project, User } from '@/domain/models'
 import { formatRelative } from '@/domain/utils/date'
 import { DEMO_REFERENCE_DATE } from '@/lib/demo-config'
+import { cn } from '@/lib/utils'
 import { describeActivity, SOURCE_LABELS } from '@/lib/labels'
 
 const ACTION_ICONS: Record<string, LucideIcon> = {
@@ -25,11 +26,11 @@ const ACTION_ICONS: Record<string, LucideIcon> = {
 }
 
 const ACTION_STYLES: Record<string, string> = {
-  'project.created': 'bg-blue-50 text-blue-600',
-  'project.updated': 'bg-slate-100 text-slate-600',
-  'alert.generated': 'bg-amber-50 text-amber-600',
-  'alert.reviewed': 'bg-indigo-50 text-indigo-600',
-  'alert.resolved': 'bg-emerald-50 text-emerald-600',
+  'project.created': 'bg-brand-terracotta-subtle text-brand-terracotta-hover',
+  'project.updated': 'bg-sand-soft text-text-secondary',
+  'alert.generated': 'bg-warning-soft text-warning',
+  'alert.reviewed': 'bg-info-soft text-info',
+  'alert.resolved': 'bg-success-soft text-success',
 }
 
 interface RecentActivityProps {
@@ -59,8 +60,8 @@ export function RecentActivity({ activity, projects, users }: RecentActivityProp
           description="Los cambios en proyectos y alertas aparecerán aquí."
         />
       ) : (
-        <ol className="divide-y divide-border">
-          {activity.slice(0, 6).map((entry) => {
+        <ol className="px-5 py-2">
+          {activity.slice(0, 6).map((entry, index, items) => {
             const Icon = ACTION_ICONS[entry.action] ?? Activity
             const project = entry.projectId
               ? projectsById.get(entry.projectId)
@@ -68,12 +69,23 @@ export function RecentActivity({ activity, projects, users }: RecentActivityProp
             const actor = entry.actorId
               ? usersById.get(entry.actorId)
               : undefined
+            const isLast = index === items.length - 1
 
             return (
-              <li key={entry.id} className="flex gap-3 px-5 py-3">
+              <li key={entry.id} className="relative flex gap-3 py-3">
+                {!isLast ? (
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-10 bottom-[-12px] left-[13px] w-px bg-border"
+                  />
+                ) : null}
                 <span
                   aria-hidden="true"
-                  className={`mt-0.5 inline-flex size-7 shrink-0 items-center justify-center rounded-lg ${ACTION_STYLES[entry.action] ?? 'bg-slate-100 text-slate-600'}`}
+                  className={cn(
+                    'relative z-10 mt-0.5 inline-flex size-7 shrink-0 items-center justify-center rounded-lg ring-4 ring-surface',
+                    ACTION_STYLES[entry.action] ??
+                      'bg-sand-soft text-text-secondary',
+                  )}
                 >
                   <Icon className="size-3.5" />
                 </span>

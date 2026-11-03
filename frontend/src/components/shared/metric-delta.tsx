@@ -7,6 +7,7 @@ interface MetricDeltaProps {
   label: string
   lowerIsBetter?: boolean
   className?: string
+  onDark?: boolean
 }
 
 export function MetricDelta({
@@ -14,10 +15,19 @@ export function MetricDelta({
   label,
   lowerIsBetter = false,
   className,
+  onDark = false,
 }: MetricDeltaProps) {
   if (value === null || Number.isNaN(value)) {
     return (
-      <p className={cn('text-xs text-muted-foreground', className)}>{label}</p>
+      <p
+        className={cn(
+          'text-xs',
+          onDark ? 'text-brand-ivory/60' : 'text-muted-foreground',
+          className,
+        )}
+      >
+        {label}
+      </p>
     )
   }
 
@@ -30,17 +40,27 @@ export function MetricDelta({
       <span
         className={cn(
           'inline-flex items-center gap-0.5 rounded-md px-1 py-0.5 font-medium tabular-nums',
-          isFlat
-            ? 'bg-muted text-muted-foreground'
-            : isPositive
-              ? 'bg-success-soft text-success'
-              : 'bg-danger-soft text-danger',
+          onDark
+            ? isFlat
+              ? 'text-brand-ivory/70'
+              : isPositive
+                ? 'text-[#BFD3B8]'
+                : 'text-[#F0B6A6]'
+            : isFlat
+              ? 'bg-muted text-muted-foreground'
+              : isPositive
+                ? 'bg-success-soft text-success'
+                : 'bg-danger-soft text-danger',
         )}
       >
         <Icon aria-hidden="true" className="size-3" />
         {formatPercentage(value)}
       </span>
-      <span className="text-muted-foreground">{label}</span>
+      <span
+        className={cn(onDark ? 'text-brand-ivory/60' : 'text-muted-foreground')}
+      >
+        {label}
+      </span>
     </p>
   )
 }

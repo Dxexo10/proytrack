@@ -7,11 +7,11 @@ import { MetricDelta } from './metric-delta'
 type KpiTone = 'default' | 'positive' | 'warning' | 'danger' | 'info'
 
 const TONE_STYLES: Record<KpiTone, string> = {
-  default: 'bg-slate-50 text-slate-600 ring-slate-200/70',
-  positive: 'bg-emerald-50 text-emerald-600 ring-emerald-200/70',
-  warning: 'bg-amber-50 text-amber-600 ring-amber-200/70',
-  danger: 'bg-red-50 text-red-600 ring-red-200/70',
-  info: 'bg-blue-50 text-blue-600 ring-blue-200/70',
+  default: 'bg-sand-soft text-text-secondary ring-border',
+  positive: 'bg-success-soft text-success ring-success/15',
+  warning: 'bg-warning-soft text-warning ring-warning/15',
+  danger: 'bg-danger-soft text-danger ring-danger/15',
+  info: 'bg-info-soft text-info ring-info/15',
 }
 
 interface KpiCardProps {
@@ -24,6 +24,7 @@ interface KpiCardProps {
   lowerIsBetter?: boolean
   href?: string
   hint?: string
+  featured?: boolean
 }
 
 export function KpiCard({
@@ -36,24 +37,43 @@ export function KpiCard({
   lowerIsBetter = false,
   href,
   hint,
+  featured = false,
 }: KpiCardProps) {
   const content = (
-    <Card className="h-full gap-4 p-5 transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-[0_18px_38px_-26px_rgba(15,23,42,0.45)]">
+    <Card
+      className={cn(
+        'h-full gap-4 p-5 transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-raised',
+        featured &&
+          'bg-brand-graphite bg-[image:radial-gradient(120%_120%_at_100%_0%,rgba(198,93,58,0.22),transparent_60%)] text-brand-ivory shadow-[0_20px_50px_-30px_rgba(37,40,36,0.65)] ring-0',
+      )}
+    >
       <div className="flex items-start justify-between gap-3 px-0">
-        <p className="pt-0.5 text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
+        <p
+          className={cn(
+            'pt-0.5 text-[11px] font-semibold tracking-[0.12em] uppercase',
+            featured ? 'text-brand-ivory/70' : 'text-muted-foreground',
+          )}
+        >
           {label}
         </p>
         <span
           aria-hidden="true"
           className={cn(
             'inline-flex size-9 items-center justify-center rounded-xl ring-1 ring-inset',
-            TONE_STYLES[tone],
+            featured
+              ? 'bg-brand-terracotta text-white ring-brand-terracotta/40'
+              : TONE_STYLES[tone],
           )}
         >
           <Icon className="size-4" />
         </span>
       </div>
-      <p className="px-0 text-[30px] leading-none font-semibold tracking-[-0.02em] text-foreground tabular-nums">
+      <p
+        className={cn(
+          'px-0 text-[32px] leading-none font-semibold tracking-[-0.02em] tabular-nums',
+          featured ? 'text-brand-ivory' : 'text-foreground',
+        )}
+      >
         {value}
       </p>
       <div className="px-0">
@@ -62,9 +82,17 @@ export function KpiCard({
             value={delta}
             label={deltaLabel}
             lowerIsBetter={lowerIsBetter}
+            onDark={featured}
           />
         ) : (
-          <p className="text-xs text-muted-foreground">{hint}</p>
+          <p
+            className={cn(
+              'text-xs',
+              featured ? 'text-brand-ivory/60' : 'text-muted-foreground',
+            )}
+          >
+            {hint}
+          </p>
         )}
       </div>
     </Card>

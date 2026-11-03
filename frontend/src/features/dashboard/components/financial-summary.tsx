@@ -34,7 +34,7 @@ export function BudgetSummaryCard({
         </div>
         <span
           aria-hidden="true"
-          className="inline-flex size-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600"
+          className="inline-flex size-8 items-center justify-center rounded-lg bg-brand-terracotta-subtle text-brand-terracotta-hover"
         >
           <Wallet className="size-4" />
         </span>
@@ -60,7 +60,7 @@ export function BudgetSummaryCard({
           <div
             className={cn(
               'h-full rounded-full transition-[width] duration-300',
-              isOverBudget ? 'bg-warning' : 'bg-brand-primary',
+              isOverBudget ? 'bg-warning' : 'bg-brand-terracotta',
             )}
             style={{ width: `${ratio}%` }}
           />
@@ -70,7 +70,7 @@ export function BudgetSummaryCard({
           <span
             className={cn(
               'font-medium tabular-nums',
-              isOverBudget ? 'text-amber-600' : 'text-foreground',
+              isOverBudget ? 'text-warning' : 'text-foreground',
             )}
           >
             {formatPercentage(variationPct)}
@@ -85,15 +85,15 @@ export function BudgetSummaryCard({
 const SEVERITY_STYLES = {
   critical: {
     icon: OctagonAlert,
-    className: 'bg-red-50 text-red-600',
+    className: 'bg-danger-soft text-danger',
   },
   warning: {
     icon: TriangleAlert,
-    className: 'bg-amber-50 text-amber-600',
+    className: 'bg-warning-soft text-warning',
   },
   info: {
     icon: Info,
-    className: 'bg-blue-50 text-blue-600',
+    className: 'bg-info-soft text-info',
   },
 } as const
 
@@ -117,7 +117,7 @@ export function AlertsSummaryCard({
         </div>
         <span
           aria-hidden="true"
-          className="inline-flex size-8 items-center justify-center rounded-lg bg-amber-50 text-amber-600"
+          className="inline-flex size-8 items-center justify-center rounded-lg bg-warning-soft text-warning"
         >
           <BellRing className="size-4" />
         </span>
@@ -155,7 +155,7 @@ export function AlertsSummaryCard({
 
       <Link
         to="/alerts"
-        className="text-xs font-medium text-brand-primary hover:text-brand-primary-hover hover:underline"
+        className="text-xs font-medium text-brand-terracotta-hover hover:text-brand-terracotta-strong hover:underline"
       >
         Ir al centro de alertas
       </Link>

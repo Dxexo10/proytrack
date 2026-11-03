@@ -24,6 +24,7 @@ export function KpiGrid({ summary }: KpiGridProps) {
         tone="default"
         delta={deltas.projects}
         href="/projects"
+        featured
       />
       <KpiCard
         label="En ejecución"

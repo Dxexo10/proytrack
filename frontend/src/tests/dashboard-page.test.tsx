@@ -17,7 +17,7 @@ describe('DashboardPage', () => {
     expect(
       await screen.findByRole(
         'heading',
-        { name: 'Resumen general', level: 1 },
+        { name: 'Buen día, Sofía', level: 1 },
         { timeout: 8000 },
       ),
     ).toBeInTheDocument()

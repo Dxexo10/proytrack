@@ -20,9 +20,9 @@ import { formatDate } from '@/domain/utils/date'
 import { cn } from '@/lib/utils'
 
 const RISK_STYLES = {
-  high: 'border-red-200 bg-red-50 text-red-700',
-  medium: 'border-amber-200 bg-amber-50 text-amber-700',
-  low: 'border-slate-200 bg-slate-50 text-slate-600',
+  high: 'border-danger/20 bg-danger-soft text-danger',
+  medium: 'border-warning/20 bg-warning-soft text-warning',
+  low: 'border-border bg-sand-soft text-muted-foreground',
 } as const
 
 const RISK_LABELS = {
@@ -80,7 +80,7 @@ export function AttentionTable({ items, users }: AttentionTableProps) {
                   <TableCell className="max-w-[240px] pl-5 whitespace-normal">
                     <Link
                       to={`/projects/${item.project.id}`}
-                      className="block truncate font-medium text-foreground hover:text-brand-primary hover:underline"
+                      className="block truncate font-medium text-foreground hover:text-brand-terracotta-hover hover:underline"
                     >
                       {item.project.name}
                     </Link>

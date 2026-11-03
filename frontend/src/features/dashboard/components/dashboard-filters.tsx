@@ -23,7 +23,7 @@ export function DashboardFilters({ period, onChange }: DashboardFiltersProps) {
             className={cn(
               'rounded-lg px-3 py-1 text-xs font-medium transition-colors duration-150',
               active
-                ? 'bg-brand-navy text-white shadow-[0_4px_10px_-6px_rgba(15,23,42,0.7)]'
+                ? 'bg-brand-terracotta-strong text-white shadow-[0_4px_10px_-6px_rgba(198,93,58,0.8)]'
                 : 'text-muted-foreground hover:bg-surface hover:text-foreground',
             )}
           >
