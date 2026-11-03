@@ -83,7 +83,7 @@ export function DashboardPage() {
   const previousPeriod = parsePeriod(String(period))
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 lg:space-y-7">
       <PageHeader
         title="Resumen general"
         description="Una vista clara del estado de tu portafolio."
@@ -92,7 +92,7 @@ export function DashboardPage() {
             <DemoBadge />
             <span className="text-xs text-muted-foreground">
               Datos de referencia al {formatDate(DEMO_REFERENCE_DATE)} ·
-              periodo de {previousPeriod} meses
+              comparación de {previousPeriod} meses
             </span>
           </div>
         }

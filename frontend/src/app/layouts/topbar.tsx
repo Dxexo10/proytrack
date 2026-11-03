@@ -128,28 +128,37 @@ function UserMenu() {
 
 export function Topbar() {
   return (
-    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-2 border-b border-border bg-surface/85 px-3 backdrop-blur supports-[backdrop-filter]:bg-surface/70 sm:px-5 lg:px-6">
-      <MobileNav />
-      <Breadcrumb />
+    <header className="sticky top-0 z-30 bg-canvas px-3 pt-3 sm:px-5 lg:px-6">
+      <div className="mx-auto w-full max-w-[1600px]">
+        <div className="flex h-14 items-center gap-2 rounded-2xl border border-border/80 bg-surface/90 px-3 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.55)] backdrop-blur-md sm:px-4">
+          <MobileNav />
+          <Breadcrumb />
 
-      <div className="ml-auto flex items-center gap-1 sm:gap-1.5">
-        <span className="mr-1 hidden items-center gap-1.5 rounded-full border border-border bg-surface px-2.5 py-1 text-xs text-muted-foreground md:inline-flex">
-          <CalendarDays aria-hidden="true" className="size-3.5" />
-          Datos al {formatDate(DEMO_REFERENCE_DATE)}
-        </span>
+          <div className="ml-auto flex items-center gap-1 sm:gap-1.5">
+            <span className="mr-1 hidden items-center gap-1.5 rounded-full border border-border/80 bg-canvas px-2.5 py-1 text-xs text-muted-foreground md:inline-flex">
+              <CalendarDays aria-hidden="true" className="size-3.5" />
+              Datos al {formatDate(DEMO_REFERENCE_DATE)}
+            </span>
 
-        <Button
-          variant="ghost"
-          size="icon"
-          disabled
-          aria-label="Buscador global — disponible en la Fase 2"
-          title="Buscador global · disponible en la Fase 2"
-        >
-          <Search aria-hidden="true" className="size-[18px]" />
-        </Button>
+            <span
+              aria-hidden="true"
+              className="mx-0.5 hidden h-5 w-px bg-border sm:block"
+            />
 
-        <AlertsShortcut />
-        <UserMenu />
+            <Button
+              variant="ghost"
+              size="icon"
+              disabled
+              aria-label="Buscador global — disponible en la Fase 2"
+              title="Buscador global · disponible en la Fase 2"
+            >
+              <Search aria-hidden="true" className="size-[18px]" />
+            </Button>
+
+            <AlertsShortcut />
+            <UserMenu />
+          </div>
+        </div>
       </div>
     </header>
   )

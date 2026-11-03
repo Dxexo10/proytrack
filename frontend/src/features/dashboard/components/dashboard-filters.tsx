@@ -9,7 +9,7 @@ interface DashboardFiltersProps {
 
 export function DashboardFilters({ period, onChange }: DashboardFiltersProps) {
   return (
-    <fieldset className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface p-1">
+    <fieldset className="inline-flex items-center gap-1 rounded-xl border border-border/80 bg-canvas/80 p-1">
       <legend className="sr-only">Periodo del resumen</legend>
       {PERIODS.map((option) => {
         const active = option === period
@@ -21,10 +21,10 @@ export function DashboardFilters({ period, onChange }: DashboardFiltersProps) {
             onClick={() => onChange(option)}
             aria-pressed={active}
             className={cn(
-              'rounded-md px-2.5 py-1 text-xs font-medium transition-colors',
+              'rounded-lg px-3 py-1 text-xs font-medium transition-colors duration-150',
               active
-                ? 'bg-brand-navy text-white'
-                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                ? 'bg-brand-navy text-white shadow-[0_4px_10px_-6px_rgba(15,23,42,0.7)]'
+                : 'text-muted-foreground hover:bg-surface hover:text-foreground',
             )}
           >
             {option} meses

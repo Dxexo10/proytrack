@@ -1,4 +1,4 @@
-import { Menu } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { LogoMark } from '@/components/shared/logo-mark'
@@ -6,6 +6,7 @@ import { DemoBadge } from '@/components/shared/demo-badge'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -36,9 +37,9 @@ export function MobileNav() {
       <SheetContent
         side="left"
         showCloseButton={false}
-        className="w-[280px] gap-0 border-sidebar-border bg-sidebar p-0 text-sidebar-foreground sm:max-w-[280px]"
+        className="w-[280px] gap-0 border-white/10 bg-brand-navy p-0 text-sidebar-foreground sm:max-w-[280px]"
       >
-        <SheetHeader className="flex h-16 flex-row items-center gap-3 border-b border-sidebar-border px-4 py-0">
+        <SheetHeader className="flex h-16 flex-row items-center gap-3 border-b border-white/10 px-4 py-0">
           <LogoMark />
           <div className="min-w-0">
             <SheetTitle className="text-sm font-semibold text-white">
@@ -48,11 +49,23 @@ export function MobileNav() {
               Project Management &amp; Intelligence
             </SheetDescription>
           </div>
+          <SheetClose
+            render={
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                className="ml-auto text-slate-400 hover:bg-white/10 hover:text-white"
+                aria-label="Cerrar navegación"
+              />
+            }
+          >
+            <X aria-hidden="true" className="size-4" />
+          </SheetClose>
         </SheetHeader>
 
-        <SidebarNav onNavigate={() => setOpen(false)} />
+        <SidebarNav showDemoBadge={false} onNavigate={() => setOpen(false)} />
 
-        <div className="border-t border-sidebar-border p-3">
+        <div className="border-t border-white/10 p-3">
           <DemoBadge variant="dark" className="w-full justify-center" />
           <p className="mt-2 text-center text-[11px] text-sidebar-foreground/60">
             {openAlerts ?? 0} alertas abiertas ·{' '}

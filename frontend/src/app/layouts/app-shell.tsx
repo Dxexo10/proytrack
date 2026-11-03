@@ -1,34 +1,71 @@
+import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { DEMO_LABEL } from '@/lib/demo-config'
+import { cn } from '@/lib/utils'
 import { Sidebar } from './sidebar'
 import { Topbar } from './topbar'
 
+const COLLAPSE_STORAGE_KEY = 'proytrack:nav-collapsed'
+
+function useSidebarCollapse() {
+  const [collapsed, setCollapsed] = useState(() => {
+    try {
+      const stored = window.localStorage.getItem(COLLAPSE_STORAGE_KEY)
+      return stored === null ? true : stored === 'true'
+    } catch {
+      return true
+    }
+  })
+
+  const toggle = () => {
+    setCollapsed((previous) => {
+      const next = !previous
+      try {
+        window.localStorage.setItem(COLLAPSE_STORAGE_KEY, String(next))
+      } catch {
+        // La preferencia es cosmética: si el almacenamiento no está disponible,
+        // la navegación sigue funcionando en memoria.
+      }
+      return next
+    })
+  }
+
+  return { collapsed, toggle }
+}
+
 export function AppShell() {
+  const { collapsed, toggle } = useSidebarCollapse()
+
   return (
     <div className="min-h-svh bg-canvas">
       <a
         href="#contenido"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-brand-navy focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-xl focus:bg-brand-navy focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
       >
         Saltar al contenido
       </a>
 
-      <Sidebar />
+      <Sidebar collapsed={collapsed} onToggle={toggle} />
 
-      <div className="flex min-h-svh flex-col lg:pl-[72px] xl:pl-64">
+      <div
+        className={cn(
+          'flex min-h-svh flex-col transition-[padding-left] duration-200 ease-out',
+          collapsed ? 'lg:pl-[92px]' : 'lg:pl-[264px]',
+        )}
+      >
         <Topbar />
+
         <main
           id="contenido"
           tabIndex={-1}
-          className="mx-auto w-full max-w-[1600px] flex-1 px-4 py-6 outline-none sm:px-6 lg:px-8 lg:py-8"
+          className="mx-auto w-full max-w-[1600px] flex-1 px-3 pt-2 pb-8 outline-none sm:px-5 lg:px-6"
         >
           <Outlet />
         </main>
-        <footer className="border-t border-border px-4 py-4 text-xs text-muted-foreground sm:px-6 lg:px-8">
-          <div className="mx-auto flex w-full max-w-[1600px] flex-wrap items-center justify-between gap-2">
-            <span>
-              ProyTrack · Project Management &amp; Intelligence
-            </span>
+
+        <footer className="px-3 pb-4 sm:px-5 lg:px-6">
+          <div className="mx-auto flex w-full max-w-[1600px] flex-wrap items-center justify-between gap-2 rounded-2xl border border-border/70 bg-surface/60 px-4 py-3 text-xs text-muted-foreground">
+            <span>ProyTrack · Project Management &amp; Intelligence</span>
             <span>{DEMO_LABEL}</span>
           </div>
         </footer>
