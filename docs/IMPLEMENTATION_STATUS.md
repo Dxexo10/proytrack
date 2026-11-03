@@ -6,15 +6,15 @@ Actualizado al cierre de la **Fase 1 · Fundamentos + Dashboard**.
 
 | Tarea | Resultado | Verificación | Commit |
 | --- | --- | --- | --- |
-| Workspace Vite + React + TypeScript, alias, ESLint/Prettier/Vitest | Listo | `lint`, `typecheck` | `a88316d` |
-| Tokens de diseño ProyTrack y primitivas shadcn/ui | Listo | revisión visual | `a88316d` |
-| Modelos de dominio, utilidades de dinero y fechas | Listo | unit tests | `ec78075` |
-| Dataset determinista (50 proyectos, alertas, actividad) | Listo | unit tests de determinismo y coherencia | `ec78075` |
-| Contratos de repositorio + adaptadores mock con IndexedDB | Listo | tests contra `fake-indexeddb` | `ec78075` |
-| App shell: sidebar, topbar, drawer móvil, breadcrumbs, 404 | Listo | smoke test de rutas | `5629a33` |
-| Dashboard: KPIs, 3 gráficos, tabla de atención, actividad | Listo | smoke test de render | `5629a33` |
-| Filtro de periodo en URL y recálculo de indicadores | Listo | verificación manual | `5629a33` |
-| Pruebas unitarias y de render | 28 tests en verde | `npm run test` | `6ddec5e` |
+| Workspace Vite + React + TypeScript, alias, ESLint/Prettier/Vitest | Listo | `lint`, `typecheck` | `dc350b0` |
+| Tokens de diseño ProyTrack y primitivas shadcn/ui | Listo | revisión visual | `dc350b0` |
+| Modelos de dominio, utilidades de dinero y fechas | Listo | unit tests | `f16a5e2` |
+| Dataset determinista (50 proyectos, alertas, actividad) | Listo | unit tests de determinismo y coherencia | `f16a5e2` |
+| Contratos de repositorio + adaptadores mock con IndexedDB | Listo | tests contra `fake-indexeddb` | `f16a5e2` |
+| App shell: sidebar, topbar, drawer móvil, breadcrumbs, 404 | Listo | smoke test de rutas | `13de103` |
+| Dashboard: KPIs, 3 gráficos, tabla de atención, actividad | Listo | smoke test de render | `13de103` |
+| Filtro de periodo en URL y recálculo de indicadores | Listo | verificación manual | `13de103` |
+| Pruebas unitarias y de render | 32 tests en verde | `npm run test` | `4ea5f1e` |
 | Documentación (README, arquitectura, design system, ADRs) | Listo | revisión | este commit |
 
 ### Verificación ejecutada
@@ -22,7 +22,7 @@ Actualizado al cierre de la **Fase 1 · Fundamentos + Dashboard**.
 ```text
 npm run lint       → 0 errores, 0 advertencias
 npm run typecheck  → sin errores
-npm run test       → 6 archivos, 28 pruebas aprobadas
+npm run test       → 7 archivos, 32 pruebas aprobadas
 npm run build      → dist generado (chunks separados por vendor y ruta)
 ```
 
