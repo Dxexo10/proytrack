@@ -14,7 +14,7 @@ web
 
 ## Product Purpose
 
-ProyTrack centraliza la gestión de proyectos empresariales —portafolio, presupuestos, avance, fechas y responsables— y convierte los cambios relevantes en alertas explicables e indicadores ejecutivos.
+Trazo centraliza la gestión de proyectos empresariales —portafolio, presupuestos, avance, fechas y responsables— y convierte los cambios relevantes en alertas explicables e indicadores ejecutivos.
 
 La demo existe para que una persona que nunca vio el producto entienda el estado del portafolio, abra y edite un proyecto, observe la detección de un cambio, revise la alerta y consulte el historial, todo sin backend real. El éxito se mide por esa secuencia comprensible de extremo a extremo con datos simulados coherentes.
 
@@ -42,10 +42,12 @@ No se limita a mostrar el estado actual: conserva versiones de cada proyecto y e
 
 ## Brand Commitments
 
-- Nombre: **ProyTrack**. Descriptor: **Project Management & Intelligence**. Eslogan: **Tus proyectos bajo control.**
-- Personalidad confirmada: profesional, moderna, precisa, clara, confiable y sobria; tono directo orientado a decisiones, sin jerga innecesaria.
-- Wordmark y logotipo actual de barras son provisionales; no inventar clientes, testimonios ni resultados de negocio.
-- Restricción visual vinculante del propietario: **tono claro (light mode)**. El detalle del sistema visual se define fuera de este documento.
+- Nombre: **Trazo**. Wordmark opcional: **trazo.** Descriptor: **Project Management & Intelligence**. Eslogan: **Cada proyecto tiene un camino.**
+- Personalidad confirmada: profesional pero cercana, moderna sin plantilla, elegante sin ostentación, tecnológica sin futurismo, confiable, clara y minimalista con identidad propia. Tono directo orientado a decisiones, sin anglicismos innecesarios.
+- La identidad visual vinculante (terracota, grafito, marfil, arena y oliva; Manrope + Inter; Floating Workspace) se define en `TRAZO_BRAND_GUIDELINES.md`.
+- Restricción visual vinculante del propietario: **tono claro (light mode)**.
+- El wordmark y el logotipo actual son provisionales; no inventar clientes, testimonios ni resultados de negocio.
+- El repositorio remoto conserva su nombre técnico hasta autorización expresa del propietario.
 
 ## Evidence on Hand
 
