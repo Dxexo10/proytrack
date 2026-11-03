@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { BellRing, CalendarDays, Search } from 'lucide-react'
+import { BellRing } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,8 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { DEMO_REFERENCE_DATE } from '@/lib/demo-config'
-import { formatDate } from '@/domain/utils/date'
 import { initials } from '@/domain/utils/format'
 import { ROLE_LABELS } from '@/lib/labels'
 import { DEMO_CURRENT_USER } from '@/data/mock/seed/users'
@@ -28,9 +26,14 @@ function Breadcrumb() {
 
   return (
     <nav aria-label="Ruta de navegación" className="min-w-0">
-      <ol className="flex min-w-0 items-center gap-1.5 text-sm">
-        <li className="hidden text-muted-foreground sm:block">ProyTrack</li>
-        <li aria-hidden="true" className="hidden text-muted-foreground/50 sm:block">
+      <ol className="flex min-w-0 items-center gap-2 text-sm">
+        <li className="hidden font-heading text-[13px] font-semibold tracking-tight text-brand-graphite sm:block">
+          trazo<span className="text-brand-terracotta">.</span>
+        </li>
+        <li
+          aria-hidden="true"
+          className="hidden text-brand-sand sm:block"
+        >
           /
         </li>
         {parent && parent.href !== pathname ? (
@@ -38,14 +41,14 @@ function Breadcrumb() {
             <li className="hidden sm:block">
               <Link
                 to={parent.href}
-                className="rounded text-muted-foreground hover:text-foreground"
+                className="rounded text-muted-foreground transition-colors hover:text-foreground"
               >
                 {parent.label}
               </Link>
             </li>
             <li
               aria-hidden="true"
-              className="hidden text-muted-foreground/50 sm:block"
+              className="hidden text-brand-sand sm:block"
             >
               /
             </li>
@@ -57,6 +60,21 @@ function Breadcrumb() {
   )
 }
 
+function DemoIndicator() {
+  return (
+    <span
+      className="hidden items-center gap-1.5 rounded-full border border-brand-terracotta/20 bg-brand-terracotta-subtle px-2.5 py-1 text-[11px] font-medium text-brand-terracotta-hover md:inline-flex"
+      title="Entorno de demostración · Datos simulados"
+    >
+      <span
+        aria-hidden="true"
+        className="size-1.5 rounded-full bg-brand-terracotta"
+      />
+      Demo · datos simulados
+    </span>
+  )
+}
+
 function AlertsShortcut() {
   const { data: openAlerts } = useOpenAlertsCount()
   const count = openAlerts ?? 0
@@ -65,13 +83,13 @@ function AlertsShortcut() {
     <Button
       variant="ghost"
       size="icon"
-      className="relative"
+      className="relative text-text-secondary hover:bg-brand-terracotta-subtle hover:text-brand-terracotta-hover"
       render={<Link to="/alerts" />}
       aria-label={`Centro de alertas: ${count} alertas abiertas`}
     >
       <BellRing aria-hidden="true" className="size-[18px]" />
       {count > 0 ? (
-        <span className="absolute -top-0.5 -right-0.5 inline-flex min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[10px] font-semibold leading-4 text-white">
+        <span className="absolute -top-0.5 -right-0.5 inline-flex min-w-4 items-center justify-center rounded-full bg-brand-terracotta px-1 text-[10px] font-semibold leading-4 text-white">
           {count > 9 ? '9+' : count}
         </span>
       ) : null}
@@ -87,18 +105,18 @@ function UserMenu() {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full"
+            className="rounded-full hover:bg-sand-soft"
             aria-label="Abrir menú de perfil"
           />
         }
       >
         <Avatar size="sm">
-          <AvatarFallback className="bg-brand-navy text-[11px] font-semibold text-white">
+          <AvatarFallback className="bg-brand-graphite text-[11px] font-semibold text-brand-ivory">
             {initials(DEMO_CURRENT_USER.name)}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-64">
+      <DropdownMenuContent align="end" className="w-64 rounded-xl">
         <DropdownMenuLabel>Perfil de demostración</DropdownMenuLabel>
         <div className="px-1.5 pb-2">
           <p className="text-sm font-medium text-foreground">
@@ -118,9 +136,7 @@ function UserMenu() {
         >
           Configuración demo
         </DropdownMenuItem>
-        <DropdownMenuItem disabled>
-          Restablecer datos · Fase 4
-        </DropdownMenuItem>
+        <DropdownMenuItem disabled>Restablecer datos · Fase 4</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
@@ -130,31 +146,12 @@ export function Topbar() {
   return (
     <header className="sticky top-0 z-30 bg-canvas px-3 pt-3 sm:px-5 lg:px-6">
       <div className="mx-auto w-full max-w-[1600px]">
-        <div className="flex h-14 items-center gap-2 rounded-2xl border border-border/80 bg-surface/90 px-3 shadow-[0_18px_40px_-32px_rgba(15,23,42,0.55)] backdrop-blur-md sm:px-4">
+        <div className="flex h-14 items-center gap-2 rounded-3xl border border-brand-sand/90 bg-surface/95 px-3 shadow-card backdrop-blur-sm sm:px-4">
           <MobileNav />
           <Breadcrumb />
 
-          <div className="ml-auto flex items-center gap-1 sm:gap-1.5">
-            <span className="mr-1 hidden items-center gap-1.5 rounded-full border border-border/80 bg-canvas px-2.5 py-1 text-xs text-muted-foreground md:inline-flex">
-              <CalendarDays aria-hidden="true" className="size-3.5" />
-              Datos al {formatDate(DEMO_REFERENCE_DATE)}
-            </span>
-
-            <span
-              aria-hidden="true"
-              className="mx-0.5 hidden h-5 w-px bg-border sm:block"
-            />
-
-            <Button
-              variant="ghost"
-              size="icon"
-              disabled
-              aria-label="Buscador global — disponible en la Fase 2"
-              title="Buscador global · disponible en la Fase 2"
-            >
-              <Search aria-hidden="true" className="size-[18px]" />
-            </Button>
-
+          <div className="ml-auto flex items-center gap-1 sm:gap-2">
+            <DemoIndicator />
             <AlertsShortcut />
             <UserMenu />
           </div>
