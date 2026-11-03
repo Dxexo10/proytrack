@@ -65,7 +65,10 @@ async function ensureSeeded(db: IDBPDatabase<ProyTrackDB>): Promise<void> {
     meta.schemaVersion === DEMO_SCHEMA_VERSION &&
     meta.referenceDate === DEMO_REFERENCE_DATE
 
-  if (isCurrent) return
+  if (isCurrent) {
+    const projectCount = await db.count('projects')
+    if (projectCount > 0) return
+  }
 
   await writeDataset(db, generateDemoDataset())
 }

@@ -96,7 +96,21 @@ describe('buildDashboardSummary', () => {
     ).toBe(1)
   })
 
-  it('compares against the previous window', () => {
+  it('keeps the portfolio snapshot independent from the selected period', () => {
+    const shortWindow = buildDashboardSummary({
+      projects,
+      alerts: [alert],
+      filters: { periodMonths: 3 },
+      referenceDate: REFERENCE,
+    })
+
+    expect(shortWindow.totals.projects).toBe(3)
+    expect(shortWindow.totals.completed).toBe(1)
+    expect(shortWindow.totals.openAlerts).toBe(1)
+    expect(shortWindow.statusDistribution).toHaveLength(5)
+  })
+
+  it('compares the selected period against the previous window', () => {
     const previous = buildDashboardSummary({
       projects: [
         ...projects,
@@ -111,7 +125,7 @@ describe('buildDashboardSummary', () => {
       referenceDate: REFERENCE,
     })
 
-    expect(previous.totals.projects).toBe(2)
-    expect(previous.deltas.projects).not.toBeNull()
+    expect(previous.totals.projects).toBe(4)
+    expect(previous.deltas.projects).toBe(100)
   })
 })

@@ -122,6 +122,7 @@ export function buildDashboardSummary({
   const today = toISODate(reference)
 
   const available = projects.filter((project) => project.archivedAt === null)
+
   const current = available.filter((project) =>
     inRange(project.createdAt, windowStart, `${today}T23:59:59.999Z`),
   )
@@ -129,20 +130,35 @@ export function buildDashboardSummary({
     inRange(project.createdAt, previousStart, windowStart),
   )
 
-  const currentIds = new Set(current.map((project) => project.id))
-  const currentAlerts = alerts.filter((alert) => currentIds.has(alert.projectId))
-  const openAlerts = currentAlerts.filter((alert) => alert.status === 'open')
+  const availableIds = new Set(available.map((project) => project.id))
+  const portfolioAlerts = alerts.filter((alert) =>
+    availableIds.has(alert.projectId),
+  )
+  const openAlerts = portfolioAlerts.filter((alert) => alert.status === 'open')
 
-  const inProgress = current.filter(
+  const inProgress = available.filter(
     (project) => project.status === 'in_progress',
   ).length
-  const completed = current.filter(
+  const completed = available.filter(
     (project) => project.status === 'completed',
   ).length
-  const onHold = current.filter((project) => project.status === 'on_hold').length
-  const overdue = current.filter((project) => isOverdue(project, referenceDate))
-    .length
-  const attention = current.filter((project) =>
+  const onHold = available.filter(
+    (project) => project.status === 'on_hold',
+  ).length
+  const overdue = available.filter((project) =>
+    isOverdue(project, referenceDate),
+  ).length
+  const attention = available.filter((project) =>
+    requiresAttention(project, referenceDate),
+  ).length
+
+  const periodInProgress = current.filter(
+    (project) => project.status === 'in_progress',
+  ).length
+  const periodCompleted = current.filter(
+    (project) => project.status === 'completed',
+  ).length
+  const periodAttention = current.filter((project) =>
     requiresAttention(project, referenceDate),
   ).length
 
@@ -156,11 +172,11 @@ export function buildDashboardSummary({
     requiresAttention(project, referenceDate),
   ).length
 
-  const plannedBudgetCents = current.reduce(
+  const plannedBudgetCents = available.reduce(
     (total, project) => total + project.initialBudgetCents,
     0,
   )
-  const currentBudgetCents = current.reduce(
+  const currentBudgetCents = available.reduce(
     (total, project) => total + project.currentBudgetCents,
     0,
   )
@@ -188,11 +204,11 @@ export function buildDashboardSummary({
 
   const statusDistribution: StatusSlice[] = STATUS_ORDER.map((status) => ({
     status,
-    count: current.filter((project) => project.status === status).length,
+    count: available.filter((project) => project.status === status).length,
   }))
 
   const sectorBudget: SectorBudget[] = SECTOR_ORDER.map((sector) => {
-    const sectorProjects = current.filter(
+    const sectorProjects = available.filter(
       (project) => project.sector === sector,
     )
     return {
@@ -208,7 +224,7 @@ export function buildDashboardSummary({
     }
   })
 
-  const attentionProjects: AttentionItem[] = current
+  const attentionProjects: AttentionItem[] = available
     .map((project) => {
       const risk = assessProjectRisk(project, referenceDate)
       return {
@@ -231,7 +247,7 @@ export function buildDashboardSummary({
     periodMonths: filters.periodMonths,
     referenceDate,
     totals: {
-      projects: current.length,
+      projects: available.length,
       inProgress,
       completed,
       onHold,
@@ -244,9 +260,9 @@ export function buildDashboardSummary({
     budgetVariationPct: percentageChange(plannedBudgetCents, currentBudgetCents),
     deltas: {
       projects: percentageChange(previous.length, current.length),
-      inProgress: percentageChange(previousInProgress, inProgress),
-      completed: percentageChange(previousCompleted, completed),
-      attention: percentageChange(previousAttention, attention),
+      inProgress: percentageChange(previousInProgress, periodInProgress),
+      completed: percentageChange(previousCompleted, periodCompleted),
+      attention: percentageChange(previousAttention, periodAttention),
     },
     trend,
     statusDistribution,

@@ -32,8 +32,9 @@ modo que el portafolio siempre se ve coherente sin depender de un backend.
 
 - Dashboard ejecutivo (`/dashboard`) con KPIs calculados desde los datos, tres
   gráficos, tabla de proyectos que requieren atención y actividad reciente.
-- Filtro de periodo (3 / 6 / 12 meses) reflejado en la URL y recalculando todos
-  los indicadores.
+- Filtro de periodo (3 / 6 / 12 meses) reflejado en la URL: ajusta la serie
+  mensual y la comparación contra el periodo anterior, mientras los totales
+  siempre representan el portafolio activo completo.
 - Layout responsive completo: sidebar compacta, drawer móvil, topbar con
   breadcrumb, alertas abiertas y perfil demo.
 - Dataset determinista de 50 proyectos, alertas y actividad persistidos en
@@ -128,8 +129,9 @@ incluye renders ni mockups que no correspondan a pantallas implementadas.
 
 - No hay backend, autenticación ni multiempresa: el perfil es fijo y de demo.
 - Los módulos de la Fase 2 y 3 aún no están implementados.
-- El dashboard filtra por fecha de creación de proyecto; los filtros por estado,
-  prioridad y responsable llegan con el listado de proyectos.
+- El periodo del dashboard afecta a la tendencia y a los deltas frente al
+  periodo anterior; los totales y la distribución representan el portafolio
+  activo completo.
 
 ## Licencia
 

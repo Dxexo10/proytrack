@@ -3,6 +3,7 @@ import { generateActivity } from '@/data/mock/seed/activity'
 import { generateAlerts } from '@/data/mock/seed/alerts'
 import { generateProjects } from '@/data/mock/seed/projects'
 import { createRandom } from '@/data/mock/seed/random'
+import { buildDashboardSummary } from '@/domain/services/dashboard-summary'
 import { DEMO_REFERENCE_DATE, DEMO_SEED } from '@/lib/demo-config'
 
 function generate() {
@@ -60,5 +61,26 @@ describe('demo dataset', () => {
     ).toBe(true)
     expect(alerts.every((alert) => alert.createdAt <= reference)).toBe(true)
     expect(activity.every((entry) => entry.createdAt <= reference)).toBe(true)
+  })
+
+  it('reports the full portfolio for every dashboard period', () => {
+    const { projects, alerts } = generate()
+
+    for (const periodMonths of [3, 6, 12] as const) {
+      const summary = buildDashboardSummary({
+        projects,
+        alerts,
+        filters: { periodMonths },
+        referenceDate: DEMO_REFERENCE_DATE,
+      })
+
+      expect(summary.periodMonths).toBe(periodMonths)
+      expect(summary.totals.projects).toBe(projects.length)
+      expect(summary.totals.completed).toBeGreaterThan(0)
+      expect(summary.totals.openAlerts).toBeGreaterThan(0)
+      expect(
+        summary.statusDistribution.reduce((total, slice) => total + slice.count, 0),
+      ).toBe(projects.length)
+    }
   })
 })
