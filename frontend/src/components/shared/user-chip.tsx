@@ -12,7 +12,7 @@ export function UserChip({ name, className, size = 'sm' }: UserChipProps) {
   return (
     <span className={cn('inline-flex min-w-0 items-center gap-2', className)}>
       <Avatar size={size} className="shrink-0">
-        <AvatarFallback className="bg-slate-100 text-[10px] font-semibold text-slate-600">
+        <AvatarFallback className="bg-sand-soft text-[10px] font-semibold text-text-secondary">
           {initials(name)}
         </AvatarFallback>
       </Avatar>

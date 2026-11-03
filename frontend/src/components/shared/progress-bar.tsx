@@ -29,7 +29,7 @@ export function ProgressBar({
         <div
           className={cn(
             'h-full rounded-full transition-[width] duration-300',
-            safeValue === 100 ? 'bg-emerald-500' : 'bg-brand-primary',
+            safeValue === 100 ? 'bg-brand-olive' : 'bg-brand-terracotta',
           )}
           style={{ width: `${safeValue}%` }}
         />

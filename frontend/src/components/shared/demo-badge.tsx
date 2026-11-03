@@ -12,14 +12,14 @@ export function DemoBadge({ variant = 'light', className }: DemoBadgeProps) {
       className={cn(
         'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium leading-tight',
         variant === 'light'
-          ? 'border border-amber-200 bg-amber-50 text-amber-800'
-          : 'border border-amber-400/20 bg-amber-400/10 text-amber-200',
+          ? 'border border-brand-terracotta/20 bg-brand-terracotta-subtle text-brand-terracotta-hover'
+          : 'border border-white/15 bg-white/10 text-brand-ivory',
         className,
       )}
     >
       <span
         aria-hidden="true"
-        className="size-1.5 shrink-0 rounded-full bg-amber-500"
+        className="size-1.5 shrink-0 rounded-full bg-brand-terracotta"
       />
       {DEMO_LABEL}
     </span>

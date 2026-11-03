@@ -17,7 +17,7 @@ export function RouteError() {
         role="alert"
         className="w-full max-w-lg rounded-2xl border border-border bg-surface p-8 text-center"
       >
-        <span className="mx-auto mb-4 inline-flex size-12 items-center justify-center rounded-full bg-red-50 text-red-600">
+        <span className="mx-auto mb-4 inline-flex size-12 items-center justify-center rounded-full bg-danger-soft text-danger">
           <AlertTriangle aria-hidden="true" className="size-6" />
         </span>
         <h1 className="text-lg font-semibold text-foreground">

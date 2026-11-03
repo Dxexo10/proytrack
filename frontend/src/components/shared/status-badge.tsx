@@ -16,23 +16,24 @@ const STATUS_STYLES: Record<
 > = {
   planned: {
     icon: CircleDashed,
-    className: 'border-slate-200 bg-slate-50 text-slate-600',
+    className: 'border-border bg-sand-soft text-muted-foreground',
   },
   in_progress: {
     icon: CirclePlay,
-    className: 'border-blue-200 bg-blue-50 text-blue-700',
+    className:
+      'border-brand-terracotta/25 bg-brand-terracotta-subtle text-brand-terracotta-hover',
   },
   on_hold: {
     icon: OctagonAlert,
-    className: 'border-amber-200 bg-amber-50 text-amber-700',
+    className: 'border-warning/20 bg-warning-soft text-warning',
   },
   completed: {
     icon: CircleCheck,
-    className: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+    className: 'border-success/20 bg-success-soft text-success',
   },
   cancelled: {
     icon: CircleSlash,
-    className: 'border-slate-200 bg-slate-100 text-slate-500',
+    className: 'border-border bg-muted text-muted-foreground',
   },
 }
 

@@ -34,7 +34,7 @@ export function ComingSoon({
         <div className="flex items-start gap-4">
           <span
             aria-hidden="true"
-            className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-amber-600"
+            className="inline-flex size-11 shrink-0 items-center justify-center rounded-xl bg-warning-soft text-warning"
           >
             <Icon className="size-5" />
           </span>
@@ -58,7 +58,7 @@ export function ComingSoon({
             >
               <span
                 aria-hidden="true"
-                className="mt-1.5 size-1.5 shrink-0 rounded-full bg-brand-primary"
+                className="mt-1.5 size-1.5 shrink-0 rounded-full bg-brand-terracotta"
               />
               {feature}
             </li>

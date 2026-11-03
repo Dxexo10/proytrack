@@ -3,17 +3,17 @@ import { PRIORITY_LABELS } from '@/lib/labels'
 import { cn } from '@/lib/utils'
 
 const PRIORITY_STYLES: Record<ProjectPriority, string> = {
-  low: 'text-slate-500',
-  medium: 'text-blue-600',
-  high: 'text-amber-600',
-  critical: 'text-red-600',
+  low: 'text-muted-foreground',
+  medium: 'text-info',
+  high: 'text-warning',
+  critical: 'text-danger',
 }
 
 const DOT_STYLES: Record<ProjectPriority, string> = {
-  low: 'bg-slate-400',
-  medium: 'bg-blue-500',
-  high: 'bg-amber-500',
-  critical: 'bg-red-500',
+  low: 'bg-text-muted',
+  medium: 'bg-info',
+  high: 'bg-warning',
+  critical: 'bg-danger',
 }
 
 interface PriorityBadgeProps {

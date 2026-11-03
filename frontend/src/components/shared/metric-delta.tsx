@@ -31,10 +31,10 @@ export function MetricDelta({
         className={cn(
           'inline-flex items-center gap-0.5 rounded-md px-1 py-0.5 font-medium tabular-nums',
           isFlat
-            ? 'bg-slate-100 text-slate-600'
+            ? 'bg-muted text-muted-foreground'
             : isPositive
-              ? 'bg-emerald-50 text-emerald-700'
-              : 'bg-red-50 text-red-700',
+              ? 'bg-success-soft text-success'
+              : 'bg-danger-soft text-danger',
         )}
       >
         <Icon aria-hidden="true" className="size-3" />

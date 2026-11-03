@@ -19,15 +19,15 @@ export function ErrorState({
     <div
       role="alert"
       className={cn(
-        'flex flex-col items-center justify-center gap-2 rounded-xl border border-red-200 bg-red-50/60 px-6 py-10 text-center',
+        'flex flex-col items-center justify-center gap-2 rounded-2xl border border-danger/20 bg-danger-soft px-6 py-10 text-center',
         className,
       )}
     >
-      <span className="inline-flex size-10 items-center justify-center rounded-full bg-red-100 text-red-600">
+      <span className="inline-flex size-10 items-center justify-center rounded-full bg-danger/10 text-danger">
         <TriangleAlert aria-hidden="true" className="size-5" />
       </span>
-      <p className="text-sm font-semibold text-red-900">{title}</p>
-      <p className="max-w-md text-sm text-red-800">{message}</p>
+      <p className="text-sm font-semibold text-danger">{title}</p>
+      <p className="max-w-md text-sm text-danger/90">{message}</p>
       {onRetry ? (
         <Button variant="outline" size="sm" className="mt-2" onClick={onRetry}>
           <RotateCcw aria-hidden="true" className="size-4" />
