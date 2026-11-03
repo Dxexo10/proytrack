@@ -1,7 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
-import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
+import { Wrench } from 'lucide-react'
 import { LogoMark } from '@/components/shared/logo-mark'
-import { DemoBadge } from '@/components/shared/demo-badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -94,13 +93,11 @@ function SidebarLink({
 interface SidebarNavProps {
   collapsed?: boolean
   onNavigate?: () => void
-  showDemoBadge?: boolean
 }
 
 export function SidebarNav({
   collapsed = false,
   onNavigate,
-  showDemoBadge = true,
 }: SidebarNavProps) {
   const { pathname } = useLocation()
 
@@ -109,7 +106,7 @@ export function SidebarNav({
       <nav
         aria-label="Navegación principal"
         className={cn(
-          'flex-1 space-y-1 overflow-x-hidden overflow-y-auto py-2',
+          'min-h-0 space-y-1 overflow-x-hidden overflow-y-auto py-2',
           collapsed ? 'px-2' : 'px-3',
         )}
       >
@@ -131,7 +128,7 @@ export function SidebarNav({
 
       <div
         className={cn(
-          'mt-auto border-t border-white/10',
+          'border-t border-white/10',
           collapsed ? 'space-y-1 px-2 py-2' : 'space-y-2 px-3 py-3',
         )}
       >
@@ -144,10 +141,6 @@ export function SidebarNav({
             onNavigate={onNavigate}
           />
         ))}
-
-        {!collapsed && showDemoBadge ? (
-          <DemoBadge variant="dark" className="w-full justify-center" />
-        ) : null}
 
         <div
           title={
@@ -190,7 +183,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed top-3 bottom-3 left-3 z-40 hidden flex-col overflow-hidden rounded-3xl border border-white/[0.07] bg-brand-graphite bg-[image:radial-gradient(120%_80%_at_0%_0%,rgba(198,93,58,0.14),transparent_55%)] text-sidebar-foreground shadow-[0_24px_60px_-30px_rgba(37,40,36,0.7)] transition-[width] duration-[220ms] ease-out md:flex',
+        'fixed top-3 left-3 z-40 hidden max-h-[calc(100svh-1.5rem)] flex-col overflow-hidden rounded-3xl border border-white/[0.07] bg-brand-graphite bg-[image:radial-gradient(120%_80%_at_0%_0%,rgba(198,93,58,0.14),transparent_55%)] text-sidebar-foreground shadow-[0_24px_60px_-30px_rgba(37,40,36,0.7)] transition-[width] duration-[220ms] ease-out md:flex',
         collapsed ? 'w-[72px]' : 'w-[236px]',
       )}
     >
@@ -231,11 +224,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             !collapsed && 'ml-auto',
           )}
         >
-          {collapsed ? (
-            <PanelLeftOpen aria-hidden="true" className="size-4" />
-          ) : (
-            <PanelLeftClose aria-hidden="true" className="size-4" />
-          )}
+          <Wrench aria-hidden="true" className="size-4" />
         </Button>
       </div>
 

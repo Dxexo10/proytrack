@@ -63,7 +63,7 @@ export function MobileNav() {
           </SheetClose>
         </SheetHeader>
 
-        <SidebarNav showDemoBadge={false} onNavigate={() => setOpen(false)} />
+        <SidebarNav onNavigate={() => setOpen(false)} />
 
         <div className="border-t border-white/10 p-3">
           <DemoBadge variant="dark" className="w-full justify-center" />
