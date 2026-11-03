@@ -111,7 +111,6 @@ export function parseTags(value: string): string[] {
     .split(',')
     .map((tag) => tag.trim())
     .filter(Boolean)
-    .slice(0, 6)
 }
 
 export function toProjectInput(values: ProjectFormValues): CreateProjectInput {
