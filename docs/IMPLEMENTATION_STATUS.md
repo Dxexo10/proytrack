@@ -36,25 +36,32 @@ Actualizado tras el cierre de la **Fase 1** y el rebranding visual a **Trazo**.
 ```text
 npm run lint       → 0 errores, 0 advertencias
 npm run typecheck  → sin errores
-npm run test       → 8 archivos, 43 pruebas aprobadas
+npm run test       → 11 archivos, 57 pruebas aprobadas
 npm run build      → dist generado (chunks separados por vendor y ruta)
 ```
 
 Tamaño del build (gzip): React 150 kB · UI 54 kB · charts 130 kB (diferido) ·
 app 35 kB · dashboard 8 kB.
 
-## Pendiente inmediato (Fase 2)
+## Fase 2 — completada
 
-- Listado de proyectos con TanStack Table, búsqueda y filtros en URL.
-- Formulario crear/editar con React Hook Form + Zod y validaciones.
-- Archivado lógico y detalle con pestaña Resumen.
-- Enlaces del dashboard (`/projects?estado=…`, `/projects?riesgo=alto`) que hoy
-  apuntan a una página de próxima fase.
+| Tarea | Resultado | Commits |
+| --- | --- | --- |
+| Filtros de portafolio en URL, consultas y esquema de formulario | Búsqueda, estado, prioridad, sector, responsable, riesgo, archivados, orden y paginación | `246f902` |
+| Listado `/projects` | Tabla desktop, tarjetas móviles, archivado con confirmación, estados de carga/vacío/error | `f88bfc6` |
+| Alta y edición | Formulario compartido con Zod, presupuesto, cronograma y protección de cambios sin guardar | `a4c03cb` |
+| Detalle `/projects/:id` | KPIs, alcance, presupuesto, alertas, actividad y pestañas de Fase 3 | `47b7979` |
+| Pruebas de Fase 2 | Filtros, validación, render del listado y detalle | `a0196b0` |
+
+## Pendiente inmediato (Fase 3)
+
+- Versiones inmutables y eventos de cambio por campo modificado.
+- Comparador antes/después con actor, fecha y motivo.
+- Motor de reglas y alertas accionables sin duplicados.
+- Monitor de cambios e historial conectado a las versiones reales.
 
 ## Pendiente posterior
 
-- **Fase 3:** versiones inmutables, comparador antes/después, motor de reglas,
-  alertas accionables, monitor e historial.
 - **Fase 4:** actividad, configuración y reset demo, escenarios, accesibilidad AA,
   E2E con Playwright, CI y capturas reales en el README.
 - **Fases 5–7:** API Express, Prisma + PostgreSQL, adaptador HTTP y despliegue.

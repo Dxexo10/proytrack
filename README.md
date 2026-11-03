@@ -36,8 +36,8 @@ modo que el portafolio siempre se ve coherente sin depender de un backend.
 | Fase | Alcance | Estado |
 | --- | --- | --- |
 | **F1 · Fundamentos + Dashboard + identidad Trazo** | Design system, layout responsive, dataset simulado, repositorios mock sobre IndexedDB, dashboard ejecutivo | **Disponible** |
-| F2 · Proyectos | Listado con búsqueda y filtros, formulario de alta/edición, archivado, detalle | En progreso |
-| F3 · Inteligencia de cambios | Versiones, comparador antes/después, motor de reglas, alertas, monitor e historial | Planificado |
+| **F2 · Proyectos** | Portafolio con filtros en URL, alta/edición, archivado y detalle | **Disponible** |
+| F3 · Inteligencia de cambios | Versiones, comparador antes/después, motor de reglas, alertas, monitor e historial | Siguiente |
 | F4 · Pulido y QA | Actividad, ajustes y reset demo, accesibilidad AA, E2E con Playwright, CI | Planificado |
 | F5–F7 · Backend | API REST con Node/Express, Prisma y PostgreSQL | Planificado |
 
@@ -53,14 +53,22 @@ modo que el portafolio siempre se ve coherente sin depender de un backend.
   activo terracota y preferencia persistida en el navegador.
 - Layout responsive completo: rail compacto en desktop, drawer móvil con cierre
   por Escape y topbar flotante independiente.
+- Portafolio `/projects` con búsqueda, filtros combinables de estado, prioridad,
+  sector, responsable y riesgo, orden, paginación y estado de archivados.
+- Vista de tabla en desktop y tarjetas en móvil, con acciones de ver, editar y
+  archivar (con confirmación y archivado lógico).
+- Formulario crear/editar con React Hook Form + Zod: información general,
+  línea base vs. presupuesto actual, cronograma, avance y reglas de completado.
+- Detalle `/projects/:id` con KPIs, alcance, presupuesto, alertas relacionadas,
+  actividad reciente y pestañas honestas de Fase 3 para historial/comparación.
 - Dataset determinista de 50 proyectos, alertas y actividad persistidos en
   IndexedDB (sobreviven a la recarga).
 - Estados de carga, error y vacío; navegación por teclado y foco visible.
 
-Los módulos de Proyectos, Monitor, Alertas, Actividad y Configuración muestran
-una pantalla honesta de "próximamente" con lo que incluirá cada uno. No hay
-botones decorativos: cada acción navega, ejecuta algo real o está deshabilitada
-con explicación.
+Los módulos de Monitor, Alertas, Actividad y Configuración muestran una pantalla
+honesta de "próximamente" con lo que incluirá cada uno. No hay botones
+decorativos: cada acción navega, ejecuta algo real o está deshabilitada con
+explicación.
 
 ## Stack
 
@@ -138,7 +146,8 @@ npm run lint && npm run typecheck && NODE_ENV=test npm run test && npm run build
 ```
 
 Cobertura actual: utilidades de dinero y fechas, agregación de KPIs, determinismo
-del dataset, repositorios sobre IndexedDB, render del dashboard, navegación
+del dataset, repositorios sobre IndexedDB, dashboard, filtros de portafolio en
+URL, validación del formulario de proyectos, listado/detalle, navegación
 compacta/expandible, contraste AA de los tokens y ausencia de la marca anterior
 en el código visible.
 
@@ -150,7 +159,8 @@ incluye renders ni mockups que no correspondan a pantallas implementadas.
 ## Limitaciones conocidas
 
 - No hay backend, autenticación ni multiempresa: el perfil es fijo y de demo.
-- Los módulos de la Fase 2 y 3 aún no están implementados.
+- El historial de versiones, el comparador y el motor de cambios de la Fase 3
+  aún no están implementados.
 - El periodo del dashboard afecta a la tendencia y a los deltas frente al
   periodo anterior; los totales y la distribución representan el portafolio
   activo completo.
