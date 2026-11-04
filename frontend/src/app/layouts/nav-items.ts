@@ -20,7 +20,7 @@ export const PRIMARY_NAV: NavItem[] = [
   { label: 'Proyectos', href: '/projects', icon: FolderKanban },
   { label: 'Monitor de cambios', href: '/monitor', icon: Radar },
   { label: 'Centro de alertas', href: '/alerts', icon: BellRing },
-  { label: 'Actividad', href: '/activity', icon: History, phase: 'Fase 4' },
+  { label: 'Actividad', href: '/activity', icon: History },
 ]
 
 export const SECONDARY_NAV: NavItem[] = [
@@ -28,7 +28,6 @@ export const SECONDARY_NAV: NavItem[] = [
     label: 'Configuración demo',
     href: '/settings',
     icon: Settings,
-    phase: 'Fase 4',
   },
 ]
 

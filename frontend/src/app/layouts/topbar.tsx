@@ -38,10 +38,7 @@ function Breadcrumb() {
         <li className="hidden font-heading text-[13px] font-semibold tracking-tight text-brand-graphite sm:block">
           trazo<span className="text-brand-terracotta">.</span>
         </li>
-        <li
-          aria-hidden="true"
-          className="hidden text-brand-sand sm:block"
-        >
+        <li aria-hidden="true" className="hidden text-brand-sand sm:block">
           /
         </li>
         {parent && parent.href !== pathname ? (
@@ -54,10 +51,7 @@ function Breadcrumb() {
                 {parent.label}
               </Link>
             </li>
-            <li
-              aria-hidden="true"
-              className="hidden text-brand-sand sm:block"
-            >
+            <li aria-hidden="true" className="hidden text-brand-sand sm:block">
               /
             </li>
           </>
@@ -144,7 +138,6 @@ function UserMenu() {
         >
           Configuración demo
         </DropdownMenuItem>
-        <DropdownMenuItem disabled>Restablecer datos · Fase 4</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
