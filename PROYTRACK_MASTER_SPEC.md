@@ -1,6 +1,6 @@
 # PROYTRACK — Documento maestro de producto y desarrollo
 
-> **Versión:** 1.0 · **Estado:** especificación inicial · **Modalidad:** proyecto personal de portafolio, demo funcional con datos ficticios claramente identificados.
+> **Versión:** 1.1 · **Estado:** especificación inicial · **Modalidad:** proyecto personal de portafolio, demo funcional con datos ficticios claramente identificados.
 >
 > **Instrucción principal para CMDC / agente desarrollador:** Implementar **PRIMERO EL FRONTEND** en React + TypeScript, con interfaz premium, flujos funcionales y datos mock persistidos localmente. **No construir backend ni conectar PostgreSQL hasta aprobar el frontend**. Diseñar contratos y capas de acceso a datos que permitan reemplazar mocks por API REST sin reescribir las vistas. No afirmar que una función existe si es solo visual.
 
@@ -593,5 +593,143 @@ Una persona que nunca ha visto ProyTrack puede entrar a la demo, entender el est
 - Autenticación y multiempresa reales.
 - Integraciones con fuentes externas y scheduler real.
 - Formato final de exportación de reportes.
+
+
+
+---
+
+## 16. Estrategia Git y commits por tarea (OBLIGATORIA PARA CMDC)
+
+**Objetivo:** construir un historial público honesto, legible y profesional que permita a un reclutador revisar la evolución de ProyTrack. **No fabricar actividad ni crear commits vacíos para colorear el gráfico de contribuciones.**
+
+### 16.1 Regla de trabajo
+
+1. Antes de cada tarea, definir objetivo, archivos afectados y criterio de aceptación.
+2. Implementar **una unidad lógica y revisable**: componente, pantalla, funcionalidad, prueba, refactor o documentación.
+3. Ejecutar las verificaciones aplicables (`lint`, `typecheck`, pruebas y/o build); corregir fallos antes de confirmar.
+4. Revisar `git diff` y `git status`; excluir secretos, `.env`, credenciales, artefactos compilados y dependencias.
+5. Crear **un commit significativo por tarea lógica terminada**, salvo que dividirla en varios commits independientes mejore la revisión. No hacer commits por cada línea, clic o archivo ni confirmar código roto solo por cumplir una cuota.
+6. Mantener el árbol de trabajo ordenado. Registrar en `docs/IMPLEMENTATION_STATUS.md` tarea, resultado, pruebas y hash del commit.
+7. **Nunca ejecutar `git push`, publicar el repositorio, crear releases ni modificar ramas remotas sin autorización explícita del propietario.** Los commits locales sí pueden realizarse si el repositorio está inicializado y la identidad Git está correctamente configurada.
+8. No reescribir el historial compartido ni usar `--force` sin aprobación. Nunca cambiar fechas de commits, automatizar commits vacíos o suplantar identidades para aparentar actividad.
+
+### 16.2 Convención de mensajes
+
+Usar **Conventional Commits**: `tipo(alcance): descripción breve en imperativo`.
+
+Tipos sugeridos: `feat`, `fix`, `refactor`, `style`, `test`, `docs`, `chore`, `perf`, `ci`.
+
+Ejemplos de tareas reales, **no commits a generar artificialmente**:
+
+```text
+chore(app): initialize React and TypeScript workspace
+style(theme): define ProyTrack design tokens
+feat(layout): add responsive sidebar and top navigation
+feat(dashboard): implement project KPI cards
+feat(projects): add searchable project table
+feat(projects): implement project creation form
+feat(monitor): compare project snapshots
+feat(alerts): generate alerts from change rules
+test(monitor): cover budget variation thresholds
+fix(projects): prevent invalid deadline updates
+docs(readme): add architecture and demo instructions
+ci(checks): run lint, typecheck and tests on pull requests
+```
+
+Los mensajes deben describir **exactamente** lo implementado, sin atribuir funcionalidades futuras. Un commit de UI no debe presentarse como una integración real con PostgreSQL.
+
+### 16.3 Flujo Git sugerido
+
+```bash
+git status
+git diff --check
+npm run lint
+npm run build
+# Ejecutar pruebas si existen y si el script está configurado.
+git add <archivos-relacionados-con-la-tarea>
+git diff --cached
+git commit -m "feat(dashboard): add project KPI cards"
+git log --oneline -5
+```
+
+No usar `git add .` a ciegas. Si `user.name` o `user.email` no están configurados, **pedir al propietario sus valores**; nunca inventarlos. Para que una contribución se atribuya correctamente, el correo de autor debe estar asociado/verificado en su cuenta de GitHub (puede usar un correo `noreply` configurado por GitHub). El gráfico de contribuciones también depende de las reglas de GitHub sobre repositorio, rama y tipo de contribución; no prometer que cada commit local producirá un cuadro verde.
+
+### 16.4 Ritmo de entrega
+
+- Al cerrar cada tarea: informar resumen, archivos clave, verificaciones realizadas, hash del commit y siguiente tarea.
+- Al cerrar cada fase: mostrar una captura o demo verificable, actualizar documentación y presentar un resumen de los commits.
+- Si una tarea no está terminada o falla las verificaciones: informar el bloqueo, **no declarar éxito**.
+- No usar una cuota artificial de commits diarios. Priorizar avances genuinos y cambios fáciles de revisar.
+
+## 17. GitHub atractivo para reclutadores y empresas
+
+### 17.1 Repositorio público `proytrack`
+
+**Meta:** que en 30–60 segundos un visitante entienda el problema, vea el producto, encuentre una demo y compruebe la calidad del código.
+
+README recomendado, en este orden:
+
+1. **Hero:** nombre ProyTrack, descriptor breve, problema y propuesta de valor; imagen/banner original del producto.
+2. **Enlaces visibles:** `Live Demo`, `Screenshots`, `Architecture`, `Getting Started` (solo habilitar enlaces que existan).
+3. **Capturas reales** de dashboard, proyectos, detalle, monitor y alertas; preferir capturas de la aplicación implementada y no renders ficticios.
+4. **Demo en 3 pasos:** abrir proyecto, modificar presupuesto, revisar alerta e historial.
+5. **Funcionalidades implementadas** con estado verificable; separar claramente `Available`, `In progress` y `Planned`.
+6. **Stack:** React, TypeScript, Vite, Tailwind, shadcn/ui; Node.js y PostgreSQL etiquetados como *planned* hasta que se implementen.
+7. **Arquitectura:** diagrama simple de UI → servicios/repositorios mock → persistencia local, con la API/PostgreSQL como fase posterior.
+8. **Instalación:** requisitos, comandos reproducibles y modo demo sin credenciales reales.
+9. **Pruebas y calidad:** comandos de lint, typecheck, tests y build; badges CI solo si hay workflows operativos.
+10. **Roadmap, decisiones técnicas, limitaciones, licencia y autoría.** Indicar explícitamente que los datos son sintéticos y que se trata de un proyecto personal de demostración.
+
+Archivos recomendados:
+
+```text
+README.md
+LICENSE                      # Elegir licencia conscientemente
+.gitignore
+.env.example                 # Solo nombres de variables, sin secretos
+.github/workflows/ci.yml    # Cuando existan scripts verificables
+.github/ISSUE_TEMPLATE/     # Opcional
+.github/PULL_REQUEST_TEMPLATE.md  # Opcional
+public/og-cover.png         # Portada original cuando esté creada
+docs/ARCHITECTURE.md
+docs/IMPLEMENTATION_STATUS.md
+docs/DECISIONS.md
+docs/screenshots/
+```
+
+### 17.2 Presentación visual de GitHub
+
+- Mantener un nombre, descripción y temas del repositorio coherentes: `react`, `typescript`, `project-management`, `dashboard`, `portfolio`, `saas`, `vite` (solo los que correspondan).
+- Configurar una imagen social de portada propia, consistente con la paleta de ProyTrack: navy `#0F172A`, azul `#2563EB`, fondo `#F8FAFC`, verde `#10B981` y ámbar `#F59E0B`.
+- Usar GIF/video corto del **flujo funcional real** cuando esté implementado, evitando imágenes engañosas o animaciones pesadas.
+- Destacar ProyTrack entre los repositorios fijados del perfil y agregar su enlace de demo al perfil cuando exista.
+- Opcional: README de perfil GitHub con presentación breve, tecnologías, 2–3 proyectos destacados y contacto profesional; no llenar el perfil con badges decorativos ni métricas que distraigan.
+- No colocar logos de empresas como si fueran clientes reales ni inventar usuarios, resultados o métricas de negocio.
+
+### 17.3 Calidad y seguridad antes de publicar
+
+- Comprobar que no se suban secretos, tokens, contraseñas, bases de datos locales ni archivos `.env`.
+- Añadir CI para lint, TypeScript, pruebas y build cuando esos scripts estén disponibles.
+- Mantener rutas y botones de la demo funcionales; evitar enlaces rotos y funcionalidades simuladas sin etiquetar.
+- Usar datos sintéticos deterministas y un botón para restaurar el estado del demo.
+- Proporcionar instrucciones claras para reproducir los escenarios de alerta.
+- Mantener una rama principal estable; usar ramas de trabajo si ayudan a organizar cambios.
+
+### 17.4 Criterios de aceptación de la presencia en GitHub
+
+- [ ] El README explica el producto en menos de un minuto.
+- [ ] Las capturas corresponden a pantallas realmente implementadas.
+- [ ] Hay instrucciones de instalación verificadas.
+- [ ] Las funcionalidades actuales se distinguen de las futuras.
+- [ ] Los commits tienen mensajes específicos y reflejan tareas terminadas.
+- [ ] El historial permite seguir la evolución del frontend antes del backend.
+- [ ] No hay secretos ni archivos innecesarios versionados.
+- [ ] El enlace público de la demo funciona (cuando se publique).
+- [ ] El repositorio tiene descripción, temas y portada coherentes.
+- [ ] El propietario ha aprobado expresamente cualquier `push` o publicación.
+
+## 18. Instrucción adicional prioritaria para CMDC
+
+> **A partir de la primera tarea del frontend, trabaja con disciplina Git.** Divide el desarrollo en tareas pequeñas, funcionales y comprobables. Por cada tarea lógica completada, ejecuta las verificaciones pertinentes, crea un commit local con Conventional Commits y reporta su hash. Documenta el progreso. Prioriza primero el frontend en React/TypeScript con mocks reales y experiencia visual premium; NO implementes backend ni PostgreSQL sin aprobación. Prepara un README de alto nivel visual, pero usa capturas reales y no afirmes que hay funciones o integraciones que aún no existen. No generes commits vacíos ni manipules fechas para aumentar contribuciones. **Nunca hagas `git push` ni publiques nada sin mi autorización explícita.**
 
 **Fin del documento.**
