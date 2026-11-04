@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { GitCompareArrows } from 'lucide-react'
+import { ChangeValue } from '@/components/shared/change-value'
 import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
 import { FilterSelect } from '@/components/shared/filter-select'
@@ -23,7 +24,6 @@ import {
   useProjectAlerts,
   useProjectVersions,
 } from '../hooks/use-project-query'
-import { ChangeValue } from './change-value'
 
 interface ProjectCompareTabProps {
   projectId: string

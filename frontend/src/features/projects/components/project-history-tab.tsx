@@ -1,4 +1,5 @@
 import { GitCommitHorizontal, History } from 'lucide-react'
+import { ChangeValue } from '@/components/shared/change-value'
 import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
 import { SectionCard } from '@/components/shared/section-card'
@@ -14,7 +15,6 @@ import {
   useProjectChanges,
   useProjectVersions,
 } from '../hooks/use-project-query'
-import { ChangeValue } from './change-value'
 
 interface ProjectHistoryTabProps {
   projectId: string
