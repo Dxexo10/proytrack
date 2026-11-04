@@ -28,7 +28,8 @@ export default defineConfig({
           ) {
             return 'react'
           }
-          if (id.includes('@base-ui') || id.includes('lucide-react')) return 'ui'
+          if (id.includes('@base-ui') || id.includes('lucide-react'))
+            return 'ui'
           if (id.includes('@tanstack')) return 'query'
           return undefined
         },
@@ -38,6 +39,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
     setupFiles: ['./src/tests/setup.ts'],
     css: false,
     restoreMocks: true,
