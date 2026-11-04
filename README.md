@@ -22,6 +22,10 @@ modo que el portafolio siempre se ve coherente sin depender de un backend.
 > Repositorio: [`Dxexo10/trazo`](https://github.com/Dxexo10/trazo). La URL
 > anterior de GitHub redirige automáticamente al nuevo nombre.
 
+[![CI](https://github.com/Dxexo10/trazo/actions/workflows/ci.yml/badge.svg)](https://github.com/Dxexo10/trazo/actions/workflows/ci.yml)
+
+Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
+
 ## Identidad
 
 - **Paleta:** grafito `#252824`, terracota `#C65D3A`, marfil `#F5F2EB`,
@@ -158,7 +162,8 @@ Cobertura actual: utilidades de dinero y fechas, agregación de KPIs, determinis
 del dataset, repositorios sobre IndexedDB, diff de versiones, motor de reglas y
 alertas, feed de cambios, dashboard, filtros de portafolio, validación del
 formulario, historial/comparador, monitor, alertas, actividad, configuración y
-navegación. La suite E2E cubre el flujo estrella completo con Playwright.
+navegación. La suite E2E cubre el flujo estrella, el reset, el simulador, la
+navegación móvil y una auditoría axe AA en las pantallas principales.
 
 ## Capturas
 
@@ -187,8 +192,9 @@ Capturas reales de la aplicación en ejecución con el dataset ficticio del demo
 ## Limitaciones conocidas
 
 - No hay backend, autenticación ni multiempresa: el perfil es fijo y de demo.
-- La auditoría formal de accesibilidad AA y los escenarios de simulación de
-  actualizaciones siguen pendientes; la E2E cubre el flujo estrella.
+- La accesibilidad AA se audita automáticamente con axe en las pantallas
+  principales; falta validación manual con lectores de pantalla.
+- Los escenarios se ejecutan en el navegador, no con jobs reales.
 - Las capturas se tomaron en 1440 px; la interfaz también se verificó en 768 y
   390 px.
 - El periodo del dashboard afecta a la tendencia y a los deltas frente al

@@ -82,37 +82,37 @@ y 390 px.
 
 ## Fase 4 — completada en lo funcional
 
-| Tarea                     | Resultado                                                                                        | Commits     |
-| ------------------------- | ------------------------------------------------------------------------------------------------ | ----------- |
-| Actividad `/activity`     | Timeline de auditoría con filtros por proyecto, usuario, acción, origen y periodo; paginación    | este bloque |
-| Configuración `/settings` | Perfil demo, dataset, umbrales y severidades de reglas editables                                 | este bloque |
-| Reset demo                | Confirmación desde `/settings`; invalida todas las queries y vuelve al dataset inicial           | este bloque |
-| E2E Playwright            | Configuración, script `test:e2e` y flujo estrella: editar → versión → alerta → monitor → revisar | este bloque |
-| CI                        | Workflow de lint, typecheck, pruebas, build y E2E con reporte como artefacto                     | este bloque |
-| Capturas reales           | 11 imágenes en `docs/screenshots/` y README actualizado                                          | este bloque |
+| Tarea                     | Resultado                                                                                     | Commits     |
+| ------------------------- | --------------------------------------------------------------------------------------------- | ----------- |
+| Actividad `/activity`     | Timeline de auditoría con filtros por proyecto, usuario, acción, origen y periodo; paginación | este bloque |
+| Configuración `/settings` | Perfil demo, dataset, umbrales y severidades de reglas editables                              | este bloque |
+| Reset demo                | Confirmación desde `/settings`; invalida todas las queries y vuelve al dataset inicial        | este bloque |
+| Simulador de escenarios   | Cuatro escenarios demo desde el monitor con versión y alertas reales                          | este bloque |
+| E2E Playwright            | Flujo estrella, reset, simulador, navegación móvil y axe en 7 pantallas                       | este bloque |
+| CI                        | Workflow de lint, typecheck, pruebas, build y E2E con reporte como artefacto                  | este bloque |
+| Capturas y demo           | 11 imágenes en `docs/screenshots/`, README actualizado y `DEMO_GUIDE.md`                      | este bloque |
 
 ### Verificación ejecutada
 
 ```text
 npm run lint       → 0 errores, 0 advertencias
 npm run typecheck  → sin errores
-NODE_ENV=test npm run test → 23 archivos, 113 pruebas aprobadas
-npm run test:e2e   → 2 pruebas aprobadas (Chromium)
+NODE_ENV=test npm run test → 24 archivos, 118 pruebas aprobadas
+npm run test:e2e   → 12 pruebas aprobadas (Chromium)
 npm run build      → dist generado
 ```
 
-El flujo E2E arranca un servidor Vite en el puerto 4173, restablece el dataset,
-edita `PRJ-001` de S/ 4,200,000 a S/ 5,040,000, comprueba la versión 5, la alerta,
-el monitor y la acción de revisión. Un segundo test valida el reset.
+La E2E arranca un servidor Vite en el puerto 4173 y cubre: flujo estrella
+(editar → versión 5 → alerta → monitor → revisar), reset demo, simulador de
+presupuesto, navegación/filtros móviles y auditoría axe sin violaciones graves
+en dashboard, proyectos, historial, monitor, alertas, actividad y configuración.
+También verifica que el primer Tab enfoca el enlace de salto.
 
 ## Pendiente inmediato
 
-- Auditoría formal de accesibilidad AA (teclado, foco, lectores, contraste
-  ampliado) y ampliar la E2E a móvil.
-- Escenarios de simulación de actualizaciones y CTA en el monitor.
-- Portada social y metadata del repositorio en GitHub; ejecutar el workflow CI
-  tras el push.
-- Guion de demo en `docs/DEMO_GUIDE.md`.
+- Validación manual con lectores de pantalla y navegador real más allá de axe.
+- Portada social y metadata del repositorio en GitHub.
+- Confirmar el workflow CI en GitHub Actions tras el push.
 
 ## Pendiente posterior
 
