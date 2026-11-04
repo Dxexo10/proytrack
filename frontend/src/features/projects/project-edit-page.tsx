@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ArrowLeft, FolderSearch } from 'lucide-react'
 import { DemoBadge } from '@/components/shared/demo-badge'
@@ -6,6 +7,8 @@ import { ErrorState } from '@/components/shared/error-state'
 import { PageHeader } from '@/components/shared/page-header'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
 import { DEMO_USERS } from '@/data/mock/seed/users'
 import { useUpdateProject } from './hooks/use-project-mutations'
@@ -22,6 +25,7 @@ export function ProjectEditPage() {
   const navigate = useNavigate()
   const projectQuery = useProjectQuery(id)
   const update = useUpdateProject(id ?? '')
+  const [reason, setReason] = useState('')
 
   if (projectQuery.isPending) {
     return (
@@ -88,6 +92,27 @@ export function ProjectEditPage() {
         }
       />
 
+      <Card className="gap-3 p-4 sm:p-5">
+        <div className="space-y-1.5">
+          <Label
+            htmlFor="change-reason"
+            className="text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase"
+          >
+            Motivo del cambio (opcional)
+          </Label>
+          <Input
+            id="change-reason"
+            value={reason}
+            onChange={(event) => setReason(event.target.value)}
+            maxLength={200}
+            placeholder="Ej. Ajuste de presupuesto aprobado por el cliente"
+          />
+          <p className="text-xs text-muted-foreground">
+            Se guardará en la nueva versión y en el historial del proyecto.
+          </p>
+        </div>
+      </Card>
+
       <ProjectForm
         key={project.id}
         defaultValues={values}
@@ -96,9 +121,12 @@ export function ProjectEditPage() {
         submitLabel="Guardar cambios"
         cancelHref={`/projects/${project.id}`}
         onSubmit={(nextValues) => {
-          update.mutate(toProjectInput(nextValues), {
-            onSuccess: () => navigate(`/projects/${project.id}`),
-          })
+          update.mutate(
+            { input: toProjectInput(nextValues), reason },
+            {
+              onSuccess: () => navigate(`/projects/${project.id}`),
+            },
+          )
         }}
       />
     </div>

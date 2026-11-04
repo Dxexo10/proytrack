@@ -1,5 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { activityRepository, alertRepository, projectRepository } from '@/data'
+import {
+  activityRepository,
+  alertRepository,
+  changeEventRepository,
+  projectRepository,
+  versionRepository,
+} from '@/data'
 
 export function useProjectQuery(id: string | undefined) {
   return useQuery({
@@ -23,6 +29,22 @@ export function useProjectActivity(projectId: string | undefined) {
     queryKey: ['projects', 'activity', projectId],
     queryFn: () =>
       activityRepository.list({ projectId: projectId ?? '', pageSize: 8 }),
+    enabled: Boolean(projectId),
+  })
+}
+
+export function useProjectVersions(projectId: string | undefined) {
+  return useQuery({
+    queryKey: ['projects', 'versions', projectId],
+    queryFn: () => versionRepository.listByProject(projectId ?? ''),
+    enabled: Boolean(projectId),
+  })
+}
+
+export function useProjectChanges(projectId: string | undefined) {
+  return useQuery({
+    queryKey: ['projects', 'changes', projectId],
+    queryFn: () => changeEventRepository.listByProject(projectId ?? ''),
     enabled: Boolean(projectId),
   })
 }

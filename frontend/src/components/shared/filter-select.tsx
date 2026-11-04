@@ -46,10 +46,7 @@ export function FilterSelect({
         value={value}
         onValueChange={(next) => onChange(String(next ?? 'all'))}
       >
-        <SelectTrigger
-          className="h-9 w-full bg-surface"
-          aria-label={label}
-        >
+        <SelectTrigger className="h-9 w-full bg-surface" aria-label={label}>
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

@@ -1,4 +1,4 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import {
   Archive,
   ArrowLeft,
@@ -22,7 +22,6 @@ import { SectionCard } from '@/components/shared/section-card'
 import { StatusBadge } from '@/components/shared/status-badge'
 import { UserChip } from '@/components/shared/user-chip'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { DEMO_USERS } from '@/data/mock/seed/users'
@@ -42,6 +41,8 @@ import {
 } from '@/lib/labels'
 import { cn } from '@/lib/utils'
 import { ArchiveProjectButton } from './components/archive-project-button'
+import { ProjectCompareTab } from './components/project-compare-tab'
+import { ProjectHistoryTab } from './components/project-history-tab'
 import { useProjectActivity } from './hooks/use-project-query'
 import { useProjectAlerts, useProjectQuery } from './hooks/use-project-query'
 import { RecentActivity } from '@/features/dashboard/components/recent-activity'
@@ -68,23 +69,33 @@ function DetailSkeleton() {
   )
 }
 
-function PhaseNote({ title, description }: { title: string; description: string }) {
-  return (
-    <Card className="items-center gap-2 border-dashed bg-surface/70 p-8 text-center">
-      <p className="font-heading text-base font-semibold text-foreground">
-        {title}
-      </p>
-      <p className="max-w-md text-sm text-muted-foreground">{description}</p>
-    </Card>
-  )
+const DETAIL_TABS = ['resumen', 'historial', 'comparar'] as const
+type DetailTab = (typeof DETAIL_TABS)[number]
+
+function resolveTab(value: string | null): DetailTab {
+  return DETAIL_TABS.includes(value as DetailTab)
+    ? (value as DetailTab)
+    : 'resumen'
 }
 
 export function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const [searchParams, setSearchParams] = useSearchParams()
   const projectQuery = useProjectQuery(id)
   const alertsQuery = useProjectAlerts(id)
   const activityQuery = useProjectActivity(id)
+  const activeTab = resolveTab(searchParams.get('tab'))
+
+  const changeTab = (next: string) => {
+    const params = new URLSearchParams(searchParams)
+    if (next === 'resumen') {
+      params.delete('tab')
+    } else {
+      params.set('tab', next)
+    }
+    setSearchParams(params, { replace: true })
+  }
 
   if (projectQuery.isPending) return <DetailSkeleton />
 
@@ -227,7 +238,7 @@ export function ProjectDetailPage() {
         />
       </div>
 
-      <Tabs defaultValue="resumen" className="gap-4">
+      <Tabs value={activeTab} onValueChange={changeTab} className="gap-4">
         <TabsList className="bg-sand-soft">
           <TabsTrigger value="resumen">Resumen</TabsTrigger>
           <TabsTrigger value="historial">Historial</TabsTrigger>
@@ -318,9 +329,7 @@ export function ProjectDetailPage() {
                 <div className="space-y-4 px-5 pb-5">
                   <dl className="grid gap-3 text-sm sm:grid-cols-3">
                     <div>
-                      <dt className="text-xs text-muted-foreground">
-                        Inicial
-                      </dt>
+                      <dt className="text-xs text-muted-foreground">Inicial</dt>
                       <dd className="pt-1 font-medium tabular-nums text-foreground">
                         {formatCurrency(project.initialBudgetCents)}
                       </dd>
@@ -419,17 +428,11 @@ export function ProjectDetailPage() {
         </TabsContent>
 
         <TabsContent value="historial">
-          <PhaseNote
-            title="Historial de versiones en Fase 3"
-            description="Aquí verás cada versión inmutable del proyecto, con autor, fecha, origen y los campos que cambiaron."
-          />
+          <ProjectHistoryTab projectId={project.id} />
         </TabsContent>
 
         <TabsContent value="comparar">
-          <PhaseNote
-            title="Comparador antes/después en Fase 3"
-            description="La comparación de versiones y la regla que disparó cada alerta llegan con el motor de cambios."
-          />
+          <ProjectCompareTab projectId={project.id} />
         </TabsContent>
       </Tabs>
     </div>

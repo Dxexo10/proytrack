@@ -3,6 +3,7 @@ import {
   CircleCheck,
   Eye,
   FolderPlus,
+  GitCommitHorizontal,
   PencilLine,
   TriangleAlert,
   type LucideIcon,
@@ -20,6 +21,7 @@ import { describeActivity, SOURCE_LABELS } from '@/lib/labels'
 const ACTION_ICONS: Record<string, LucideIcon> = {
   'project.created': FolderPlus,
   'project.updated': PencilLine,
+  'version.created': GitCommitHorizontal,
   'alert.generated': TriangleAlert,
   'alert.reviewed': Eye,
   'alert.resolved': CircleCheck,
@@ -28,6 +30,7 @@ const ACTION_ICONS: Record<string, LucideIcon> = {
 const ACTION_STYLES: Record<string, string> = {
   'project.created': 'bg-brand-terracotta-subtle text-brand-terracotta-hover',
   'project.updated': 'bg-sand-soft text-text-secondary',
+  'version.created': 'bg-brand-terracotta-subtle text-brand-terracotta-hover',
   'alert.generated': 'bg-warning-soft text-warning',
   'alert.reviewed': 'bg-info-soft text-info',
   'alert.resolved': 'bg-success-soft text-success',
@@ -39,7 +42,11 @@ interface RecentActivityProps {
   users: User[]
 }
 
-export function RecentActivity({ activity, projects, users }: RecentActivityProps) {
+export function RecentActivity({
+  activity,
+  projects,
+  users,
+}: RecentActivityProps) {
   const usersById = new Map(users.map((user) => [user.id, user]))
   const projectsById = new Map(projects.map((project) => [project.id, project]))
 

@@ -3,7 +3,10 @@ import { Button } from '@/components/ui/button'
 import type { ProjectSortField } from '@/data'
 import { cn } from '@/lib/utils'
 import type { ProjectFilters } from '../hooks/use-project-filters'
-import { FilterSelect, type FilterOption } from './project-filter-select'
+import {
+  FilterSelect,
+  type FilterOption,
+} from '@/components/shared/filter-select'
 
 const SORT_OPTIONS: FilterOption[] = [
   { value: 'updatedAt', label: 'Actualización' },

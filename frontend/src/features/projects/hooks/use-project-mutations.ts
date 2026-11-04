@@ -39,14 +39,20 @@ export function useCreateProject() {
   })
 }
 
+export interface UpdateProjectPayload {
+  input: UpdateProjectInput
+  reason?: string
+}
+
 export function useUpdateProject(id: string) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (input: UpdateProjectInput) =>
+    mutationFn: ({ input, reason }: UpdateProjectPayload) =>
       projectRepository.update(id, input, {
         actorId: DEMO_CURRENT_USER.id,
         source: 'manual',
+        reason,
       }),
     onSuccess: (result) => {
       invalidateProjectData(queryClient)

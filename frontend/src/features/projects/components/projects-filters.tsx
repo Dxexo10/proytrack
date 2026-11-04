@@ -1,14 +1,13 @@
-import {
-  ChevronDown,
-  Search,
-  SlidersHorizontal,
-  X,
-} from 'lucide-react'
+import { ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import {
   Sheet,
   SheetClose,
@@ -20,11 +19,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { Switch } from '@/components/ui/switch'
-import {
-  PRIORITY_LABELS,
-  SECTOR_LABELS,
-  STATUS_LABELS,
-} from '@/lib/labels'
+import { PRIORITY_LABELS, SECTOR_LABELS, STATUS_LABELS } from '@/lib/labels'
 import {
   PROJECT_PRIORITIES,
   PROJECT_STATUSES,
@@ -35,7 +30,10 @@ import {
   hasActiveFilters,
   type ProjectFilters,
 } from '../hooks/use-project-filters'
-import { FilterSelect, type FilterOption } from './project-filter-select'
+import {
+  FilterSelect,
+  type FilterOption,
+} from '@/components/shared/filter-select'
 
 const ALL: FilterOption = { value: 'all', label: 'Todos' }
 
