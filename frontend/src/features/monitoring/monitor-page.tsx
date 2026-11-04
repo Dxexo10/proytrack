@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, Radar } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Play, Radar } from 'lucide-react'
 import { DemoBadge } from '@/components/shared/demo-badge'
 import { EmptyState } from '@/components/shared/empty-state'
 import { ErrorState } from '@/components/shared/error-state'
@@ -19,6 +19,7 @@ import {
 import { ChangeDetailSheet } from './components/change-detail-sheet'
 import { ChangeFeedList } from './components/change-feed-list'
 import { MonitorFilters } from './components/monitor-filters'
+import { SimulateUpdateSheet } from './components/simulate-update-sheet'
 
 function MonitorSkeleton() {
   return (
@@ -39,6 +40,7 @@ export function MonitorPage() {
   const feedQuery = useChangeFeed(filters)
   const projectsQuery = useMonitorProjects()
   const [selected, setSelected] = useState<ChangeFeedItem | null>(null)
+  const [simulatorOpen, setSimulatorOpen] = useState(false)
 
   const total = feedQuery.data?.total ?? 0
   const items = feedQuery.data?.items ?? []
@@ -62,6 +64,12 @@ export function MonitorPage() {
                 : `${formatNumber(total)} ${total === 1 ? 'cambio' : 'cambios'}`}
             </span>
           </div>
+        }
+        actions={
+          <Button size="sm" onClick={() => setSimulatorOpen(true)}>
+            <Play aria-hidden="true" className="size-4" />
+            Simular actualización
+          </Button>
         }
       />
 
@@ -150,6 +158,12 @@ export function MonitorPage() {
           )}
         </SectionCard>
       ) : null}
+
+      <SimulateUpdateSheet
+        open={simulatorOpen}
+        onOpenChange={setSimulatorOpen}
+        projects={projectsQuery.data ?? []}
+      />
 
       <ChangeDetailSheet item={selected} onClose={() => setSelected(null)} />
     </div>
