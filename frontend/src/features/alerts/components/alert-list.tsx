@@ -34,7 +34,7 @@ export function AlertList({
             key={alert.id}
             className="flex flex-col gap-3 px-5 py-4 sm:flex-row sm:items-start"
           >
-            <div className="flex min-w-0 flex-1 gap-3">
+            <div className="flex min-w-0 flex-1 items-start gap-3">
               <SeverityBadge
                 severity={alert.severity}
                 showLabel={false}

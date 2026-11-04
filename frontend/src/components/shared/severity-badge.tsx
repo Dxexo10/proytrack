@@ -42,7 +42,10 @@ export function SeverityBadge({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-xs font-medium whitespace-nowrap',
+        'inline-flex items-center gap-1.5 rounded-full border text-xs font-medium whitespace-nowrap',
+        showLabel
+          ? 'px-2 py-0.5'
+          : 'size-6 shrink-0 justify-center self-start p-0',
         style,
         className,
       )}

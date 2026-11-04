@@ -86,7 +86,7 @@ export function MonitorFilters({
 
   return (
     <Card className="gap-3 p-4 sm:p-5">
-      <div className="grid gap-3 sm:grid-cols-2 xl:flex xl:flex-wrap xl:items-end">
+      <div className="grid grid-cols-2 gap-3 xl:flex xl:flex-wrap xl:items-end">
         <FilterSelect
           label="Proyecto"
           value={filters.projectId || 'all'}
@@ -94,7 +94,7 @@ export function MonitorFilters({
           onChange={(projectId) =>
             onChange({ projectId: projectId === 'all' ? '' : projectId })
           }
-          className="xl:w-[240px]"
+          className="col-span-2 xl:w-[240px]"
         />
         <FilterSelect
           label="Campo"
