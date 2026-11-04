@@ -107,11 +107,22 @@ producción no hay esperas artificiales.
   mensual y los deltas contra la ventana anterior. Los totales, la distribución
   y las alertas representan el portafolio activo completo.
 
+## Pruebas
+
+- **Unitarias/integración:** Vitest + jsdom + `fake-indexeddb` sobre dominio,
+  repositorios, seed y pantallas.
+- **E2E:** Playwright con Chromium, servidor Vite propio en el puerto 4173 y
+  reset del dataset antes de cada escenario (`e2e/star-flow.spec.ts`).
+- **CI:** `.github/workflows/ci.yml` ejecuta lint, typecheck, pruebas, build y
+  E2E; publica el reporte de Playwright como artefacto.
+
 ## Verificación
 
 ```bash
 npm run lint
 npm run typecheck
 NODE_ENV=test npm run test
+npx playwright install chromium   # primera vez
+npm run test:e2e
 npm run build
 ```

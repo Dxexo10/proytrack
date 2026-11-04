@@ -80,12 +80,39 @@ y actualiza monitor, centro de alertas, actividad y badge del topbar.
 También se revisaron monitor, alertas, historial y comparador en 1440, 768
 y 390 px.
 
-## Pendiente inmediato (Fase 4)
+## Fase 4 — completada en lo funcional
 
-- Página `/activity` completa con filtros por proyecto, usuario y periodo.
-- `/settings`: umbrales de reglas editables, reset demo y versión del dataset.
+| Tarea                     | Resultado                                                                                        | Commits     |
+| ------------------------- | ------------------------------------------------------------------------------------------------ | ----------- |
+| Actividad `/activity`     | Timeline de auditoría con filtros por proyecto, usuario, acción, origen y periodo; paginación    | este bloque |
+| Configuración `/settings` | Perfil demo, dataset, umbrales y severidades de reglas editables                                 | este bloque |
+| Reset demo                | Confirmación desde `/settings`; invalida todas las queries y vuelve al dataset inicial           | este bloque |
+| E2E Playwright            | Configuración, script `test:e2e` y flujo estrella: editar → versión → alerta → monitor → revisar | este bloque |
+| CI                        | Workflow de lint, typecheck, pruebas, build y E2E con reporte como artefacto                     | este bloque |
+| Capturas reales           | 11 imágenes en `docs/screenshots/` y README actualizado                                          | este bloque |
+
+### Verificación ejecutada
+
+```text
+npm run lint       → 0 errores, 0 advertencias
+npm run typecheck  → sin errores
+NODE_ENV=test npm run test → 23 archivos, 113 pruebas aprobadas
+npm run test:e2e   → 2 pruebas aprobadas (Chromium)
+npm run build      → dist generado
+```
+
+El flujo E2E arranca un servidor Vite en el puerto 4173, restablece el dataset,
+edita `PRJ-001` de S/ 4,200,000 a S/ 5,040,000, comprueba la versión 5, la alerta,
+el monitor y la acción de revisión. Un segundo test valida el reset.
+
+## Pendiente inmediato
+
+- Auditoría formal de accesibilidad AA (teclado, foco, lectores, contraste
+  ampliado) y ampliar la E2E a móvil.
 - Escenarios de simulación de actualizaciones y CTA en el monitor.
-- Auditoría de accesibilidad AA, E2E con Playwright, CI y capturas reales.
+- Portada social y metadata del repositorio en GitHub; ejecutar el workflow CI
+  tras el push.
+- Guion de demo en `docs/DEMO_GUIDE.md`.
 
 ## Pendiente posterior
 
@@ -98,4 +125,6 @@ y 390 px.
   `NODE_ENV=test`.
 - El cambio a esquema 2 / semilla 3 fuerza una resiembra del dataset demo y
   descarta ediciones locales previas (comportamiento esperado del entorno mock).
-- `agent-browser` se ejecuta mediante `npx`; no está instalado globalmente.
+- La instalación de Google Chrome para Playwright requiere privilegios de
+  administrador; se usan Chromium (E2E) y Edge (playwright-cli).
+- La skill global `playwright-cli` vive en `~\.agents\skills\playwright-cli`.

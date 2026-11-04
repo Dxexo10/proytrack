@@ -38,7 +38,7 @@ modo que el portafolio siempre se ve coherente sin depender de un backend.
 | **F1 · Fundamentos + Dashboard + identidad Trazo** | Design system, layout responsive, dataset simulado, repositorios mock sobre IndexedDB, dashboard ejecutivo | **Disponible** |
 | **F2 · Proyectos**                                 | Portafolio con filtros en URL, alta/edición, archivado y detalle                                           | **Disponible** |
 | **F3 · Inteligencia de cambios**                   | Versiones inmutables, comparador antes/después, motor de reglas, centro de alertas, monitor e historial    | **Disponible** |
-| F4 · Pulido y QA                                   | Actividad, ajustes y reset demo, accesibilidad AA, E2E con Playwright, CI                                  | Planificado    |
+| **F4 · Pulido y QA**                               | Actividad, ajustes y reset demo, E2E con Playwright, CI y capturas                                         | **Disponible** |
 | F5–F7 · Backend                                    | API REST con Node/Express, Prisma y PostgreSQL                                                             | Planificado    |
 
 ### Disponible hoy
@@ -69,13 +69,15 @@ modo que el portafolio siempre se ve coherente sin depender de un backend.
   origen, severidad y periodo, detalle del cambio y enlaces al proyecto.
 - Centro de alertas `/alerts` con contadores, filtros, la regla que originó cada
   alerta y acciones para revisar o resolver con trazabilidad.
+- Actividad `/activity`: timeline de auditoría con filtros por proyecto, usuario,
+  acción, origen y periodo, más paginación.
+- Configuración `/settings`: perfil demo, umbrales de reglas editables, versión
+  del dataset y reset con confirmación.
 - Dataset determinista de 50 proyectos, versiones, cambios, alertas, actividad y
   reglas persistidos en IndexedDB (sobreviven a la recarga).
+- Suite E2E con Playwright del flujo estrella y workflow de CI con lint,
+  typecheck, pruebas, build y E2E.
 - Estados de carga, error y vacío; navegación por teclado y foco visible.
-
-Los módulos de Actividad y Configuración muestran una pantalla honesta de
-"próximamente" con lo que incluirá cada uno. No hay botones decorativos: cada
-acción navega, ejecuta algo real o está deshabilitada con explicación.
 
 ## Stack
 
@@ -153,23 +155,42 @@ npm run lint && npm run typecheck && NODE_ENV=test npm run test && npm run build
 ```
 
 Cobertura actual: utilidades de dinero y fechas, agregación de KPIs, determinismo
-del dataset, repositorios sobre IndexedDB, dashboard, filtros de portafolio en
-URL, validación del formulario de proyectos, listado/detalle, navegación
-compacta/expandible, contraste AA de los tokens y ausencia de la marca anterior
-en el código visible.
+del dataset, repositorios sobre IndexedDB, diff de versiones, motor de reglas y
+alertas, feed de cambios, dashboard, filtros de portafolio, validación del
+formulario, historial/comparador, monitor, alertas, actividad, configuración y
+navegación. La suite E2E cubre el flujo estrella completo con Playwright.
 
 ## Capturas
 
-Se añadirán capturas reales de la aplicación al cerrar la Fase 4. Este README no
-incluye renders ni mockups que no correspondan a pantallas implementadas.
+Capturas reales de la aplicación en ejecución con el dataset ficticio del demo.
+
+| Dashboard                                              | Proyectos                                                |
+| ------------------------------------------------------ | -------------------------------------------------------- |
+| ![Dashboard ejecutivo](docs/screenshots/dashboard.png) | ![Portafolio con filtros](docs/screenshots/projects.png) |
+
+| Historial de versiones                                          | Comparador antes/después                                            |
+| --------------------------------------------------------------- | ------------------------------------------------------------------- |
+| ![Historial de versiones](docs/screenshots/project-history.png) | ![Comparador de versiones](docs/screenshots/version-comparison.png) |
+
+| Monitor de cambios                                  | Detalle de un cambio                                       |
+| --------------------------------------------------- | ---------------------------------------------------------- |
+| ![Monitor de cambios](docs/screenshots/monitor.png) | ![Detalle del cambio](docs/screenshots/monitor-detail.png) |
+
+| Centro de alertas                                 | Actividad                                               |
+| ------------------------------------------------- | ------------------------------------------------------- |
+| ![Centro de alertas](docs/screenshots/alerts.png) | ![Timeline de actividad](docs/screenshots/activity.png) |
+
+| Configuración                                        | Móvil                                                        |
+| ---------------------------------------------------- | ------------------------------------------------------------ |
+| ![Configuración demo](docs/screenshots/settings.png) | ![Portafolio en móvil](docs/screenshots/projects-mobile.png) |
 
 ## Limitaciones conocidas
 
 - No hay backend, autenticación ni multiempresa: el perfil es fijo y de demo.
-- Los umbrales de las reglas se persisten y alimentan el motor, pero su pantalla
-  de edición y el reset demo desde `/settings` pertenecen a la Fase 4.
-- La página de actividad completa y los escenarios de simulación quedan para la
-  Fase 4; el feed de cambios y la actividad reciente ya son reales.
+- La auditoría formal de accesibilidad AA y los escenarios de simulación de
+  actualizaciones siguen pendientes; la E2E cubre el flujo estrella.
+- Las capturas se tomaron en 1440 px; la interfaz también se verificó en 768 y
+  390 px.
 - El periodo del dashboard afecta a la tendencia y a los deltas frente al
   periodo anterior; los totales y la distribución representan el portafolio
   activo completo.
