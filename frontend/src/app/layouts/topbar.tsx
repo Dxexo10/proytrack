@@ -87,11 +87,14 @@ function AlertsShortcut() {
       size="icon"
       className="relative text-text-secondary hover:bg-brand-terracotta-subtle hover:text-brand-terracotta-hover"
       render={<Link to="/alerts" />}
-      aria-label={`Centro de alertas: ${count} alertas abiertas`}
+      aria-label={`${count > 9 ? '9+' : count} · Centro de alertas: ${count} alertas abiertas`}
     >
       <BellRing aria-hidden="true" className="size-[18px]" />
       {count > 0 ? (
-        <span className="absolute -top-0.5 -right-0.5 inline-flex min-w-4 items-center justify-center rounded-full bg-brand-terracotta px-1 text-[10px] font-semibold leading-4 text-white">
+        <span
+          aria-hidden="true"
+          className="absolute -top-0.5 -right-0.5 inline-flex min-w-4 items-center justify-center rounded-full bg-brand-terracotta-hover px-1 text-[10px] font-semibold leading-4 text-white"
+        >
           {count > 9 ? '9+' : count}
         </span>
       ) : null}
@@ -108,11 +111,11 @@ function UserMenu() {
             variant="ghost"
             size="icon"
             className="rounded-full hover:bg-sand-soft"
-            aria-label="Abrir menú de perfil"
+            aria-label={`${initials(DEMO_CURRENT_USER.name)} · Abrir menú de perfil de ${DEMO_CURRENT_USER.name}`}
           />
         }
       >
-        <Avatar size="sm">
+        <Avatar size="sm" aria-hidden="true">
           <AvatarFallback className="bg-brand-graphite text-[11px] font-semibold text-brand-ivory">
             {initials(DEMO_CURRENT_USER.name)}
           </AvatarFallback>

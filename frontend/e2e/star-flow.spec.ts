@@ -1,11 +1,5 @@
-import { expect, test, type Page } from '@playwright/test'
-
-async function resetDemo(page: Page) {
-  await page.goto('/settings')
-  await page.getByRole('button', { name: /Restablecer datos/i }).click()
-  await page.getByRole('button', { name: 'Restablecer demo' }).click()
-  await expect(page.getByText('Datos demo restablecidos.')).toBeVisible()
-}
+import { expect, test } from '@playwright/test'
+import { resetDemo } from './helpers'
 
 test.beforeEach(async ({ page }) => {
   await resetDemo(page)
