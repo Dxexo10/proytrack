@@ -33,13 +33,13 @@ modo que el portafolio siempre se ve coherente sin depender de un backend.
 
 ## Estado del proyecto
 
-| Fase | Alcance | Estado |
-| --- | --- | --- |
+| Fase                                               | Alcance                                                                                                    | Estado         |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------- |
 | **F1 · Fundamentos + Dashboard + identidad Trazo** | Design system, layout responsive, dataset simulado, repositorios mock sobre IndexedDB, dashboard ejecutivo | **Disponible** |
-| **F2 · Proyectos** | Portafolio con filtros en URL, alta/edición, archivado y detalle | **Disponible** |
-| F3 · Inteligencia de cambios | Versiones, comparador antes/después, motor de reglas, alertas, monitor e historial | Siguiente |
-| F4 · Pulido y QA | Actividad, ajustes y reset demo, accesibilidad AA, E2E con Playwright, CI | Planificado |
-| F5–F7 · Backend | API REST con Node/Express, Prisma y PostgreSQL | Planificado |
+| **F2 · Proyectos**                                 | Portafolio con filtros en URL, alta/edición, archivado y detalle                                           | **Disponible** |
+| **F3 · Inteligencia de cambios**                   | Versiones inmutables, comparador antes/después, motor de reglas, centro de alertas, monitor e historial    | **Disponible** |
+| F4 · Pulido y QA                                   | Actividad, ajustes y reset demo, accesibilidad AA, E2E con Playwright, CI                                  | Planificado    |
+| F5–F7 · Backend                                    | API REST con Node/Express, Prisma y PostgreSQL                                                             | Planificado    |
 
 ### Disponible hoy
 
@@ -59,16 +59,23 @@ modo que el portafolio siempre se ve coherente sin depender de un backend.
   archivar (con confirmación y archivado lógico).
 - Formulario crear/editar con React Hook Form + Zod: información general,
   línea base vs. presupuesto actual, cronograma, avance y reglas de completado.
+- Edición transaccional: cada cambio relevante crea una versión inmutable, un
+  evento por campo modificado y las alertas que dispare el motor de reglas.
 - Detalle `/projects/:id` con KPIs, alcance, presupuesto, alertas relacionadas,
-  actividad reciente y pestañas honestas de Fase 3 para historial/comparación.
-- Dataset determinista de 50 proyectos, alertas y actividad persistidos en
-  IndexedDB (sobreviven a la recarga).
+  actividad reciente y pestañas de historial y comparación antes/después.
+- Historial de versiones con autor, fecha, origen, motivo y campos cambiados;
+  comparador entre dos versiones con las reglas que se dispararon.
+- Monitor `/monitor` con feed agrupado por fecha, filtros por proyecto, campo,
+  origen, severidad y periodo, detalle del cambio y enlaces al proyecto.
+- Centro de alertas `/alerts` con contadores, filtros, la regla que originó cada
+  alerta y acciones para revisar o resolver con trazabilidad.
+- Dataset determinista de 50 proyectos, versiones, cambios, alertas, actividad y
+  reglas persistidos en IndexedDB (sobreviven a la recarga).
 - Estados de carga, error y vacío; navegación por teclado y foco visible.
 
-Los módulos de Monitor, Alertas, Actividad y Configuración muestran una pantalla
-honesta de "próximamente" con lo que incluirá cada uno. No hay botones
-decorativos: cada acción navega, ejecuta algo real o está deshabilitada con
-explicación.
+Los módulos de Actividad y Configuración muestran una pantalla honesta de
+"próximamente" con lo que incluirá cada uno. No hay botones decorativos: cada
+acción navega, ejecuta algo real o está deshabilitada con explicación.
 
 ## Stack
 
@@ -80,7 +87,7 @@ explicación.
 - **React Hook Form + Zod** (base de formularios de la Fase 2)
 - **idb** para persistencia local
 - **Vitest + React Testing Library** · **ESLint + Prettier**
-- *Planificado:* TanStack Table, Playwright, Node.js + Express, Prisma, PostgreSQL
+- _Planificado:_ TanStack Table, Playwright, Node.js + Express, Prisma, PostgreSQL
 
 ## Cómo ejecutar
 
@@ -159,8 +166,10 @@ incluye renders ni mockups que no correspondan a pantallas implementadas.
 ## Limitaciones conocidas
 
 - No hay backend, autenticación ni multiempresa: el perfil es fijo y de demo.
-- El historial de versiones, el comparador y el motor de cambios de la Fase 3
-  aún no están implementados.
+- Los umbrales de las reglas se persisten y alimentan el motor, pero su pantalla
+  de edición y el reset demo desde `/settings` pertenecen a la Fase 4.
+- La página de actividad completa y los escenarios de simulación quedan para la
+  Fase 4; el feed de cambios y la actividad reciente ya son reales.
 - El periodo del dashboard afecta a la tendencia y a los deltas frente al
   periodo anterior; los totales y la distribución representan el portafolio
   activo completo.

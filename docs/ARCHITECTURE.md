@@ -33,7 +33,11 @@ DashboardPage
 Definidos en `src/data/contracts`:
 
 - `ProjectRepository`: `list`, `getAll`, `getById`, `create`, `update`, `archive`,
-  `listVersions`.
+  `listVersions`. `update` aplica el estado, crea la versión y devuelve
+  `ProjectUpdateResult` con cambios y alertas generadas.
+- `VersionRepository`: `getAll`, `getById`, `listByProject`, `list`.
+- `ChangeEventRepository`: `getAll`, `listByProject`, `listByVersion`, `list`.
+- `RuleConfigRepository`: `list`, `update`.
 - `AlertRepository`: `list`, `getAll`, `getById`, `updateStatus`, `countOpen`.
 - `ActivityRepository`: `list`, `getAll`.
 
@@ -46,6 +50,13 @@ implementar `HttpProjectRepository`, `HttpAlertRepository` y
 - `domain/models`: entidades serializables (dinero en céntimos, fechas ISO).
 - `domain/services/project-metrics`: vencimiento, variación presupuestal y
   puntuación de riesgo explicable.
+- `domain/services/project-diff`: compara los campos auditables y produce los
+  eventos de cambio.
+- `domain/services/change-rules`: evalúa presupuesto, fecha, vencimiento,
+  bloqueo y prioridad contra `RuleConfig`; una sola alerta de presupuesto por
+  transición.
+- `domain/services/change-feed`: une cambios, versiones, proyectos, actores y
+  alertas para monitor; filtros y paginación puros.
 - `domain/services/dashboard-summary`: agrega KPIs, series y distribuciones a
   partir de proyectos y alertas. Sin acceso a red, 100 % testeable.
 - `domain/utils`: formato de moneda (`Intl.NumberFormat('es-PE')`), fechas y
@@ -53,10 +64,18 @@ implementar `HttpProjectRepository`, `HttpAlertRepository` y
 
 ## Persistencia
 
-`data/mock/storage/db.ts` abre IndexedDB (`trazo-demo`, versión 1) con los
-stores `projects`, `alerts`, `activity` y `meta`. En el primer acceso, o cuando
-cambia `seedVersion` / `schemaVersion` / `referenceDate`, se vuelve a sembrar el
-dataset determinista. La versión de semilla actual es 2.
+`data/mock/storage/db.ts` abre IndexedDB (`trazo-demo`, versión 2) con los
+stores `projects`, `versions`, `changes`, `alerts`, `activity`, `rules` y
+`meta`. En el primer acceso, o cuando cambia `seedVersion` / `schemaVersion` /
+`referenceDate`, se vuelve a sembrar el dataset determinista. La versión de
+semilla actual es 3.
+
+La edición de un proyecto es un único caso de uso transaccional
+(`data/mock/services/apply-project-update.ts`): actualiza el proyecto, guarda la
+versión inmutable, escribe un `ChangeEvent` por campo, evalúa las reglas,
+deduplica alertas por `(projectId, versionId, ruleId)` y registra la actividad.
+El dataset inicial recorre el mismo diff/motor para que versiones, cambios y
+alertas sean coherentes desde el primer render.
 
 Los adaptadores simulan latencia de 120–320 ms **solo en desarrollo**; en tests y
 producción no hay esperas artificiales.
@@ -67,6 +86,15 @@ producción no hay esperas artificiales.
 - Gráficos cargados aparte del dashboard para no bloquear el primer render.
 - Chunks de vendor separados (React, UI, charts, query).
 - Providers: TanStack Query, Tooltip y Toaster (sonner).
+
+## Reglas de negocio implementadas en Fase 3
+
+- Presupuesto: alerta desde cero, advertencia > 10 % y crítica > 20 % respecto a
+  la versión anterior; exactamente 20 % se queda en advertencia.
+- Fecha de entrega postergada, proyecto vencido, estado bloqueado y prioridad
+  crítica.
+- Sin cambios en los campos auditables no hay versión ni alerta.
+- Idempotencia por `(projectId, versionId, ruleId)`.
 
 ## Reglas de negocio implementadas en Fase 1
 
