@@ -12,7 +12,16 @@ export class MockActivityRepository implements ActivityRepository {
     const filtered = activity.filter((entry) => {
       if (query.projectId && entry.projectId !== query.projectId) return false
       if (query.actorId && entry.actorId !== query.actorId) return false
-      if (query.createdAfter && entry.createdAt < query.createdAfter) return false
+      if (query.action && entry.action !== query.action) return false
+      if (
+        query.source &&
+        query.source.length > 0 &&
+        !query.source.includes(entry.source)
+      ) {
+        return false
+      }
+      if (query.createdAfter && entry.createdAt < query.createdAfter)
+        return false
       return true
     })
 
