@@ -2,9 +2,9 @@ export const DEMO_REFERENCE_DATE = '2026-10-31'
 
 export const DEMO_SEED = 20261031
 
-export const DEMO_SEED_VERSION = 2
+export const DEMO_SEED_VERSION = 3
 
-export const DEMO_SCHEMA_VERSION = 1
+export const DEMO_SCHEMA_VERSION = 2
 
 export const DEMO_CURRENCY = 'PEN' as const
 

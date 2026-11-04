@@ -1,4 +1,9 @@
-import type { ActivityLog, Alert, Project } from '@/domain/models'
+import type {
+  ActivityLog,
+  Alert,
+  Project,
+  ProjectVersion,
+} from '@/domain/models'
 import { parseDate } from '@/domain/utils/date'
 import { createRandom, pick, randomInt } from './random'
 import { DEMO_CURRENT_USER, DEMO_USERS } from './users'
@@ -15,6 +20,7 @@ export function generateActivity(
   random: () => number,
   projects: readonly Project[],
   alerts: readonly Alert[],
+  versions: readonly ProjectVersion[],
 ): ActivityLog[] {
   const activity: ActivityLog[] = []
   const fallbackRandom = createRandom(9_815_223)
@@ -46,6 +52,20 @@ export function generateActivity(
     })
   }
 
+  for (const version of versions) {
+    push({
+      projectId: version.projectId,
+      actorId: version.changedBy,
+      action: 'version.created',
+      source: version.source,
+      createdAt: version.changedAt,
+      metadata: {
+        versionNumber: String(version.versionNumber),
+        reason: version.reason ?? '',
+      },
+    })
+  }
+
   for (const alert of alerts) {
     push({
       projectId: alert.projectId,
@@ -53,7 +73,11 @@ export function generateActivity(
       action: 'alert.generated',
       source: 'system',
       createdAt: alert.createdAt,
-      metadata: { ruleId: alert.ruleId, severity: alert.severity },
+      metadata: {
+        ruleId: alert.ruleId,
+        severity: alert.severity,
+        versionId: alert.versionId ?? '',
+      },
     })
   }
 

@@ -5,11 +5,13 @@ import {
   type CreateProjectInput,
   type UpdateProjectInput,
 } from '@/data'
+import { DEMO_CURRENT_USER } from '@/data/mock/seed/users'
 
 function invalidateProjectData(queryClient: ReturnType<typeof useQueryClient>) {
   void queryClient.invalidateQueries({ queryKey: ['projects'] })
   void queryClient.invalidateQueries({ queryKey: ['dashboard'] })
   void queryClient.invalidateQueries({ queryKey: ['alerts'] })
+  void queryClient.invalidateQueries({ queryKey: ['monitor'] })
 }
 
 function messageFrom(error: unknown, fallback: string): string {
@@ -20,7 +22,11 @@ export function useCreateProject() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (input: CreateProjectInput) => projectRepository.create(input),
+    mutationFn: (input: CreateProjectInput) =>
+      projectRepository.create(input, {
+        actorId: DEMO_CURRENT_USER.id,
+        source: 'manual',
+      }),
     onSuccess: (project) => {
       invalidateProjectData(queryClient)
       toast.success('Proyecto creado correctamente.', {
@@ -38,11 +44,34 @@ export function useUpdateProject(id: string) {
 
   return useMutation({
     mutationFn: (input: UpdateProjectInput) =>
-      projectRepository.update(id, input),
-    onSuccess: (project) => {
+      projectRepository.update(id, input, {
+        actorId: DEMO_CURRENT_USER.id,
+        source: 'manual',
+      }),
+    onSuccess: (result) => {
       invalidateProjectData(queryClient)
-      toast.success('Proyecto actualizado.', {
-        description: `${project.code} · ${project.name}`,
+
+      if (!result.changed || !result.version) {
+        toast.info('Sin cambios', {
+          description: 'No se registró una nueva versión del proyecto.',
+        })
+        return
+      }
+
+      const fields = `${result.changes.length} ${
+        result.changes.length === 1 ? 'campo' : 'campos'
+      }`
+      const alerts =
+        result.alerts.length > 0
+          ? ` · ${result.alerts.length} ${
+              result.alerts.length === 1
+                ? 'alerta generada'
+                : 'alertas generadas'
+            }`
+          : ''
+
+      toast.success('Proyecto actualizado. Se registró una nueva versión.', {
+        description: `${result.project.code} · v${result.version.versionNumber} · ${fields}${alerts}`,
       })
     },
     onError: (error) => {

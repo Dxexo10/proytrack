@@ -1,5 +1,12 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb'
-import type { ActivityLog, Alert, Project } from '@/domain/models'
+import type {
+  ActivityLog,
+  Alert,
+  ChangeEvent,
+  Project,
+  ProjectVersion,
+  RuleConfig,
+} from '@/domain/models'
 import {
   DEMO_DATABASE_NAME,
   DEMO_REFERENCE_DATE,
@@ -15,10 +22,13 @@ export interface DatasetMeta {
   seededAt: string
 }
 
-interface TrazoDB extends DBSchema {
+export interface TrazoDB extends DBSchema {
   projects: { key: string; value: Project }
+  versions: { key: string; value: ProjectVersion }
+  changes: { key: string; value: ChangeEvent }
   alerts: { key: string; value: Alert }
   activity: { key: string; value: ActivityLog }
+  rules: { key: string; value: RuleConfig }
   meta: { key: string; value: DatasetMeta }
 }
 
@@ -28,20 +38,35 @@ function writeDataset(
   db: IDBPDatabase<TrazoDB>,
   dataset: DemoDataset,
 ): Promise<void> {
-  const tx = db.transaction(['projects', 'alerts', 'activity', 'meta'], 'readwrite')
+  const tx = db.transaction(
+    ['projects', 'versions', 'changes', 'alerts', 'activity', 'rules', 'meta'],
+    'readwrite',
+  )
 
   tx.objectStore('projects').clear()
+  tx.objectStore('versions').clear()
+  tx.objectStore('changes').clear()
   tx.objectStore('alerts').clear()
   tx.objectStore('activity').clear()
+  tx.objectStore('rules').clear()
 
   for (const project of dataset.projects) {
     tx.objectStore('projects').put(project)
+  }
+  for (const version of dataset.versions) {
+    tx.objectStore('versions').put(version)
+  }
+  for (const change of dataset.changes) {
+    tx.objectStore('changes').put(change)
   }
   for (const alert of dataset.alerts) {
     tx.objectStore('alerts').put(alert)
   }
   for (const entry of dataset.activity) {
     tx.objectStore('activity').put(entry)
+  }
+  for (const rule of dataset.rules) {
+    tx.objectStore('rules').put(rule)
   }
 
   tx.objectStore('meta').put(
@@ -67,7 +92,8 @@ async function ensureSeeded(db: IDBPDatabase<TrazoDB>): Promise<void> {
 
   if (isCurrent) {
     const projectCount = await db.count('projects')
-    if (projectCount > 0) return
+    const versionCount = await db.count('versions')
+    if (projectCount > 0 && versionCount > 0) return
   }
 
   await writeDataset(db, generateDemoDataset())
@@ -75,26 +101,31 @@ async function ensureSeeded(db: IDBPDatabase<TrazoDB>): Promise<void> {
 
 export function getDatabase(): Promise<IDBPDatabase<TrazoDB>> {
   if (!databasePromise) {
-    databasePromise = openDB<TrazoDB>(
-      DEMO_DATABASE_NAME,
-      DEMO_SCHEMA_VERSION,
-      {
-        upgrade(db) {
-          if (!db.objectStoreNames.contains('projects')) {
-            db.createObjectStore('projects', { keyPath: 'id' })
-          }
-          if (!db.objectStoreNames.contains('alerts')) {
-            db.createObjectStore('alerts', { keyPath: 'id' })
-          }
-          if (!db.objectStoreNames.contains('activity')) {
-            db.createObjectStore('activity', { keyPath: 'id' })
-          }
-          if (!db.objectStoreNames.contains('meta')) {
-            db.createObjectStore('meta')
-          }
-        },
+    databasePromise = openDB<TrazoDB>(DEMO_DATABASE_NAME, DEMO_SCHEMA_VERSION, {
+      upgrade(db) {
+        if (!db.objectStoreNames.contains('projects')) {
+          db.createObjectStore('projects', { keyPath: 'id' })
+        }
+        if (!db.objectStoreNames.contains('versions')) {
+          db.createObjectStore('versions', { keyPath: 'id' })
+        }
+        if (!db.objectStoreNames.contains('changes')) {
+          db.createObjectStore('changes', { keyPath: 'id' })
+        }
+        if (!db.objectStoreNames.contains('alerts')) {
+          db.createObjectStore('alerts', { keyPath: 'id' })
+        }
+        if (!db.objectStoreNames.contains('activity')) {
+          db.createObjectStore('activity', { keyPath: 'id' })
+        }
+        if (!db.objectStoreNames.contains('rules')) {
+          db.createObjectStore('rules', { keyPath: 'id' })
+        }
+        if (!db.objectStoreNames.contains('meta')) {
+          db.createObjectStore('meta')
+        }
       },
-    ).then(async (db) => {
+    }).then(async (db) => {
       await ensureSeeded(db)
       return db
     })

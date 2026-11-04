@@ -1,95 +1,12 @@
-import type { Alert, AlertSeverity, AlertStatus, Project } from '@/domain/models'
-import { daysBetween, parseDate } from '@/domain/utils/date'
-import { percentageChange } from '@/domain/utils/money'
+import type {
+  Alert,
+  AlertStatus,
+  ProjectVersion,
+  RuleConfig,
+} from '@/domain/models'
+import { evaluateChangeRules } from '@/domain/services/change-rules'
+import { parseDate } from '@/domain/utils/date'
 import { DEMO_REFERENCE_DATE } from '@/lib/demo-config'
-import { randomInt } from './random'
-
-const ACTIVE_STATUSES = new Set(['in_progress', 'on_hold'])
-
-interface AlertDraft {
-  ruleId: string
-  severity: AlertSeverity
-  title: string
-  description: string
-}
-
-function budgetAlert(project: Project): AlertDraft | null {
-  const variation = percentageChange(
-    project.initialBudgetCents,
-    project.currentBudgetCents,
-  )
-
-  if (project.initialBudgetCents === 0 && project.currentBudgetCents > 0) {
-    return {
-      ruleId: 'budget-increase-from-zero',
-      severity: 'critical',
-      title: 'Presupuesto asignado desde cero',
-      description:
-        'El proyecto no tenía presupuesto inicial y ahora registra un monto asignado.',
-    }
-  }
-
-  if (variation === null) return null
-
-  if (variation > 20) {
-    return {
-      ruleId: 'budget-increase-critical',
-      severity: 'critical',
-      title: 'Incremento presupuestal crítico',
-      description: `El presupuesto actual aumentó un ${variation.toFixed(1).replace('.', ',')} % respecto a la línea base.`,
-    }
-  }
-
-  if (variation > 10) {
-    return {
-      ruleId: 'budget-increase-warning',
-      severity: 'warning',
-      title: 'Incremento presupuestal relevante',
-      description: `El presupuesto actual aumentó un ${variation.toFixed(1).replace('.', ',')} % respecto a la línea base.`,
-    }
-  }
-
-  return null
-}
-
-function deadlineAlert(
-  project: Project,
-  referenceDate: string,
-): AlertDraft | null {
-  if (!ACTIVE_STATUSES.has(project.status)) return null
-
-  const overdueDays = daysBetween(project.dueDate, referenceDate)
-  if (overdueDays <= 0) return null
-
-  return {
-    ruleId: 'project-overdue',
-    severity: 'warning',
-    title: 'Proyecto vencido',
-    description: `La fecha de entrega venció hace ${overdueDays} días con un avance del ${project.progress} %.`,
-  }
-}
-
-function statusAlert(project: Project): AlertDraft | null {
-  if (project.status !== 'on_hold') return null
-  return {
-    ruleId: 'project-on-hold',
-    severity: 'critical',
-    title: 'Proyecto bloqueado',
-    description:
-      'El estado del proyecto cambió a Bloqueado y requiere seguimiento del responsable.',
-  }
-}
-
-function priorityAlert(project: Project): AlertDraft | null {
-  if (project.priority !== 'critical') return null
-  return {
-    ruleId: 'priority-critical',
-    severity: 'warning',
-    title: 'Prioridad crítica asignada',
-    description:
-      'El proyecto pasó a prioridad crítica y debe revisarse en la reunión de portafolio.',
-  }
-}
 
 function statusFor(index: number): AlertStatus {
   if (index % 7 === 0) return 'resolved'
@@ -97,57 +14,84 @@ function statusFor(index: number): AlertStatus {
   return 'open'
 }
 
+function groupByProject(
+  versions: readonly ProjectVersion[],
+): Map<string, ProjectVersion[]> {
+  const grouped = new Map<string, ProjectVersion[]>()
+
+  for (const version of versions) {
+    const bucket = grouped.get(version.projectId)
+    if (bucket) {
+      bucket.push(version)
+    } else {
+      grouped.set(version.projectId, [version])
+    }
+  }
+
+  for (const bucket of grouped.values()) {
+    bucket.sort((a, b) => a.versionNumber - b.versionNumber)
+  }
+
+  return grouped
+}
+
 export function generateAlerts(
-  random: () => number,
-  projects: readonly Project[],
+  versions: readonly ProjectVersion[],
+  ruleConfigs: readonly RuleConfig[],
 ): Alert[] {
-  const reference = parseDate(DEMO_REFERENCE_DATE)
+  const referenceTime = parseDate(DEMO_REFERENCE_DATE).getTime()
   const alerts: Alert[] = []
+  const seen = new Set<string>()
 
-  for (const project of projects) {
-    if (project.status === 'cancelled') continue
+  for (const projectVersions of groupByProject(versions).values()) {
+    for (let index = 1; index < projectVersions.length; index += 1) {
+      const previous = projectVersions[index - 1]
+      const current = projectVersions[index]
+      if (!previous || !current) continue
+      if (current.snapshot.status === 'cancelled') continue
 
-    const drafts = [
-      budgetAlert(project),
-      deadlineAlert(project, DEMO_REFERENCE_DATE),
-      statusAlert(project),
-      priorityAlert(project),
-    ].filter((draft): draft is AlertDraft => draft !== null)
-
-    for (const draft of drafts) {
-      const status = statusFor(alerts.length)
-      const createdAt = new Date(
-        parseDate(project.updatedAt).getTime() + randomInt(random, 0, 5) * 3_600_000,
-      )
-      const createdAtIsFuture = createdAt > reference
-      const createdAtIso = (createdAtIsFuture
-        ? new Date(reference.getTime() - randomInt(random, 1, 30) * 3_600_000)
-        : createdAt
-      ).toISOString()
-
-      const reviewedAt =
-        status === 'open'
-          ? null
-          : new Date(
-              Math.min(
-                reference.getTime(),
-                parseDate(createdAtIso).getTime() +
-                  randomInt(random, 4, 72) * 3_600_000,
-              ),
-            ).toISOString()
-
-      alerts.push({
-        id: `alt_${String(alerts.length + 1).padStart(4, '0')}`,
-        projectId: project.id,
-        ruleId: draft.ruleId,
-        severity: draft.severity,
-        status,
-        title: draft.title,
-        description: draft.description,
-        createdAt: createdAtIso,
-        reviewedAt,
-        resolvedAt: status === 'resolved' ? reviewedAt : null,
+      const drafts = evaluateChangeRules({
+        previous: previous.snapshot,
+        next: current.snapshot,
+        ruleConfigs,
+        referenceDate: DEMO_REFERENCE_DATE,
+        includeTimeRules: index === projectVersions.length - 1,
       })
+
+      for (const draft of drafts) {
+        const dedupeKey = `${current.id}:${draft.ruleKey}`
+        if (seen.has(dedupeKey)) continue
+        seen.add(dedupeKey)
+
+        const status = statusFor(alerts.length)
+        const changedAt = parseDate(current.changedAt).getTime()
+        const createdAtTime = Math.min(
+          referenceTime,
+          changedAt + (alerts.length % 5) * 3_600_000,
+        )
+        const reviewedAtTime = Math.min(
+          referenceTime,
+          createdAtTime + (6 + (alerts.length % 60)) * 3_600_000,
+        )
+
+        alerts.push({
+          id: `alt_${String(alerts.length + 1).padStart(4, '0')}`,
+          projectId: current.projectId,
+          versionId: current.id,
+          ruleId: draft.ruleKey,
+          severity: draft.severity,
+          status,
+          title: draft.title,
+          description: draft.description,
+          createdAt: new Date(createdAtTime).toISOString(),
+          reviewedAt:
+            status === 'open' ? null : new Date(reviewedAtTime).toISOString(),
+          resolvedAt:
+            status === 'resolved'
+              ? new Date(reviewedAtTime).toISOString()
+              : null,
+        })
+      }
     }
   }
 

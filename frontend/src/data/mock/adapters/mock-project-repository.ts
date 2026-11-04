@@ -2,10 +2,15 @@ import type {
   CreateProjectInput,
   ProjectQuery,
   ProjectRepository,
+  UpdateProjectOptions,
+  ProjectUpdateResult,
+  ProjectWriteOptions,
   UpdateProjectInput,
 } from '@/data/contracts'
 import { paginate } from '@/data/contracts'
 import type { Project, ProjectVersion } from '@/domain/models'
+import { DEMO_CURRENT_USER } from '../seed/users'
+import { applyProjectUpdate } from '../services/apply-project-update'
 import { getDatabase } from '../storage/db'
 import { withLatency } from './latency'
 
@@ -15,7 +20,8 @@ function matchesQuery(project: Project, query: ProjectQuery): boolean {
   if (query.search) {
     const term = query.search.trim().toLowerCase()
     if (term.length > 0) {
-      const haystack = `${project.name} ${project.code} ${project.client}`.toLowerCase()
+      const haystack =
+        `${project.name} ${project.code} ${project.client}`.toLowerCase()
       if (!haystack.includes(term)) return false
     }
   }
@@ -92,10 +98,15 @@ export class MockProjectRepository implements ProjectRepository {
     return withLatency(project ?? null)
   }
 
-  async create(input: CreateProjectInput): Promise<Project> {
+  async create(
+    input: CreateProjectInput,
+    options?: ProjectWriteOptions,
+  ): Promise<Project> {
     const db = await getDatabase()
     const projects = await db.getAll('projects')
-    const now = new Date().toISOString()
+    const now = options?.now ?? new Date().toISOString()
+    const actorId = options?.actorId ?? DEMO_CURRENT_USER.id
+    const source = options?.source ?? 'manual'
 
     const project: Project = {
       ...input,
@@ -106,26 +117,57 @@ export class MockProjectRepository implements ProjectRepository {
       archivedAt: null,
     }
 
-    await db.put('projects', project)
+    const version: ProjectVersion = {
+      id: `ver_${crypto.randomUUID()}`,
+      projectId: project.id,
+      versionNumber: 1,
+      snapshot: project,
+      changedAt: now,
+      changedBy: actorId,
+      source,
+      reason: null,
+    }
+
+    const tx = db.transaction(['projects', 'versions', 'activity'], 'readwrite')
+    tx.objectStore('projects').put(project)
+    tx.objectStore('versions').put(version)
+    tx.objectStore('activity').put({
+      id: `act_${crypto.randomUUID()}`,
+      projectId: project.id,
+      actorId,
+      action: 'project.created',
+      source,
+      createdAt: now,
+      metadata: { code: project.code },
+    })
+    tx.objectStore('activity').put({
+      id: `act_${crypto.randomUUID()}`,
+      projectId: project.id,
+      actorId,
+      action: 'version.created',
+      source,
+      createdAt: now,
+      metadata: { versionNumber: '1', fields: '0', reason: '' },
+    })
+    await tx.done
+
     return withLatency(project)
   }
 
-  async update(id: string, input: UpdateProjectInput): Promise<Project> {
+  async update(
+    id: string,
+    input: UpdateProjectInput,
+    options?: UpdateProjectOptions,
+  ): Promise<ProjectUpdateResult> {
     const db = await getDatabase()
-    const existing = await db.get('projects', id)
+    const result = await applyProjectUpdate(db, id, input, {
+      actorId: options?.actorId ?? DEMO_CURRENT_USER.id,
+      source: options?.source ?? 'manual',
+      reason: options?.reason,
+      now: options?.now,
+    })
 
-    if (!existing) {
-      throw new Error('El proyecto solicitado no existe.')
-    }
-
-    const updated: Project = {
-      ...existing,
-      ...input,
-      updatedAt: new Date().toISOString(),
-    }
-
-    await db.put('projects', updated)
-    return withLatency(updated)
+    return withLatency(result)
   }
 
   async archive(id: string): Promise<void> {
@@ -137,15 +179,33 @@ export class MockProjectRepository implements ProjectRepository {
     }
 
     const now = new Date().toISOString()
-    await db.put('projects', {
+    const tx = db.transaction(['projects', 'activity'], 'readwrite')
+    tx.objectStore('projects').put({
       ...existing,
       archivedAt: now,
       updatedAt: now,
     })
+    tx.objectStore('activity').put({
+      id: `act_${crypto.randomUUID()}`,
+      projectId: id,
+      actorId: DEMO_CURRENT_USER.id,
+      action: 'project.archived',
+      source: 'manual',
+      createdAt: now,
+      metadata: {},
+    })
+    await tx.done
     await withLatency(undefined)
   }
 
-  async listVersions(_id: string): Promise<ProjectVersion[]> {
-    return withLatency([])
+  async listVersions(id: string): Promise<ProjectVersion[]> {
+    const db = await getDatabase()
+    const versions = await db.getAll('versions')
+
+    return withLatency(
+      versions
+        .filter((version) => version.projectId === id)
+        .sort((a, b) => b.versionNumber - a.versionNumber),
+    )
   }
 }

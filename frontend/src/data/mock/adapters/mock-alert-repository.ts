@@ -1,6 +1,7 @@
 import type { AlertQuery, AlertRepository } from '@/data/contracts'
 import { paginate } from '@/data/contracts'
 import type { Alert, AlertStatus } from '@/domain/models'
+import { DEMO_CURRENT_USER } from '../seed/users'
 import { getDatabase } from '../storage/db'
 import { withLatency } from './latency'
 
@@ -17,7 +18,8 @@ export class MockAlertRepository implements AlertRepository {
         if (!query.severity.includes(alert.severity)) return false
       }
       if (query.projectId && alert.projectId !== query.projectId) return false
-      if (query.createdAfter && alert.createdAt < query.createdAfter) return false
+      if (query.createdAfter && alert.createdAt < query.createdAfter)
+        return false
       return true
     })
 
@@ -55,13 +57,42 @@ export class MockAlertRepository implements AlertRepository {
       resolvedAt: status === 'resolved' ? now : null,
     }
 
-    await db.put('alerts', updated)
+    const tx = db.transaction(['alerts', 'activity'], 'readwrite')
+    tx.objectStore('alerts').put(updated)
+    tx.objectStore('activity').put({
+      id: `act_${crypto.randomUUID()}`,
+      projectId: existing.projectId,
+      actorId: DEMO_CURRENT_USER.id,
+      action: status === 'resolved' ? 'alert.resolved' : 'alert.reviewed',
+      source: 'manual',
+      createdAt: now,
+      metadata: {
+        alertId: id,
+        ruleId: existing.ruleId,
+        previousStatus: existing.status,
+      },
+    })
+    await tx.done
+
     return withLatency(updated)
   }
 
   async countOpen(): Promise<number> {
     const db = await getDatabase()
-    const alerts = await db.getAll('alerts')
-    return withLatency(alerts.filter((alert) => alert.status === 'open').length)
+    const [alerts, projects] = await Promise.all([
+      db.getAll('alerts'),
+      db.getAll('projects'),
+    ])
+    const archivedIds = new Set(
+      projects
+        .filter((project) => project.archivedAt !== null)
+        .map((project) => project.id),
+    )
+
+    return withLatency(
+      alerts.filter(
+        (alert) => alert.status === 'open' && !archivedIds.has(alert.projectId),
+      ).length,
+    )
   }
 }
