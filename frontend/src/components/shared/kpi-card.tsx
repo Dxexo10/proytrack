@@ -104,9 +104,9 @@ export function KpiCard({
     <Link
       to={href}
       className="block h-full rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-      aria-label={`${label}: ${value}. Ver detalle`}
     >
       {content}
+      <span className="sr-only">Ver detalle</span>
     </Link>
   )
 }
