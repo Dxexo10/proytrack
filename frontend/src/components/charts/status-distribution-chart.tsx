@@ -5,7 +5,7 @@ import { STATUS_LABELS } from '@/lib/labels'
 
 const STATUS_COLORS: Record<ProjectStatus, string> = {
   in_progress: 'var(--chart-1)',
-  planned: '#c9bfb0',
+  planned: 'var(--chart-muted)',
   on_hold: 'var(--chart-3)',
   completed: 'var(--chart-2)',
   cancelled: 'var(--chart-4)',

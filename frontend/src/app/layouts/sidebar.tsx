@@ -55,7 +55,7 @@ function SidebarLink({
         className={cn(
           'inline-flex size-8 shrink-0 items-center justify-center rounded-lg transition-colors duration-200',
           active
-            ? 'bg-brand-terracotta text-white shadow-[0_8px_18px_-10px_rgba(198,93,58,0.9)]'
+            ? 'bg-primary text-primary-foreground shadow-[0_8px_18px_-10px_rgba(198,93,58,0.9)]'
             : 'text-sidebar-foreground/60 group-hover:text-brand-ivory',
         )}
       >

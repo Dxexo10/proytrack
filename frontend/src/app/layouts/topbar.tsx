@@ -35,7 +35,7 @@ function Breadcrumb() {
   return (
     <nav aria-label="Ruta de navegación" className="min-w-0">
       <ol className="flex min-w-0 items-center gap-2 text-sm">
-        <li className="hidden font-heading text-[13px] font-semibold tracking-tight text-brand-graphite sm:block">
+        <li className="hidden font-heading text-[13px] font-semibold tracking-tight text-foreground sm:block">
           trazo<span className="text-brand-terracotta">.</span>
         </li>
         <li aria-hidden="true" className="hidden text-brand-sand sm:block">
@@ -93,7 +93,7 @@ function AlertsShortcut() {
       {count > 0 ? (
         <span
           aria-hidden="true"
-          className="absolute -top-0.5 -right-0.5 inline-flex min-w-4 items-center justify-center rounded-full bg-brand-terracotta-hover px-1 text-[10px] font-semibold leading-4 text-white"
+          className="absolute -top-0.5 -right-0.5 inline-flex min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[10px] font-semibold leading-4 text-primary-foreground"
         >
           {count > 9 ? '9+' : count}
         </span>

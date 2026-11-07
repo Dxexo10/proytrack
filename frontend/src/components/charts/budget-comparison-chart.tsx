@@ -73,7 +73,7 @@ export function BudgetComparisonChart({ data }: BudgetComparisonChartProps) {
           <Bar
             dataKey="initial"
             name="Presupuesto inicial"
-            fill="#c9bfb0"
+            fill="var(--chart-muted)"
             radius={[6, 6, 0, 0]}
             maxBarSize={36}
           />
@@ -89,7 +89,7 @@ export function BudgetComparisonChart({ data }: BudgetComparisonChartProps) {
 
       <div className="mt-2 flex flex-wrap items-center gap-4 px-3 text-xs text-muted-foreground">
         <span className="inline-flex items-center gap-1.5">
-          <span aria-hidden="true" className="size-2 rounded-full bg-brand-sand" />
+          <span aria-hidden="true" className="size-2 rounded-full bg-chart-muted" />
           Presupuesto inicial
         </span>
         <span className="inline-flex items-center gap-1.5">

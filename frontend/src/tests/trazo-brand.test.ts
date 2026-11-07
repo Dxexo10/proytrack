@@ -5,11 +5,33 @@ import { describe, expect, it } from 'vitest'
 
 const ROOT = process.cwd()
 
-function readTokens(): Map<string, string> {
+function readTokens(selector: ':root' | '.dark'): Map<string, string> {
   const css = readFileSync(path.join(ROOT, 'src/styles/tokens.css'), 'utf8')
+  const blockStart = css.indexOf(`${selector} {`)
+
+  if (blockStart === -1) {
+    throw new Error(`No se encontró el bloque ${selector} en tokens.css`)
+  }
+
+  const openingBrace = css.indexOf('{', blockStart)
+  let depth = 0
+  let closingBrace = openingBrace
+
+  for (let index = openingBrace; index < css.length; index += 1) {
+    if (css[index] === '{') depth += 1
+    if (css[index] === '}') {
+      depth -= 1
+      if (depth === 0) {
+        closingBrace = index
+        break
+      }
+    }
+  }
+
+  const block = css.slice(openingBrace + 1, closingBrace)
   const variables = new Map<string, string>()
 
-  for (const match of css.matchAll(/--([\w-]+):\s*([^;]+);/g)) {
+  for (const match of block.matchAll(/--([\w-]+):\s*([^;]+);/g)) {
     variables.set(match[1] ?? '', match[2]?.trim() ?? '')
   }
 
@@ -48,8 +70,8 @@ function contrast(first: string, second: string): number {
   return (light + 0.05) / (dark + 0.05)
 }
 
-describe('Trazo token contrast', () => {
-  const tokens = readTokens()
+describe('Trazo token contrast — light', () => {
+  const tokens = readTokens(':root')
 
   const pairs: Array<[string, string, string]> = [
     ['Texto principal sobre marfil', 'text-primary', 'background'],
@@ -62,6 +84,37 @@ describe('Trazo token contrast', () => {
     ['Info sobre fondo suave', 'info', 'info-soft'],
     ['Texto de sidebar sobre grafito', 'sidebar-foreground', 'sidebar'],
     ['Marfil sobre grafito', 'brand-ivory', 'brand-graphite'],
+  ]
+
+  for (const [label, foreground, background] of pairs) {
+    it(`${label} cumple AA (4.5:1)`, () => {
+      const ratio = contrast(
+        resolveToken(tokens, foreground),
+        resolveToken(tokens, background),
+      )
+
+      expect(ratio).toBeGreaterThanOrEqual(4.5)
+    })
+  }
+})
+
+describe('Trazo token contrast — dark', () => {
+  const tokens = readTokens('.dark')
+
+  const pairs: Array<[string, string, string]> = [
+    ['Texto principal sobre fondo nocturno', 'text-primary', 'background'],
+    ['Texto principal sobre tarjeta nocturna', 'text-primary', 'surface'],
+    ['Texto secundario sobre fondo nocturno', 'text-secondary', 'background'],
+    ['Texto secundario sobre tarjeta nocturna', 'text-secondary', 'surface'],
+    ['Primario sobre su texto', 'primary-foreground', 'primary'],
+    ['Terracota luminosa sobre tarjeta', 'brand-terracotta', 'surface'],
+    ['Terracota clara sobre tarjeta', 'brand-terracotta-hover', 'surface'],
+    ['Éxito sobre fondo suave', 'success', 'success-soft'],
+    ['Advertencia sobre fondo suave', 'warning', 'warning-soft'],
+    ['Error sobre fondo suave', 'danger', 'danger-soft'],
+    ['Info sobre fondo suave', 'info', 'info-soft'],
+    ['Texto de sidebar sobre sidebar nocturna', 'sidebar-foreground', 'sidebar'],
+    ['Marfil sobre sidebar nocturna', 'brand-ivory', 'sidebar'],
   ]
 
   for (const [label, foreground, background] of pairs) {

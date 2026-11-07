@@ -63,6 +63,7 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-muted: var(--chart-muted);
 
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
@@ -141,6 +142,7 @@
   --chart-3: #b7791f;
   --chart-4: #858a80;
   --chart-5: #4f6070;
+  --chart-muted: #c9bfb0;
 
   --sidebar: var(--brand-graphite);
   --sidebar-foreground: #d9d6ce;
@@ -153,6 +155,84 @@
 
   --radius: 0.75rem;
   color-scheme: light;
+}
+
+/**
+ * Trazo Nocturno — dark theme.
+ * Warm graphite + luminous terracotta; never pure black or generic navy.
+ */
+.dark {
+  --brand-graphite: #252824;
+  --brand-graphite-elevated: #383e37;
+  --brand-terracotta: #e18a69;
+  --brand-terracotta-hover: #f0a88b;
+  --brand-terracotta-strong: #e18a69;
+  --brand-terracotta-subtle: #3a2822;
+  --brand-ivory: #f0eae0;
+  --brand-sand: #454b43;
+  --brand-olive: #9fb08f;
+  --sand-soft: #2a2f2a;
+
+  --text-primary: #f0eae0;
+  --text-secondary: #b2b8ae;
+  --text-muted: #9aa096;
+  --border-subtle: #454b43;
+
+  --success: #a9c59a;
+  --success-soft: #293827;
+  --warning: #e8b77a;
+  --warning-soft: #4a3b22;
+  --danger: #f0a79b;
+  --danger-soft: #4a2b27;
+  --info: #a8bccb;
+  --info-soft: #26333c;
+  --focus: #f0a88b;
+
+  --canvas: #191c19;
+  --surface: #30352f;
+
+  --background: var(--canvas);
+  --foreground: var(--text-primary);
+  --card: var(--surface);
+  --card-foreground: var(--text-primary);
+  --popover: #383e37;
+  --popover-foreground: var(--text-primary);
+  --primary: #e18a69;
+  --primary-foreground: #191c19;
+  --secondary: #383e37;
+  --secondary-foreground: var(--text-primary);
+  --muted: #2a2f2a;
+  --muted-foreground: var(--text-secondary);
+  --accent: #3a2822;
+  --accent-foreground: #f0a88b;
+  --destructive: var(--danger);
+  --destructive-foreground: #191c19;
+  --border: var(--border-subtle);
+  --input: #454b43;
+  --ring: var(--focus);
+
+  --chart-1: #e18a69;
+  --chart-2: #9fb08f;
+  --chart-3: #d9a441;
+  --chart-4: #8e948a;
+  --chart-5: #8fa6b6;
+  --chart-muted: #5b6158;
+
+  --sidebar: #252a25;
+  --sidebar-foreground: #b2b8ae;
+  --sidebar-primary: #e18a69;
+  --sidebar-primary-foreground: #191c19;
+  --sidebar-accent: #383e37;
+  --sidebar-accent-foreground: #f0eae0;
+  --sidebar-border: #454b43;
+  --sidebar-ring: #f0a88b;
+
+  --shadow-card:
+    0 1px 2px 0 rgb(0 0 0 / 0.25), 0 10px 30px -24px rgb(0 0 0 / 0.6);
+  --shadow-raised:
+    0 2px 4px 0 rgb(0 0 0 / 0.3), 0 18px 40px -28px rgb(0 0 0 / 0.65);
+
+  color-scheme: dark;
 }
 
 @layer base {
@@ -187,7 +267,7 @@
 
   ::selection {
     background: var(--brand-terracotta-subtle);
-    color: var(--brand-graphite);
+    color: var(--text-primary);
   }
 
   :focus-visible {
