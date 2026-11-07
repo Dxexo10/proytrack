@@ -16,6 +16,7 @@ rediseño de navegación y apariencia.
 | Responsive | Drawer reutilizado, áreas seguras y scroll contenido | `926d85c` |
 | Pruebas | Sidebar, submenús, apariencia, saludo y regresión del portafolio | `fa9dd23` |
 | Documentación | Design system, marca, arquitectura, ADR y estado | este commit |
+| Saludos unificados | Franja única, 3 variantes estables de dashboard y pruebas de límites | este commit |
 
 ### Diagnóstico del «dashboard con 0 proyectos»
 
@@ -31,7 +32,7 @@ números estáticos en la aplicación.
 ```text
 npm run lint       → 0 errores, 0 advertencias
 npm run typecheck  → sin errores
-NODE_ENV=test npm run test → 28 archivos, 158 pruebas aprobadas
+NODE_ENV=test npm run test → 28 archivos, 171 pruebas aprobadas
 npm run build      → dist generado
 ```
 

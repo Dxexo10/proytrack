@@ -10,8 +10,8 @@ test('editar presupuesto crea versión, alerta y trazabilidad', async ({
 }) => {
   await page.goto('/dashboard')
   await expect(
-    page.getByRole('heading', { name: 'Buen día, Sofía' }),
-  ).toBeVisible()
+    page.getByRole('heading', { level: 1 }),
+  ).toContainText(/Sofía|Un nuevo día, nuevas metas/)
 
   await page.goto('/projects/prj_0001')
   await expect(

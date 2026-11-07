@@ -1,13 +1,18 @@
 import { useEffect, useState } from 'react'
 import {
-  greetingForDate,
+  buildDashboardGreeting,
+  GREETING_BY_BAND,
+  getTimeBand,
   millisecondsUntilNextGreetingBoundary,
+  pickDashboardGreetingIndex,
+  readOrCreateGreetingSeed,
   type Greeting,
+  type TimeBand,
 } from '@/lib/greeting'
 
-export function useGreeting(): Greeting {
-  const [greeting, setGreeting] = useState<Greeting>(() =>
-    greetingForDate(new Date()),
+function useScheduledTimeBand(): TimeBand {
+  const [band, setBand] = useState<TimeBand>(() =>
+    getTimeBand(new Date().getHours()),
   )
 
   useEffect(() => {
@@ -15,7 +20,7 @@ export function useGreeting(): Greeting {
 
     const scheduleNextUpdate = () => {
       timeoutId = setTimeout(() => {
-        setGreeting(greetingForDate(new Date()))
+        setBand(getTimeBand(new Date().getHours()))
         scheduleNextUpdate()
       }, millisecondsUntilNextGreetingBoundary(new Date()))
     }
@@ -25,5 +30,22 @@ export function useGreeting(): Greeting {
     return () => clearTimeout(timeoutId)
   }, [])
 
-  return greeting
+  return band
+}
+
+export function useTimeBand(): TimeBand {
+  return useScheduledTimeBand()
+}
+
+export function useGreeting(): Greeting {
+  const band = useScheduledTimeBand()
+  return GREETING_BY_BAND[band]
+}
+
+export function useDashboardGreeting(name: string): string {
+  const band = useScheduledTimeBand()
+  const [seed] = useState(readOrCreateGreetingSeed)
+  const index = pickDashboardGreetingIndex(band, seed)
+
+  return buildDashboardGreeting(band, name, index)
 }

@@ -94,8 +94,10 @@ producción no hay esperas artificiales.
   específico según `pathname` + query params. `sidebar.tsx`,
   `sidebar-submenu.tsx`, `sidebar-profile.tsx` y `appearance-control.tsx`
   componen la navegación; el drawer móvil reutiliza el mismo contenido.
-- `lib/greeting.ts` + `hooks/use-greeting.ts` calculan la franja horaria local y
-  reprograman la actualización en los límites 05:00, 12:00 y 19:00.
+- `lib/greeting.ts` + `hooks/use-greeting.ts` concentran la franja horaria local,
+  reprograman la actualización en los límites 05:00, 12:00 y 19:00 y eligen el
+  saludo del dashboard con una semilla de `sessionStorage`
+  (`trazo:greeting-seed`) para que sea estable durante la sesión.
 - Preferencias locales: `trazo:nav-collapsed` (expansión) y `trazo:theme`
   (apariencia). Ambas son cosméticas: si `localStorage` falla, la UI sigue
   funcionando en memoria.

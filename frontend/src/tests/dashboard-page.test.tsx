@@ -4,6 +4,23 @@ import { MemoryRouter } from 'react-router-dom'
 import { describe, expect, it } from 'vitest'
 import { Providers } from '@/app/providers'
 import { DashboardPage } from '@/features/dashboard/dashboard-page'
+import {
+  buildDashboardGreeting,
+  getTimeBand,
+  pickDashboardGreetingIndex,
+  readOrCreateGreetingSeed,
+} from '@/lib/greeting'
+
+function dashboardGreeting() {
+  const band = getTimeBand(new Date().getHours())
+  const seed = readOrCreateGreetingSeed()
+
+  return buildDashboardGreeting(
+    band,
+    'Sofía',
+    pickDashboardGreetingIndex(band, seed),
+  )
+}
 
 function renderDashboard() {
   return render(
@@ -29,12 +46,13 @@ function totalProjectsCard(): HTMLElement {
 
 describe('DashboardPage', () => {
   it('renders the executive summary using the mock repository', async () => {
+    const expectedGreeting = dashboardGreeting()
     renderDashboard()
 
     expect(
       await screen.findByRole(
         'heading',
-        { name: 'Buen día, Sofía', level: 1 },
+        { name: expectedGreeting, level: 1 },
         { timeout: 8000 },
       ),
     ).toBeInTheDocument()

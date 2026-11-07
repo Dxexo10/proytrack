@@ -13,6 +13,7 @@ import { formatDate } from '@/domain/utils/date'
 import { formatCompactCurrency, formatCurrency } from '@/domain/utils/money'
 import { DEMO_REFERENCE_DATE } from '@/lib/demo-config'
 import { DEMO_CURRENT_USER } from '@/data/mock/seed/users'
+import { useDashboardGreeting } from '@/hooks/use-greeting'
 import { AttentionTable } from './components/attention-table'
 import { DashboardFilters } from './components/dashboard-filters'
 import {
@@ -83,11 +84,12 @@ export function DashboardPage() {
   const summary = data?.summary
   const previousPeriod = parsePeriod(String(period))
   const firstName = DEMO_CURRENT_USER.name.split(' ')[0] ?? DEMO_CURRENT_USER.name
+  const dashboardGreeting = useDashboardGreeting(firstName)
 
   return (
     <div className="space-y-5 lg:space-y-7">
       <PageHeader
-        title={`Buen día, ${firstName}`}
+        title={dashboardGreeting}
         description="Así avanzan tus proyectos."
         meta={
           <div className="flex flex-wrap items-center gap-2">

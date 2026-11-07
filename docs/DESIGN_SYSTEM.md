@@ -146,10 +146,16 @@ Sin logo, wordmark, subtítulo ni aviso de entorno demo dentro de la sidebar.
 
 ### Saludo
 
-- Franjas locales: 05:00–11:59 «Buenos días», 12:00–18:59 «Buenas tardes»,
-  19:00–04:59 «Buenas noches».
-- Se reprograma en los límites horarios sin recargar. El nombre sale del perfil
-  demo (`DEMO_CURRENT_USER`), nunca está escrito a mano en el componente.
+- Una única utilidad (`lib/greeting.ts`) define las franjas locales:
+  05:00–11:59 mañana, 12:00–18:59 tarde, 19:00–04:59 noche.
+- Sidebar: saludo tradicional («Buenos días», «Buenas tardes», «Buenas noches»)
+  junto al nombre del perfil demo.
+- Dashboard: tres alternativas por franja. La elegida se deriva de una semilla
+  pseudoaleatoria guardada en `sessionStorage` (`trazo:greeting-seed`), por lo
+  que no cambia en cada render ni al navegar entre módulos; solo puede cambiar
+  al cruzar de franja horaria.
+- Ambos saludos se reprograman en los límites 05:00, 12:00 y 19:00 sin recargar.
+  El nombre sale de `DEMO_CURRENT_USER`, nunca está escrito a mano.
 
 ### Apariencia
 
