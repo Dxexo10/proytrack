@@ -34,6 +34,31 @@ Los tokens `success`, `warning`, `danger` e `info` se exponen además como color
 Tailwind (`text-success`, `bg-success-soft`, etc.). Los estados nunca se
 comunican solo con color.
 
+### Tema oscuro — Trazo Nocturno
+
+Bloque `.dark` de `tokens.css`. Nunca negro puro ni azul de dashboard genérico.
+
+| Token | HEX | Uso |
+| --- | --- | --- |
+| `--canvas` | `#191C19` | Fondo principal |
+| `--surface` | `#30352F` | Tarjetas y formularios |
+| `--sidebar` | `#252A25` | Sidebar flotante |
+| `--brand-graphite-elevated` | `#383E37` | Superficie elevada / popovers |
+| `--brand-terracotta` | `#E18A69` | Acento y acciones |
+| `--brand-terracotta-hover` | `#F0A88B` | Enlaces y texto pequeño |
+| `--text-primary` | `#F0EAE0` | Texto principal |
+| `--text-secondary` | `#B2B8AE` | Texto de apoyo |
+| `--border-subtle` | `#454B43` | Bordes y divisores |
+| `--chart-muted` | `#5B6158` | Serie comparativa de presupuesto |
+
+- Botones primarios: `--primary: #E18A69` con `--primary-foreground: #191C19`
+  (texto grafito sobre terracota luminosa, AA).
+- Semánticos oscuros: success `#A9C59A` / `#293827`, warning `#E8B77A` /
+  `#4A3B22`, danger `#F0A79B` / `#4A2B27`, info `#A8BCCB` / `#26333C`.
+- `color-scheme: dark` y sombras más contenidas.
+- Los pares críticos de ambos temas están protegidos por
+  `src/tests/trazo-brand.test.ts` (lectura separada de `:root` y `.dark`).
+
 ## Tipografía
 
 - **Encabezados:** Manrope Variable (`@fontsource-variable/manrope`).
@@ -53,14 +78,19 @@ comunican solo con color.
 
 | Breakpoint | Navegación | Contenido |
 | --- | --- | --- |
-| < 1024 px | Drawer con cierre, Escape y foco gestionado | 1 columna |
-| 1024–1279 px | Rail compacto de 72 px | KPIs 2 columnas |
-| ≥ 1280 px | Sidebar expandible de 236 px | KPIs 4 columnas |
+| < 768 px | Drawer lateral con cierre, Escape, foco y scroll bloqueado | 1 columna |
+| 768–1279 px | Sidebar visible; compacta por defecto, expandible | KPIs 2 columnas |
+| ≥ 1280 px | Sidebar expandible de 248 px; expandida por defecto | KPIs 4 columnas |
 
-- Sidebar flotante: 12 px de separación, radio 20 px, grafito y sombra suave.
-- Topbar flotante: superficie blanca, radio 20 px, borde arena.
-- Contenido máximo 1600 px, padding 12–24 px.
-- Sin scroll horizontal en ningún breakpoint.
+- Sidebar flotante de altura completa: `top/bottom: 16 px` → `calc(100dvh - 32px)`,
+  12 px del borde izquierdo, radio 22 px, grafito y sombra suave.
+- Ancho: 248 px expandida / 76 px compacta; la transición de 200 ms solo cambia
+  el ancho. Flexbox mantiene el pie anclado y el scroll solo en la navegación.
+- Topbar flotante: superficie, radio 20 px, borde arena.
+- Contenido máximo 1600 px, padding 12–24 px; `overflow-x-clip` evita scroll
+  horizontal accidental.
+- Sin logo, isotipo, wordmark ni subtítulo dentro de la sidebar: la cabecera se
+  dedica al perfil.
 
 ## Componentes clave
 
@@ -73,26 +103,84 @@ comunican solo con color.
 - `ProgressBar`: `role="progressbar"`, oliva al 100 % y terracota en curso.
 - `EmptyState`, `ErrorState`, `Skeleton`: estados honestos y accesibles.
 - `DemoBadge`: rotulación permanente de entorno simulado.
-- `LogoMark`: trazo ascendente con nodo; wordmark `trazo.`.
+- `LogoMark`: recurso de marca para superficies fuera de la navegación; no se
+  usa dentro de la sidebar ni del drawer.
+- `SidebarProfile`: avatar, saludo dinámico y nombre del perfil demo.
+- `AppearanceControl`: selector Claro / Oscuro / Sistema.
 
 ## Navegación flotante
 
-- Sidebar compacta de 72 px con tooltips accesibles y `aria-label`.
-- Expansión a 236 px con transición de 220 ms y preferencia en `localStorage`
-  (`trazo:nav-collapsed`).
-- Estado activo: rail terracota, icono terracota y texto marfil.
-- Drawer móvil sobre grafito, cerrable con Escape; foco devuelto al disparador.
-- Topbar: breadcrumb `trazo.`, sección, indicador demo, alertas y perfil.
+### Estructura
+
+1. **Cabecera:** avatar, saludo dinámico, nombre y botón expandir/contraer.
+2. Divisor sutil + título `MENÚ`.
+3. **Módulos:** Resumen general, Proyectos, Monitor de cambios, Centro de
+   alertas y Actividad. Scroll interno solo en esta zona.
+4. **Pie anclado:** Apariencia y Configuración demo.
+
+Sin logo, wordmark, subtítulo ni aviso de entorno demo dentro de la sidebar.
+
+### Expandido y compacto
+
+- Expandida 248 px; compacta 76 px; transición de 200 ms que solo altera el
+  ancho. Altura `calc(100dvh - 32px)` con `top/bottom: 16 px`.
+- Preferencia en `localStorage` (`trazo:nav-collapsed`). Por defecto expandida
+  en ≥ 1280 px y compacta por debajo.
+- Estado activo: fondo sutil, rail terracota, icono terracota y texto marfil.
+- Compacta: iconos centrados, tooltips accesibles y `aria-label`; el avatar
+  expande la navegación.
+
+### Submenús
+
+- Proyectos: Todos los proyectos (`/projects`), En ejecución
+  (`/projects?estado=in_progress`), Archivados (Próximamente).
+- Monitor de cambios: Cambios recientes (`/monitor`), Historial de versiones
+  (Próximamente).
+- Centro de alertas: Alertas abiertas (`/alerts?estado=open`) y Alertas
+  revisadas (`/alerts?estado=reviewed`).
+- Expandido: rama debajo del módulo con línea vertical, conector y chevron;
+  `aria-expanded` + `aria-controls`; el grupo del módulo activo abre por defecto.
+- Compacto: popover lateral alineado al icono, cierre con Escape, selección con
+  teclado y retorno de foco al disparador.
+- «Próximamente» es texto explícito, no una ruta ficticia.
+
+### Saludo
+
+- Franjas locales: 05:00–11:59 «Buenos días», 12:00–18:59 «Buenas tardes»,
+  19:00–04:59 «Buenas noches».
+- Se reprograma en los límites horarios sin recargar. El nombre sale del perfil
+  demo (`DEMO_CURRENT_USER`), nunca está escrito a mano en el componente.
+
+### Apariencia
+
+- Preferencia `light | dark | system` en `localStorage` (`trazo:theme`).
+- Script inline en `index.html` aplica `.dark` antes del primer render para
+  evitar flash; el `ThemeProvider` sincroniza `prefers-color-scheme`, el evento
+  `storage` y `meta[name="theme-color"]`.
+- Expandido: control segmentado con `aria-pressed`. Compacto: icono Sol / Luna /
+  Monitor con tooltip y menú de radios accesible.
+
+### Móvil
+
+- Drawer lateral de 300 px (`max-w-[85vw]`) reutilizando el mismo contenido.
+- Base UI Dialog gestiona foco, Escape y bloqueo de scroll; se añaden áreas
+  seguras y el drawer se cierra al navegar.
+
+### Topbar
+
+- Breadcrumb `trazo.`, sección, indicador demo, alertas y perfil.
 
 ## Accesibilidad
 
 - Objetivo WCAG 2.2 AA.
 - Skip-link, `aria-current`, foco visible y orden lógico.
-- Contraste mínimo 4.5:1 en texto normal, verificado por
+- Contraste mínimo 4.5:1 en texto normal en ambos temas, verificado por
   `src/tests/trazo-brand.test.ts`.
 - Estados con icono y texto; gráficos con leyenda y resumen `sr-only`.
 - `prefers-reduced-motion` desactiva animaciones.
-- Tooltips y menús accesibles mediante Base UI.
+- Tooltips, popovers y menús accesibles mediante Base UI.
+- Navegación por teclado en submenús, cambio de apariencia y drawer; foco visible
+  y retorno al disparador al cerrar.
 
 ## Verificación
 

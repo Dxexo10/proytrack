@@ -56,3 +56,23 @@ al desplegar.
 **Decisión:** las rutas de Fases 2–4 muestran `ComingSoon` con alcance y fase.
 **Consecuencia:** no hay pantallas vacías ni funcionalidad ficticia; cada botón
 navega, ejecuta algo real o está deshabilitado con explicación.
+
+## ADR-009 · Apariencia por clases y tokens, sin duplicar paletas
+
+**Contexto:** se necesita un modo oscuro propio sin reescribir componentes ni
+provocar flashes al cargar.
+**Decisión:** preferencia `light | dark | system` en `localStorage`
+(`trazo:theme`), clase `.dark` en `<html>`, tokens semánticos en `tokens.css` y
+script inline previo al bundle. El `ThemeProvider` resuelve el sistema y
+escucha `prefers-color-scheme`/`storage`.
+**Consecuencia:** los componentes consumen los mismos tokens en ambos temas; el
+contraste AA se prueba por separado para `:root` y `.dark`.
+
+## ADR-010 · Submenús con rutas reales y «Próximamente» explícito
+
+**Contexto:** la navegación debía crecer en jerarquía sin inventar pantallas.
+**Decisión:** `nav-items.ts` modela hijos con `href` o `comingSoon`. Proyectos,
+Monitor y Alertas enlazan únicamente filtros existentes; Archivados e Historial
+global de versiones se muestran deshabilitados con badge «Próximamente».
+**Consecuencia:** el estado activo se calcula con `pathname` + query params y no
+se prometen funcionalidades pendientes como implementadas.

@@ -106,11 +106,19 @@ legibilidad.
 
 ## 5. Floating Workspace
 
-- Sidebar flotante separada 12 px de los bordes, radio 20 px, fondo grafito,
-  sombra sutil y posición fixed.
-- Compacta: 72 px. Expandida: 236 px. Transición de 220 ms.
-- Activo: rail terracota, icono terracota, texto blanco y fondo blanco al 6 %.
-- Topbar blanca flotante, radio 20 px, borde sand, sombra muy sutil.
+- Sidebar flotante de altura completa: `top/bottom: 16 px` →
+  `calc(100dvh - 32px)`, 12 px del borde izquierdo, radio 22 px, fondo grafito y
+  sombra suave. Posición fixed; nunca `height: fit-content`.
+- Compacta: 76 px. Expandida: 248 px. Transición de 200 ms que solo cambia el
+  ancho. Flexbox ancla el pie y el scroll queda solo en la navegación.
+- Cabecera dedicada al usuario: avatar, saludo dinámico y nombre. Sin logo,
+  isotipo, wordmark ni subtítulo dentro de la sidebar/drawer.
+- Módulos arriba; Apariencia y Configuración ancladas abajo. Sin bloques
+  decorativos ni aviso demo dentro de la navegación.
+- Submenús jerárquicos con línea vertical sutil en expandido y popover lateral
+  en compacto. Lo no implementado se marca «Próximamente».
+- Activo: rail terracota, icono terracota, texto marfil y fondo blanco al 6 %.
+- Topbar flotante independiente, radio 20 px, borde sand, sombra muy sutil.
 - Contenido máximo 1600 px, padding 16–32 px según breakpoint.
 - Sin scroll horizontal en ningún breakpoint.
 
@@ -118,15 +126,26 @@ legibilidad.
 
 | Breakpoint | Navegación | Contenido |
 | --- | --- | --- |
-| < 1024 px | Drawer con cierre, Escape y foco gestionado | 1 columna |
-| 1024–1279 px | Sidebar compacta | KPIs 2 columnas |
-| ≥ 1280 px | Sidebar expandible | KPIs 4 columnas |
+| < 768 px | Drawer con cierre, Escape, foco y scroll bloqueado | 1 columna |
+| 768–1279 px | Sidebar compacta por defecto, expandible | KPIs 2 columnas |
+| ≥ 1280 px | Sidebar expandida por defecto | KPIs 4 columnas |
 
 ### Movimiento
 
 Transiciones de 180–250 ms en hover, apertura de sidebar, filtros, carga y
 feedback. Sin animaciones constantes, neón, glassmorphism excesivo ni sombras
 intensas. `prefers-reduced-motion` desactiva el movimiento.
+
+## 5.1 Trazo Nocturno
+
+Modo oscuro propio, cálido y no genérico: fondo `#191C19`, sidebar `#252A25`,
+tarjetas `#30352F`, terracota luminosa `#E18A69`, texto `#F0EAE0`, secundario
+`#B2B8AE` y bordes `#454B43`. Nada de negro puro ni azul oscuro de dashboard.
+
+El selector Claro / Oscuro / Sistema vive en el pie de la sidebar. La preferencia
+se guarda en `localStorage` (`trazo:theme`), respeta `prefers-color-scheme` y se
+aplica antes del primer render para evitar flash. Todos los pares críticos deben
+cumplir WCAG AA en ambos temas.
 
 ## 6. Componentes
 

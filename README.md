@@ -31,8 +31,10 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 - **Paleta:** grafito `#252824`, terracota `#C65D3A`, marfil `#F5F2EB`,
   arena `#E7E0D5` y oliva `#60715A`.
 - **Tipografía:** Manrope para encabezados e Inter para interfaz y cifras.
-- **Layout:** Floating Workspace con sidebar compacta/expandible, superficie de
-  topbar independiente y composición editorial.
+- **Layout:** Floating Workspace con sidebar de altura completa (248 px / 76 px),
+  perfil y saludo dinámico arriba, submenús jerárquicos y pie anclado.
+- **Apariencia:** tema claro, Trazo Nocturno y modo sistema con preferencia
+  persistida y contraste AA en ambos temas.
 - Guía completa: [`TRAZO_BRAND_GUIDELINES.md`](TRAZO_BRAND_GUIDELINES.md).
 
 ## Estado del proyecto
@@ -53,10 +55,13 @@ Guion de demo: [`docs/DEMO_GUIDE.md`](docs/DEMO_GUIDE.md).
 - Filtro de periodo (3 / 6 / 12 meses) reflejado en la URL: ajusta la serie
   mensual y la comparación contra el periodo anterior, mientras los totales
   siempre representan el portafolio activo completo.
-- Navegación flotante con modo compacto de iconos, tooltips accesibles, estado
-  activo terracota y preferencia persistida en el navegador.
-- Layout responsive completo: rail compacto en desktop, drawer móvil con cierre
-  por Escape y topbar flotante independiente.
+- Navegación flotante de altura completa con perfil demo, saludo por hora local,
+  submenús con «Próximamente» honesto, modo expandido/compacto, tooltips y
+  preferencia persistida.
+- Selector de apariencia Claro / Oscuro / Sistema con tema propio «Trazo
+  Nocturno», script anti-flash y reacción a `prefers-color-scheme`.
+- Layout responsive completo: compacta desde tablet, drawer móvil con foco,
+  Escape y scroll bloqueado; topbar flotante independiente.
 - Portafolio `/projects` con búsqueda, filtros combinables de estado, prioridad,
   sector, responsable y riesgo, orden, paginación y estado de archivados.
 - Vista de tabla en desktop y tarjetas en móvil, con acciones de ver, editar y

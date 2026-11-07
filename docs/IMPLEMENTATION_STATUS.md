@@ -1,6 +1,42 @@
 # Estado de implementación
 
-Actualizado tras el cierre de la **Fase 3** y el rebranding visual a **Trazo**.
+Actualizado tras el cierre de la **Fase 3**, el rebranding visual a **Trazo** y el
+rediseño de navegación y apariencia.
+
+## Rediseño de sidebar y apariencia — completado
+
+| Tarea | Resultado | Commit |
+| --- | --- | --- |
+| Tokens Trazo Nocturno | `.dark` semántico, `--chart-muted`, contraste AA por tema | `67ca8c7` |
+| Proveedor de apariencia | `trazo:theme`, `prefers-color-scheme`, `storage` y script anti-flash | `210f0f9` |
+| Sidebar de altura completa | 248/76 px, `calc(100dvh - 32px)`, perfil arriba y pie anclado | `cc01a24` |
+| Saludo dinámico | Franjas 05/12/19, actualización automática y tooltip compacto | `513dccf` |
+| Submenús jerárquicos | Rutas reales, «Próximamente» honesto y popover lateral | `5966776` |
+| Selector de apariencia | Segmentado expandido y menú accesible compacto | `d18a369` |
+| Responsive | Drawer reutilizado, áreas seguras y scroll contenido | `926d85c` |
+| Pruebas | Sidebar, submenús, apariencia, saludo y regresión del portafolio | `fa9dd23` |
+| Documentación | Design system, marca, arquitectura, ADR y estado | este commit |
+
+### Diagnóstico del «dashboard con 0 proyectos»
+
+La causa fue el cálculo del KPI «Total de proyectos» sobre la ventana temporal
+en lugar del portafolio activo completo. Ya quedó corregido en
+`b5042ac fix(dashboard): report full portfolio regardless of selected period`.
+La regresión se refuerza ahora en `dashboard-page.test.tsx`: con el dataset
+sembrado, el KPI muestra `50` y se mantiene al cambiar a 3 meses. No se usan
+números estáticos en la aplicación.
+
+### Verificación ejecutada
+
+```text
+npm run lint       → 0 errores, 0 advertencias
+npm run typecheck  → sin errores
+NODE_ENV=test npm run test → 28 archivos, 158 pruebas aprobadas
+npm run build      → dist generado
+```
+
+No se ejecutó `npm run test:e2e` en esta sesión. La validación visual y de
+lectores de pantalla queda pendiente en el navegador del propietario.
 
 ## Rebranding Trazo — completado
 

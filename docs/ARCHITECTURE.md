@@ -80,12 +80,32 @@ alertas sean coherentes desde el primer render.
 Los adaptadores simulan latencia de 120–320 ms **solo en desarrollo**; en tests y
 producción no hay esperas artificiales.
 
+## Apariencia y navegación
+
+- `lib/theme.ts` concentra el tipo `ThemePreference`, la clave
+  `trazo:theme`, la lectura segura de `localStorage`, la resolución
+  `light | dark | system` y la aplicación de `.dark` / `color-scheme`.
+- `app/theme-provider.tsx` aplica el tema, escucha
+  `matchMedia('(prefers-color-scheme: dark)')` en modo sistema y sincroniza
+  pestañas con el evento `storage`. `app/theme-context.ts` expone `useTheme`.
+- `index.html` incluye un script inline mínimo que aplica el tema antes del
+  primer render para evitar el flash de tema incorrecto.
+- `app/layouts/nav-items.ts` define módulos, submenús y el estado activo más
+  específico según `pathname` + query params. `sidebar.tsx`,
+  `sidebar-submenu.tsx`, `sidebar-profile.tsx` y `appearance-control.tsx`
+  componen la navegación; el drawer móvil reutiliza el mismo contenido.
+- `lib/greeting.ts` + `hooks/use-greeting.ts` calculan la franja horaria local y
+  reprograman la actualización en los límites 05:00, 12:00 y 19:00.
+- Preferencias locales: `trazo:nav-collapsed` (expansión) y `trazo:theme`
+  (apariencia). Ambas son cosméticas: si `localStorage` falla, la UI sigue
+  funcionando en memoria.
+
 ## Renderizado
 
 - Rutas con carga diferida (`React.lazy` + `Suspense`).
 - Gráficos cargados aparte del dashboard para no bloquear el primer render.
 - Chunks de vendor separados (React, UI, charts, query).
-- Providers: TanStack Query, Tooltip y Toaster (sonner).
+- Providers: `ThemeProvider`, TanStack Query, Tooltip y Toaster (sonner).
 
 ## Reglas de negocio implementadas en Fase 3
 
