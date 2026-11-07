@@ -6,14 +6,23 @@ import { Sidebar } from './sidebar'
 import { Topbar } from './topbar'
 
 const COLLAPSE_STORAGE_KEY = 'trazo:nav-collapsed'
+const DESKTOP_QUERY = '(min-width: 1280px)'
+
+function defaultCollapsed(): boolean {
+  try {
+    return !window.matchMedia(DESKTOP_QUERY).matches
+  } catch {
+    return true
+  }
+}
 
 function useSidebarCollapse() {
   const [collapsed, setCollapsed] = useState(() => {
     try {
       const stored = window.localStorage.getItem(COLLAPSE_STORAGE_KEY)
-      return stored === null ? true : stored === 'true'
+      return stored === null ? defaultCollapsed() : stored === 'true'
     } catch {
-      return true
+      return defaultCollapsed()
     }
   })
 
@@ -37,7 +46,7 @@ export function AppShell() {
   const { collapsed, toggle } = useSidebarCollapse()
 
   return (
-    <div className="min-h-svh bg-canvas">
+    <div className="min-h-svh overflow-x-clip bg-canvas">
       <a
         href="#contenido"
         className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-xl focus:bg-brand-graphite focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-brand-ivory"
@@ -49,8 +58,8 @@ export function AppShell() {
 
       <div
         className={cn(
-          'flex min-h-svh flex-col transition-[padding-left] duration-[220ms] ease-out',
-          collapsed ? 'md:pl-[96px]' : 'md:pl-[260px]',
+          'flex min-h-svh flex-col transition-[padding-left] duration-200 ease-out',
+          collapsed ? 'md:pl-[100px]' : 'md:pl-[272px]',
         )}
       >
         <Topbar />

@@ -32,7 +32,7 @@ describe('AppShell', () => {
       name: 'Navegación principal',
     })
 
-    expect(within(navigation).queryByText('Portafolio')).not.toBeInTheDocument()
+    expect(screen.queryByText('Menú')).not.toBeInTheDocument()
 
     const expand = screen.getByRole('button', { name: 'Expandir navegación' })
     await user.click(expand)
@@ -40,7 +40,7 @@ describe('AppShell', () => {
     expect(
       screen.getByRole('button', { name: 'Contraer navegación' }),
     ).toBeInTheDocument()
-    expect(within(navigation).getByText('Portafolio')).toBeInTheDocument()
+    expect(screen.getByText('Menú')).toBeInTheDocument()
     expect(within(navigation).getByText('Proyectos')).toBeInTheDocument()
   })
 
