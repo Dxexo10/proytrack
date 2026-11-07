@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import {
   Tooltip,
@@ -6,8 +7,14 @@ import {
 } from '@/components/ui/tooltip'
 import { isRouteActive } from '@/lib/navigation'
 import { cn } from '@/lib/utils'
-import { PRIMARY_NAV, SECONDARY_NAV, type NavItem } from './nav-items'
+import {
+  getActiveChildHref,
+  PRIMARY_NAV,
+  SECONDARY_NAV,
+  type NavItem,
+} from './nav-items'
 import { SidebarProfile } from './sidebar-profile'
+import { SidebarCompactGroup, SidebarGroup } from './sidebar-submenu'
 
 interface SidebarLinkProps {
   item: NavItem
@@ -97,8 +104,11 @@ export function SidebarContent({
   onToggle,
   onNavigate,
 }: SidebarContentProps) {
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
   const isCompact = collapsed && variant === 'desktop'
+  const [groupOverrides, setGroupOverrides] = useState<Record<string, boolean>>(
+    {},
+  )
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
@@ -125,15 +135,59 @@ export function SidebarContent({
           isCompact ? 'px-2' : 'px-3',
         )}
       >
-        {PRIMARY_NAV.map((item) => (
-          <SidebarLink
-            key={item.href}
-            item={item}
-            active={isRouteActive(pathname, item.href)}
-            collapsed={isCompact}
-            onNavigate={onNavigate}
-          />
-        ))}
+        {PRIMARY_NAV.map((item) => {
+          const active = isRouteActive(pathname, item.href)
+          const activeChildHref = getActiveChildHref(
+            pathname,
+            search,
+            item.children,
+          )
+
+          if (item.children && isCompact) {
+            return (
+              <SidebarCompactGroup
+                key={item.href}
+                item={item}
+                active={active}
+                activeChildHref={activeChildHref}
+                onNavigate={onNavigate}
+              />
+            )
+          }
+
+          if (item.children) {
+            const open =
+              groupOverrides[item.href] ??
+              (active || activeChildHref !== null)
+
+            return (
+              <SidebarGroup
+                key={item.href}
+                item={item}
+                active={active}
+                open={open}
+                activeChildHref={activeChildHref}
+                onToggle={() =>
+                  setGroupOverrides((previous) => ({
+                    ...previous,
+                    [item.href]: !open,
+                  }))
+                }
+                onNavigate={onNavigate}
+              />
+            )
+          }
+
+          return (
+            <SidebarLink
+              key={item.href}
+              item={item}
+              active={active}
+              collapsed={isCompact}
+              onNavigate={onNavigate}
+            />
+          )
+        })}
       </nav>
 
       <div
