@@ -49,4 +49,20 @@ describe('AppShell', () => {
 
     expect(await screen.findByText('Contenido de prueba')).toBeInTheDocument()
   })
+
+  it('persists the expanded sidebar preference across mounts', async () => {
+    const user = userEvent.setup()
+    const { unmount } = renderShell()
+
+    await user.click(screen.getByRole('button', { name: 'Expandir navegación' }))
+
+    expect(window.localStorage.getItem('trazo:nav-collapsed')).toBe('false')
+
+    unmount()
+    renderShell()
+
+    expect(
+      screen.getByRole('button', { name: 'Contraer navegación' }),
+    ).toBeInTheDocument()
+  })
 })

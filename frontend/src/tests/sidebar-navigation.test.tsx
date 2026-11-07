@@ -1,8 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { Providers } from '@/app/providers'
+import { MobileNav } from '@/app/layouts/mobile-nav'
 import { Sidebar } from '@/app/layouts/sidebar'
 
 function renderSidebar({
@@ -104,6 +105,31 @@ describe('Sidebar navigation', () => {
       name: 'Configuración demo',
     })
     expect(settings).toBeInTheDocument()
+  })
+
+  it('opens and closes the mobile drawer with Escape', async () => {
+    const user = userEvent.setup()
+    render(
+      <Providers>
+        <MemoryRouter initialEntries={['/dashboard']}>
+          <MobileNav />
+        </MemoryRouter>
+      </Providers>,
+    )
+
+    await user.click(screen.getByRole('button', { name: 'Abrir navegación' }))
+
+    const dialog = await screen.findByRole('dialog')
+    expect(
+      within(dialog).getByRole('link', { name: 'Proyectos' }),
+    ).toBeInTheDocument()
+    expect(within(dialog).getByText('Apariencia')).toBeInTheDocument()
+
+    await user.keyboard('{Escape}')
+
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    })
   })
 
   it('does not render product branding or demo badge in the sidebar', () => {
