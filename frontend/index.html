@@ -10,6 +10,29 @@
       content="Trazo — gestión inteligente de proyectos: dashboard ejecutivo, historial de versiones y alertas explicables. Demo con datos simulados."
     />
     <title>Trazo · Gestión inteligente de proyectos</title>
+    <script>
+      ;(function () {
+        try {
+          var stored = localStorage.getItem('trazo:theme')
+          var preference =
+            stored === 'light' || stored === 'dark' || stored === 'system'
+              ? stored
+              : 'system'
+          var isDark =
+            preference === 'dark' ||
+            (preference === 'system' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches)
+          document.documentElement.classList.toggle('dark', isDark)
+          document.documentElement.style.colorScheme = isDark
+            ? 'dark'
+            : 'light'
+          var meta = document.querySelector('meta[name="theme-color"]')
+          if (meta) meta.setAttribute('content', isDark ? '#191c19' : '#252824')
+        } catch (error) {
+          // Sin preferencia disponible se mantiene el tema claro por defecto.
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
