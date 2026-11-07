@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/tooltip'
 import { DEMO_CURRENT_USER } from '@/data/mock/seed/users'
 import { initials } from '@/domain/utils/format'
-import { ROLE_LABELS } from '@/lib/labels'
+import { useGreeting } from '@/hooks/use-greeting'
 import { cn } from '@/lib/utils'
 
 interface SidebarProfileProps {
@@ -32,7 +32,9 @@ export function SidebarProfile({
   variant = 'desktop',
   onToggle,
 }: SidebarProfileProps) {
+  const greeting = useGreeting()
   const isCompact = collapsed && variant === 'desktop'
+  const fullGreeting = `${greeting}, ${DEMO_CURRENT_USER.name}`
 
   const toggle = onToggle ? (
     <Button
@@ -56,7 +58,7 @@ export function SidebarProfile({
       type="button"
       onClick={onToggle}
       className="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-ivory/80"
-      aria-label={`Expandir navegación · ${DEMO_CURRENT_USER.name}`}
+      aria-label={`Expandir navegación · ${fullGreeting}`}
     >
       <ProfileAvatar />
     </button>
@@ -68,7 +70,7 @@ export function SidebarProfile({
         <Tooltip>
           <TooltipTrigger render={avatarTrigger} />
           <TooltipContent side="right" sideOffset={12}>
-            {DEMO_CURRENT_USER.name}
+            {fullGreeting}
           </TooltipContent>
         </Tooltip>
         {toggle}
@@ -86,11 +88,11 @@ export function SidebarProfile({
       <div className="flex min-w-0 flex-1 items-center gap-3">
         <ProfileAvatar />
         <div className="min-w-0">
+          <p className="truncate text-[11px] text-sidebar-foreground/60">
+            {greeting},
+          </p>
           <p className="truncate text-sm font-semibold text-brand-ivory">
             {DEMO_CURRENT_USER.name}
-          </p>
-          <p className="truncate text-[11px] text-sidebar-foreground/60">
-            {ROLE_LABELS[DEMO_CURRENT_USER.role]}
           </p>
         </div>
       </div>
