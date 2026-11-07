@@ -13,6 +13,7 @@ import {
   SECONDARY_NAV,
   type NavItem,
 } from './nav-items'
+import { AppearanceControl } from './appearance-control'
 import { SidebarProfile } from './sidebar-profile'
 import { SidebarCompactGroup, SidebarGroup } from './sidebar-submenu'
 
@@ -192,10 +193,12 @@ export function SidebarContent({
 
       <div
         className={cn(
-          'shrink-0 border-t border-white/10',
-          isCompact ? 'space-y-1 px-2 py-2' : 'space-y-1 px-3 py-3',
+          'shrink-0 space-y-1 border-t border-white/10',
+          isCompact ? 'px-2 py-2' : 'px-3 py-3',
         )}
       >
+        <AppearanceControl collapsed={isCompact} />
+
         {SECONDARY_NAV.map((item) => (
           <SidebarLink
             key={item.href}
