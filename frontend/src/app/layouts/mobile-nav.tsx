@@ -54,7 +54,7 @@ export function MobileNav() {
           <X aria-hidden="true" className="size-4" />
         </SheetClose>
 
-        <div className="flex min-h-0 flex-1 flex-col pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]">
+        <div className="flex min-h-0 flex-1 flex-col pt-[env(safe-area-inset-top)] pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)]">
           <SidebarContent
             variant="mobile"
             onNavigate={() => setOpen(false)}

@@ -58,7 +58,7 @@ export function AppShell() {
 
       <div
         className={cn(
-          'flex min-h-svh flex-col transition-[padding-left] duration-200 ease-out',
+          'flex min-h-svh min-w-0 flex-col transition-[padding-left] duration-200 ease-out',
           collapsed ? 'md:pl-[100px]' : 'md:pl-[272px]',
         )}
       >

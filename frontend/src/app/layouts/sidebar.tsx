@@ -132,7 +132,7 @@ export function SidebarContent({
       <nav
         aria-label="Navegación principal"
         className={cn(
-          'min-h-0 flex-1 space-y-1 overflow-x-hidden overflow-y-auto py-2',
+          'min-h-0 flex-1 space-y-1 overflow-x-hidden overflow-y-auto overscroll-contain py-2',
           isCompact ? 'px-2' : 'px-3',
         )}
       >
